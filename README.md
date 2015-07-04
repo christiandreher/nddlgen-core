@@ -8,7 +8,7 @@ This package is the core of the nddl-generator. It is compiled as a static libra
 
 Compiling a project with nddl-generator-core needs a linking against following libraries:
  * boost_system (part of libboost-all-dev)
- * boost_filesystem (part of libboost-alldev)
+ * boost_filesystem (part of libboost-all-dev)
  * sdfformat (part of libsdfformat2-dev)
 
 ## Include Paths (-l)
