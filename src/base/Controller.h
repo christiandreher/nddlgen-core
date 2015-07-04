@@ -23,12 +23,20 @@ namespace base
 	class Controller
 	{
 		private:
+			std::stringstream cerrOvRdBuf;
+			std::streambuf* cerrStdRdBuf;
+
 			std::string* errorText;
 			std::string fileIdentifier;
+
 			bool isFileIdentifierSet;
 			bool isFileChecked;
 			bool isFileParsed;
 			bool isNddlGenerated;
+
+			void disableCerr();
+			void enableCerr();
+			std::string getBufferedCerrOutput();
 		public:
 			static const std::string ERR_FILE_ID_ALREADY_SET;
 			static const std::string ERR_FILE_ALREADY_CHECKED;

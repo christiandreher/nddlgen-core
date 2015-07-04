@@ -16,10 +16,13 @@
 
 #include <string>
 #include <sys/stat.h>
-#include "Controller.h"
+#include <sdf/sdf.hh>
 #include <boost/filesystem.hpp>
 
+#include "Controller.h"
+
 using namespace std;
+using namespace sdf;
 
 namespace base
 {
@@ -44,7 +47,10 @@ namespace base
 
 	Controller::Controller(string* errorText)
 	{
+		this->cerrStdRdBuf = cout.rdbuf();
+
 		this->errorText = errorText;
+
 		this->isFileIdentifierSet = false;
 		this->isFileChecked = false;
 		this->isFileParsed = false;
@@ -53,7 +59,7 @@ namespace base
 
 	Controller::~Controller()
 	{
-		// TODO Auto-generated destructor stub
+
 	}
 
 	bool Controller::setFileIdentifier(string fileIdentifier)
@@ -134,6 +140,27 @@ namespace base
 			return false;
 		}
 
+		this->disableCerr();
+
+		// Load the world file
+		sdf::SDFPtr sdf(new sdf::SDF);
+
+		if (!sdf::init(sdf))
+		{
+			this->enableCerr();
+			*this->errorText = "Unable to initialize SDF. " + this->getBufferedCerrOutput();
+			return false;
+		}
+
+		if (!sdf::readFile(this->fileIdentifier, sdf))
+		{
+			this->enableCerr();
+			*this->errorText = "Unable to read SDF file " + this->getBufferedCerrOutput();
+			return false;
+		}
+
+		this->enableCerr();
+
 		this->isFileParsed = true;
 		return true;
 	}
@@ -170,6 +197,21 @@ namespace base
 
 		this->isNddlGenerated = true;
 		return true;
+	}
+
+	void Controller::disableCerr()
+	{
+		std::cout.rdbuf(this->cerrOvRdBuf.rdbuf());
+	}
+
+	void Controller::enableCerr()
+	{
+		std::cout.rdbuf(this->cerrStdRdBuf);
+	}
+
+	string Controller::getBufferedCerrOutput()
+	{
+		return this->cerrOvRdBuf.str();
 	}
 
 }
