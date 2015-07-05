@@ -24,6 +24,7 @@ using namespace sdf;
 
 namespace base
 {
+
 	const string Controller::ERR_FILE_ID_ALREADY_SET =
 			"A file identifier has already been set. Create a new instance if necessary.";
 	const string Controller::ERR_FILE_ALREADY_CHECKED =
@@ -46,6 +47,7 @@ namespace base
 			"Unable to initialize .sdf file.";
 	const string Controller::ERR_READING_SDF_FILE =
 			"Unable to read .sdf file.";
+
 
 	Controller::Controller(string* errorText)
 	{
@@ -77,6 +79,7 @@ namespace base
 	{
 
 	}
+
 
 	bool Controller::setFileIdentifier(string fileIdentifier)
 	{
@@ -194,6 +197,7 @@ namespace base
 		return true;
 	}
 
+
 	bool Controller::isCheckable()
 	{
 		// Check if file identifier was set
@@ -241,6 +245,7 @@ namespace base
 
 		return true;
 	}
+
 
 	void Controller::disableCerr()
 	{
