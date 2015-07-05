@@ -110,10 +110,9 @@ namespace base
 			return false;
 		}
 
-		// Check if file identifier was set
-		if (!this->isFileIdentifierSet)
+		// Check if file is checkable
+		if (!this->isCheckable())
 		{
-			*this->errorText = Controller::ERR_SET_FILE_ID_FIRST;
 			return false;
 		}
 
@@ -133,7 +132,7 @@ namespace base
 
 		this->disableCerr();
 
-		// Init .sdf
+		// Init .sdf based on installed sdf_format.xml file
 		if (!sdf::init(sdf))
 		{
 			this->enableCerr();
@@ -166,17 +165,9 @@ namespace base
 			return false;
 		}
 
-		// Check if file identifier was set
-		if (!this->isFileIdentifierSet)
+		// Check if file is parsable
+		if (!this->isParsable())
 		{
-			*this->errorText = Controller::ERR_SET_FILE_ID_FIRST;
-			return false;
-		}
-
-		// Check if file was checked
-		if (!this->isFileChecked)
-		{
-			*this->errorText = Controller::ERR_CHECK_FILE_FIRST;
 			return false;
 		}
 
@@ -193,10 +184,33 @@ namespace base
 			return false;
 		}
 
+		// Check if files are generatable
+		if (!this->isGeneratable())
+		{
+			return false;
+		}
+
+		this->isNddlGenerated = true;
+		return true;
+	}
+
+	bool Controller::isCheckable()
+	{
 		// Check if file identifier was set
 		if (!this->isFileIdentifierSet)
 		{
 			*this->errorText = Controller::ERR_SET_FILE_ID_FIRST;
+			return false;
+		}
+
+		return true;
+	}
+
+	bool Controller::isParsable()
+	{
+		// Check if file is checkable
+		if (!this->isCheckable())
+		{
 			return false;
 		}
 
@@ -207,6 +221,17 @@ namespace base
 			return false;
 		}
 
+		return true;
+	}
+
+	bool Controller::isGeneratable()
+	{
+		// Check if file is parsable
+		if (!this->isParsable())
+		{
+			return false;
+		}
+
 		// Check if file was parsed
 		if (!this->isFileParsed)
 		{
@@ -214,7 +239,6 @@ namespace base
 			return false;
 		}
 
-		this->isNddlGenerated = true;
 		return true;
 	}
 
