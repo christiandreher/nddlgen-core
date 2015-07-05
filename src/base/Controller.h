@@ -80,9 +80,9 @@ namespace base
 			bool isFileChecked;
 
 			/**
-			 * Flag to control the workflow and check if the file has been parsed.
+			 * Flag to control the workflow and check if the SDF has been parsed.
 			 */
-			bool isFileParsed;
+			bool isSdfParsed;
 
 			/**
 			 * Flag to control the workflow and check if the nddl files has been generated.

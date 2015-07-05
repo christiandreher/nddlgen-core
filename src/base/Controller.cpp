@@ -57,7 +57,7 @@ namespace base
 
 		this->isFileIdentifierSet = false;
 		this->isFileChecked = false;
-		this->isFileParsed = false;
+		this->isSdfParsed = false;
 		this->isNddlGenerated = false;
 	}
 
@@ -71,7 +71,7 @@ namespace base
 
 		this->isFileIdentifierSet = true;
 		this->isFileChecked = false;
-		this->isFileParsed = false;
+		this->isSdfParsed = false;
 		this->isNddlGenerated = false;
 	}
 
@@ -162,7 +162,7 @@ namespace base
 	bool Controller::parseSdf()
 	{
 		// Check if file has already been parsed
-		if (this->isFileParsed)
+		if (this->isSdfParsed)
 		{
 			*this->errorText = Controller::ERR_FILE_ALREADY_PARSED;
 			return false;
@@ -174,7 +174,7 @@ namespace base
 			return false;
 		}
 
-		this->isFileParsed = true;
+		this->isSdfParsed = true;
 		return true;
 	}
 
@@ -237,7 +237,7 @@ namespace base
 		}
 
 		// Check if file was parsed
-		if (!this->isFileParsed)
+		if (!this->isSdfParsed)
 		{
 			*this->errorText = Controller::ERR_PARSE_FILE_FIRST;
 			return false;
