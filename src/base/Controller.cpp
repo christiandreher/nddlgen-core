@@ -14,9 +14,7 @@
  * limitations under the License.
  */
 
-#include <string>
 #include <sys/stat.h>
-#include <sdf/sdf.hh>
 #include <boost/filesystem.hpp>
 
 #include "Controller.h"
@@ -44,14 +42,32 @@ namespace base
 			"File must be an .sdf file.";
 	const string Controller::ERR_FILE_NOT_EXISTING =
 			"File does not exist.";
+	const string Controller::ERR_INITIALIZING_SDF =
+			"Unable to initialize .sdf file.";
+	const string Controller::ERR_READING_SDF_FILE =
+			"Unable to read .sdf file.";
 
 	Controller::Controller(string* errorText)
 	{
-		this->cerrStdRdBuf = cout.rdbuf();
+		this->cerrStdRdBuf = cerr.rdbuf();
 
 		this->errorText = errorText;
 
 		this->isFileIdentifierSet = false;
+		this->isFileChecked = false;
+		this->isFileParsed = false;
+		this->isNddlGenerated = false;
+	}
+
+	Controller::Controller(string fileIdentifier, string* errorText)
+	{
+		this->cerrStdRdBuf = cerr.rdbuf();
+
+		this->fileIdentifier = fileIdentifier;
+
+		this->errorText = errorText;
+
+		this->isFileIdentifierSet = true;
 		this->isFileChecked = false;
 		this->isFileParsed = false;
 		this->isNddlGenerated = false;
@@ -85,6 +101,8 @@ namespace base
 
 	bool Controller::checkFile()
 	{
+		SDFPtr sdf(new SDF);
+
 		// Check if file has already been checked
 		if (this->isFileChecked)
 		{
@@ -113,11 +131,33 @@ namespace base
 			return false;
 		}
 
+		this->disableCerr();
+
+		// Init .sdf
+		if (!sdf::init(sdf))
+		{
+			this->enableCerr();
+			*this->errorText = Controller::ERR_INITIALIZING_SDF + "\n" + this->getBufferedCerrOutput();
+			return false;
+		}
+
+		// Try to read the file
+		if (!sdf::readFile(this->fileIdentifier, sdf))
+		{
+			this->enableCerr();
+			*this->errorText = Controller::ERR_READING_SDF_FILE + "\n" + this->getBufferedCerrOutput();
+			return false;
+		}
+
+		this->sdfRoot = sdf->root;
+
+		this->enableCerr();
+
 		this->isFileChecked = true;
 		return true;
 	}
 
-	bool Controller::parseFile()
+	bool Controller::parseSdf()
 	{
 		// Check if file has already been parsed
 		if (this->isFileParsed)
@@ -139,27 +179,6 @@ namespace base
 			*this->errorText = Controller::ERR_CHECK_FILE_FIRST;
 			return false;
 		}
-
-		this->disableCerr();
-
-		// Load the world file
-		sdf::SDFPtr sdf(new sdf::SDF);
-
-		if (!sdf::init(sdf))
-		{
-			this->enableCerr();
-			*this->errorText = "Unable to initialize SDF. " + this->getBufferedCerrOutput();
-			return false;
-		}
-
-		if (!sdf::readFile(this->fileIdentifier, sdf))
-		{
-			this->enableCerr();
-			*this->errorText = "Unable to read SDF file " + this->getBufferedCerrOutput();
-			return false;
-		}
-
-		this->enableCerr();
 
 		this->isFileParsed = true;
 		return true;
@@ -201,12 +220,12 @@ namespace base
 
 	void Controller::disableCerr()
 	{
-		std::cout.rdbuf(this->cerrOvRdBuf.rdbuf());
+		std::cerr.rdbuf(this->cerrOvRdBuf.rdbuf());
 	}
 
 	void Controller::enableCerr()
 	{
-		std::cout.rdbuf(this->cerrStdRdBuf);
+		std::cerr.rdbuf(this->cerrStdRdBuf);
 	}
 
 	string Controller::getBufferedCerrOutput()

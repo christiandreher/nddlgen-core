@@ -17,17 +17,23 @@
 #ifndef CONTROLLER_H_
 #define CONTROLLER_H_
 
+#include <string>
+#include <sdf/sdf.hh>
+
 namespace base
 {
 
 	class Controller
 	{
+
 		private:
 			std::stringstream cerrOvRdBuf;
 			std::streambuf* cerrStdRdBuf;
 
 			std::string* errorText;
 			std::string fileIdentifier;
+
+			sdf::ElementPtr sdfRoot;
 
 			bool isFileIdentifierSet;
 			bool isFileChecked;
@@ -37,6 +43,7 @@ namespace base
 			void disableCerr();
 			void enableCerr();
 			std::string getBufferedCerrOutput();
+
 		public:
 			static const std::string ERR_FILE_ID_ALREADY_SET;
 			static const std::string ERR_FILE_ALREADY_CHECKED;
@@ -47,15 +54,19 @@ namespace base
 			static const std::string ERR_PARSE_FILE_FIRST;
 			static const std::string ERR_FILE_MUST_BE_SDF;
 			static const std::string ERR_FILE_NOT_EXISTING;
+			static const std::string ERR_INITIALIZING_SDF;
+			static const std::string ERR_READING_SDF_FILE;
 
 			Controller(std::string* errorText);
+			Controller(std::string fileIdentifier, std::string* errorText);
 			virtual ~Controller();
 
 			bool setFileIdentifier(std::string fileIdentifier);
 			std::string getOutputFileName();
 			bool checkFile();
-			bool parseFile();
+			bool parseSdf();
 			bool generateNddl();
+
 	};
 
 }
