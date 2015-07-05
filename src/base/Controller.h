@@ -246,7 +246,7 @@ namespace base
 			bool checkFile();
 
 			/**
-			 * Parses the file into a data structure where possible collisions and
+			 * Parses the SDF into a data structure where possible collisions and
 			 * blocks can be computed.
 			 *
 			 * @return false, if errors where produced, true if not.
