@@ -16,17 +16,21 @@
 
 #include "nddlgen/model/LidBox.h"
 
-namespace nddlgen { namespace model {
+namespace nddlgen { namespace model
+{
 
-	LidBox::LidBox(bool isOpened) {
+	LidBox::LidBox(bool isOpened)
+	{
 		this->_isOpened = isOpened;
 	}
 
-	LidBox::~LidBox() {
+	LidBox::~LidBox()
+	{
 		// TODO Auto-generated destructor stub
 	}
 
-	bool LidBox::isOpened() {
+	bool LidBox::isOpened()
+	{
 		return this->_isOpened;
 	}
 

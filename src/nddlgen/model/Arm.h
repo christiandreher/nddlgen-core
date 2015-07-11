@@ -21,9 +21,11 @@
 #include "nddlgen/model/NddlGeneratable.h"
 #include "nddlgen/model/Workspace.h"
 
-namespace nddlgen { namespace model {
+namespace nddlgen { namespace model
+{
 
-	class Arm : public nddlgen::model::NddlGeneratable {
+	class Arm : public nddlgen::model::NddlGeneratable
+	{
 
 		private:
 

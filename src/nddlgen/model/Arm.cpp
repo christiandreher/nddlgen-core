@@ -16,13 +16,16 @@
 
 #include "nddlgen/model/Arm.h"
 
-namespace nddlgen { namespace model {
+namespace nddlgen { namespace model
+{
 
-	Arm::Arm(nddlgen::model::Workspace* workspace) {
+	Arm::Arm(nddlgen::model::Workspace* workspace)
+	{
 		this->_workspace = workspace;
 	}
 
-	Arm::~Arm() {
+	Arm::~Arm()
+	{
 		delete this->_workspace;
 	}
 

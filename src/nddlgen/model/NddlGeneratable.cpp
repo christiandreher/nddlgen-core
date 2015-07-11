@@ -16,13 +16,16 @@
 
 #include "nddlgen/model/NddlGeneratable.h"
 
-namespace nddlgen { namespace model {
+namespace nddlgen { namespace model
+{
 
-	void NddlGeneratable::setName(std::string name) {
+	void NddlGeneratable::setName(std::string name)
+	{
 		this->_name = name;
 	}
 
-	std::string NddlGeneratable::getName() {
+	std::string NddlGeneratable::getName()
+	{
 		return this->_name;
 	}
 

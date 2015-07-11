@@ -19,9 +19,11 @@
 
 #include "nddlgen/model/NddlGeneratable.h"
 
-namespace nddlgen { namespace model {
+namespace nddlgen { namespace model
+{
 
-	class Box : public nddlgen::model::NddlGeneratable {
+	class Box : public nddlgen::model::NddlGeneratable
+	{
 
 		public:
 

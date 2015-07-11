@@ -16,18 +16,22 @@
 
 #include "nddlgen/model/Workspace.h"
 
-namespace nddlgen { namespace model {
+namespace nddlgen { namespace model
+{
 
-	Workspace::Workspace() {
-
-	}
-
-	Workspace::~Workspace() {
+	Workspace::Workspace()
+	{
 
 	}
 
+	Workspace::~Workspace()
+	{
 
-	void Workspace::addToWorkspace(NddlGeneratable* object) {
+	}
+
+
+	void Workspace::addToWorkspace(NddlGeneratable* object)
+	{
 		this->_objects.push_back(object);
 	}
 

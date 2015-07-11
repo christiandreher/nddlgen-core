@@ -16,15 +16,17 @@
 
 #include "nddlgen/model/Box.h"
 
-namespace nddlgen { namespace model {
+namespace nddlgen { namespace model
+{
 
-Box::Box() {
-	// TODO Auto-generated constructor stub
+	Box::Box()
+	{
+		// TODO Auto-generated constructor stub
+	}
 
-}
-
-Box::~Box() {
-	// TODO Auto-generated destructor stub
-}
+	Box::~Box()
+	{
+		// TODO Auto-generated destructor stub
+	}
 
 }}

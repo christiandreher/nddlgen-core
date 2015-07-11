@@ -14,34 +14,19 @@
  * limitations under the License.
  */
 
-#ifndef NDDLGEN_MODEL_NDDLGENERATABLE_H_
-#define NDDLGEN_MODEL_NDDLGENERATABLE_H_
-
-#include <string>
+#include <nddlgen/model/ObjectSlide.h>
 
 namespace nddlgen { namespace model
 {
 
-	class NddlGeneratable
+	ObjectSlide::ObjectSlide()
 	{
+		// TODO Auto-generated constructor stub
+	}
 
-		private:
-
-			std::string _name;
-
-		public:
-
-			NddlGeneratable();
-			virtual ~NddlGeneratable();
-
-			virtual std::string generateDomainAsString() = 0;
-			virtual std::string generateInitialStateAsString() = 0;
-
-			void setName(std::string name);
-			std::string getName();
-
-	};
+	ObjectSlide::~ObjectSlide()
+	{
+		// TODO Auto-generated destructor stub
+	}
 
 }}
-
-#endif

@@ -14,31 +14,19 @@
  * limitations under the License.
  */
 
-#ifndef NDDLGEN_MODEL_NDDLGENERATABLE_H_
-#define NDDLGEN_MODEL_NDDLGENERATABLE_H_
-
-#include <string>
+#ifndef NDDLGEN_MODEL_OBJECTSLIDE_H_
+#define NDDLGEN_MODEL_OBJECTSLIDE_H_
 
 namespace nddlgen { namespace model
 {
 
-	class NddlGeneratable
+	class ObjectSlide
 	{
-
-		private:
-
-			std::string _name;
 
 		public:
 
-			NddlGeneratable();
-			virtual ~NddlGeneratable();
-
-			virtual std::string generateDomainAsString() = 0;
-			virtual std::string generateInitialStateAsString() = 0;
-
-			void setName(std::string name);
-			std::string getName();
+			ObjectSlide();
+			virtual ~ObjectSlide();
 
 	};
 

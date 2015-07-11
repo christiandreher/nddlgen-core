@@ -19,9 +19,11 @@
 
 #include "nddlgen/model/Box.h"
 
-namespace nddlgen { namespace model {
+namespace nddlgen { namespace model
+{
 
-	class LidBox : public nddlgen::model::Box {
+	class LidBox : public nddlgen::model::Box
+	{
 
 		private:
 
