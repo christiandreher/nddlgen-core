@@ -28,7 +28,7 @@ namespace nddlgen { namespace model {
 
 
 	void Workspace::addToWorkspace(NddlGeneratable* object) {
-		this->objects.push_back(object);
+		this->_objects.push_back(object);
 	}
 
 }}

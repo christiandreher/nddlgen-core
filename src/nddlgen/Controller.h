@@ -44,50 +44,50 @@ namespace nddlgen
 			/**
 			 * Stringstream to override the default cerr buffer.
 			 */
-			std::stringstream cerrOvRdBuf;
+			std::stringstream _cerrOvRdBuf;
 
 			/**
 			 * Default cerr buffer.
 			 */
-			std::streambuf* cerrStdRdBuf;
+			std::streambuf* _cerrStdRdBuf;
 
 
 			/**
 			 * Pointer to a string to write error messages to. Must be supplied through the constructor.
 			 */
-			std::string* errorText;
+			std::string* _errorText;
 
 			/**
 			 * Identifier for the sdf file to generate nddl files from. Must contain file name and extension
 			 * (.sdf) and can be a relative or absolute path.
 			 */
-			std::string fileIdentifier;
+			std::string _fileIdentifier;
 
 			/**
 			 * Root element of the sdf file.
 			 */
-			sdf::ElementPtr sdfRoot;
+			sdf::ElementPtr _sdfRoot;
 
 
 			/**
 			 * Flag to control the workflow and check if a file identifier has been set.
 			 */
-			bool isFileIdentifierSet;
+			bool _isFileIdentifierSet;
 
 			/**
 			 * Flag to control the workflow and check if the file has been checked.
 			 */
-			bool isFileChecked;
+			bool _isFileChecked;
 
 			/**
 			 * Flag to control the workflow and check if the SDF has been parsed.
 			 */
-			bool isSdfParsed;
+			bool _isSdfParsed;
 
 			/**
 			 * Flag to control the workflow and check if the nddl files has been generated.
 			 */
-			bool isNddlGenerated;
+			bool _isNddlGenerated;
 
 
 			/**

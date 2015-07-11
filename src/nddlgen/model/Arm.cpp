@@ -19,11 +19,11 @@
 namespace nddlgen { namespace model {
 
 	Arm::Arm(nddlgen::model::Workspace* workspace) {
-		this->workspace = workspace;
+		this->_workspace = workspace;
 	}
 
 	Arm::~Arm() {
-		delete this->workspace;
+		delete this->_workspace;
 	}
 
 }}

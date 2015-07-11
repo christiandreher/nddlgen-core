@@ -23,13 +23,19 @@ namespace nddlgen { namespace model {
 
 	class LidBox : public nddlgen::model::Box {
 
+		private:
+
+			bool _isOpened;
+
 		public:
 
-			LidBox();
+			LidBox(bool isOpened);
 			virtual ~LidBox();
 
 			virtual std::string generateDomainAsString();
 			virtual std::string generateInitialStateAsString();
+
+			bool isOpened();
 
 	};
 

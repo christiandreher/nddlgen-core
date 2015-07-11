@@ -25,7 +25,7 @@ namespace nddlgen { namespace model {
 
 		private:
 
-			std::string name;
+			std::string _name;
 
 		public:
 

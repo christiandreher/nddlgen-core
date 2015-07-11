@@ -27,7 +27,7 @@ namespace nddlgen { namespace model {
 
 		private:
 
-			nddlgen::model::Workspace* workspace;
+			nddlgen::model::Workspace* _workspace;
 
 		public:
 

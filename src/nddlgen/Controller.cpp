@@ -48,28 +48,28 @@ namespace nddlgen
 
 	Controller::Controller(std::string* errorText)
 	{
-		this->cerrStdRdBuf = std::cerr.rdbuf();
+		this->_cerrStdRdBuf = std::cerr.rdbuf();
 
-		this->errorText = errorText;
+		this->_errorText = errorText;
 
-		this->isFileIdentifierSet = false;
-		this->isFileChecked = false;
-		this->isSdfParsed = false;
-		this->isNddlGenerated = false;
+		this->_isFileIdentifierSet = false;
+		this->_isFileChecked = false;
+		this->_isSdfParsed = false;
+		this->_isNddlGenerated = false;
 	}
 
 	Controller::Controller(std::string fileIdentifier, std::string* errorText)
 	{
-		this->cerrStdRdBuf = std::cerr.rdbuf();
+		this->_cerrStdRdBuf = std::cerr.rdbuf();
 
-		this->fileIdentifier = fileIdentifier;
+		this->_fileIdentifier = fileIdentifier;
 
-		this->errorText = errorText;
+		this->_errorText = errorText;
 
-		this->isFileIdentifierSet = true;
-		this->isFileChecked = false;
-		this->isSdfParsed = false;
-		this->isNddlGenerated = false;
+		this->_isFileIdentifierSet = true;
+		this->_isFileChecked = false;
+		this->_isSdfParsed = false;
+		this->_isNddlGenerated = false;
 	}
 
 	Controller::~Controller()
@@ -81,21 +81,21 @@ namespace nddlgen
 	bool Controller::setFileIdentifier(std::string fileIdentifier)
 	{
 		// Check if file identifier has already been set
-		if (this->isFileIdentifierSet)
+		if (this->_isFileIdentifierSet)
 		{
-			*this->errorText = Controller::ERR_FILE_ID_ALREADY_SET;
+			*this->_errorText = Controller::ERR_FILE_ID_ALREADY_SET;
 			return false;
 		}
 
-		this->fileIdentifier = fileIdentifier;
-		this->isFileIdentifierSet = true;
+		this->_fileIdentifier = fileIdentifier;
+		this->_isFileIdentifierSet = true;
 
 		return true;
 	}
 
 	std::string Controller::getOutputFileName()
 	{
-		std::string fileStem = boost::filesystem::path(this->fileIdentifier).stem().string();
+		std::string fileStem = boost::filesystem::path(this->_fileIdentifier).stem().string();
 		return fileStem + ".nddl";
 	}
 
@@ -104,9 +104,9 @@ namespace nddlgen
 		sdf::SDFPtr sdf(new sdf::SDF);
 
 		// Check if file has already been checked
-		if (this->isFileChecked)
+		if (this->_isFileChecked)
 		{
-			*this->errorText = Controller::ERR_FILE_ALREADY_CHECKED;
+			*this->_errorText = Controller::ERR_FILE_ALREADY_CHECKED;
 			return false;
 		}
 
@@ -117,16 +117,16 @@ namespace nddlgen
 		}
 
 		// Check if file is a .sdf file
-		if (boost::filesystem::path(this->fileIdentifier).extension().string() != ".sdf")
+		if (boost::filesystem::path(this->_fileIdentifier).extension().string() != ".sdf")
 		{
-			*this->errorText = Controller::ERR_FILE_MUST_BE_SDF;
+			*this->_errorText = Controller::ERR_FILE_MUST_BE_SDF;
 			return false;
 		}
 
 		// Check if file exists
-		if (!boost::filesystem::exists(this->fileIdentifier))
+		if (!boost::filesystem::exists(this->_fileIdentifier))
 		{
-			*this->errorText = Controller::ERR_FILE_NOT_EXISTING;
+			*this->_errorText = Controller::ERR_FILE_NOT_EXISTING;
 			return false;
 		}
 
@@ -136,32 +136,32 @@ namespace nddlgen
 		if (!sdf::init(sdf))
 		{
 			this->enableCerr();
-			*this->errorText = Controller::ERR_INITIALIZING_SDF + "\n" + this->getBufferedCerrOutput();
+			*this->_errorText = Controller::ERR_INITIALIZING_SDF + "\n" + this->getBufferedCerrOutput();
 			return false;
 		}
 
 		// Try to read the file
-		if (!sdf::readFile(this->fileIdentifier, sdf))
+		if (!sdf::readFile(this->_fileIdentifier, sdf))
 		{
 			this->enableCerr();
-			*this->errorText = Controller::ERR_READING_SDF_FILE + "\n" + this->getBufferedCerrOutput();
+			*this->_errorText = Controller::ERR_READING_SDF_FILE + "\n" + this->getBufferedCerrOutput();
 			return false;
 		}
 
-		this->sdfRoot = sdf->root;
+		this->_sdfRoot = sdf->root;
 
 		this->enableCerr();
 
-		this->isFileChecked = true;
+		this->_isFileChecked = true;
 		return true;
 	}
 
 	bool Controller::parseSdf()
 	{
 		// Check if file has already been parsed
-		if (this->isSdfParsed)
+		if (this->_isSdfParsed)
 		{
-			*this->errorText = Controller::ERR_FILE_ALREADY_PARSED;
+			*this->_errorText = Controller::ERR_FILE_ALREADY_PARSED;
 			return false;
 		}
 
@@ -171,16 +171,16 @@ namespace nddlgen
 			return false;
 		}
 
-		this->isSdfParsed = true;
+		this->_isSdfParsed = true;
 		return true;
 	}
 
 	bool Controller::generateNddl()
 	{
 		// Check if nddl has already been generated
-		if (this->isNddlGenerated)
+		if (this->_isNddlGenerated)
 		{
-			*this->errorText = Controller::ERR_NDDL_ALREADY_GENERATED;
+			*this->_errorText = Controller::ERR_NDDL_ALREADY_GENERATED;
 			return false;
 		}
 
@@ -190,7 +190,7 @@ namespace nddlgen
 			return false;
 		}
 
-		this->isNddlGenerated = true;
+		this->_isNddlGenerated = true;
 		return true;
 	}
 
@@ -198,9 +198,9 @@ namespace nddlgen
 	bool Controller::isCheckable()
 	{
 		// Check if file identifier was set
-		if (!this->isFileIdentifierSet)
+		if (!this->_isFileIdentifierSet)
 		{
-			*this->errorText = Controller::ERR_SET_FILE_ID_FIRST;
+			*this->_errorText = Controller::ERR_SET_FILE_ID_FIRST;
 			return false;
 		}
 
@@ -216,9 +216,9 @@ namespace nddlgen
 		}
 
 		// Check if file was checked
-		if (!this->isFileChecked)
+		if (!this->_isFileChecked)
 		{
-			*this->errorText = Controller::ERR_CHECK_FILE_FIRST;
+			*this->_errorText = Controller::ERR_CHECK_FILE_FIRST;
 			return false;
 		}
 
@@ -234,9 +234,9 @@ namespace nddlgen
 		}
 
 		// Check if file was parsed
-		if (!this->isSdfParsed)
+		if (!this->_isSdfParsed)
 		{
-			*this->errorText = Controller::ERR_PARSE_FILE_FIRST;
+			*this->_errorText = Controller::ERR_PARSE_FILE_FIRST;
 			return false;
 		}
 
@@ -246,17 +246,17 @@ namespace nddlgen
 
 	void Controller::disableCerr()
 	{
-		std::cerr.rdbuf(this->cerrOvRdBuf.rdbuf());
+		std::cerr.rdbuf(this->_cerrOvRdBuf.rdbuf());
 	}
 
 	void Controller::enableCerr()
 	{
-		std::cerr.rdbuf(this->cerrStdRdBuf);
+		std::cerr.rdbuf(this->_cerrStdRdBuf);
 	}
 
 	std::string Controller::getBufferedCerrOutput()
 	{
-		return this->cerrOvRdBuf.str();
+		return this->_cerrOvRdBuf.str();
 	}
 
 }

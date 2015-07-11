@@ -18,13 +18,16 @@
 
 namespace nddlgen { namespace model {
 
-LidBox::LidBox() {
-	// TODO Auto-generated constructor stub
+	LidBox::LidBox(bool isOpened) {
+		this->_isOpened = isOpened;
+	}
 
-}
+	LidBox::~LidBox() {
+		// TODO Auto-generated destructor stub
+	}
 
-LidBox::~LidBox() {
-	// TODO Auto-generated destructor stub
-}
+	bool LidBox::isOpened() {
+		return this->_isOpened;
+	}
 
 }}

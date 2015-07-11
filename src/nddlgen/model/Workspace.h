@@ -27,7 +27,7 @@ namespace nddlgen { namespace model {
 
 		private:
 
-			boost::ptr_list<NddlGeneratable> objects;
+			boost::ptr_list<NddlGeneratable> _objects;
 
 		public:
 
