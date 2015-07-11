@@ -14,8 +14,8 @@
  * limitations under the License.
  */
 
-#ifndef CONTROLLER_H_
-#define CONTROLLER_H_
+#ifndef NDDLGEN_CONTROLLER_H_
+#define NDDLGEN_CONTROLLER_H_
 
 #include <string>
 #include <sdf/sdf.hh>
@@ -26,7 +26,7 @@
  * @author Christian Dreher
  * @version v1.0.0
  */
-namespace base
+namespace nddlgen
 {
 
 	/**

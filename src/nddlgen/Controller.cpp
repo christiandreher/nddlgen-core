@@ -17,41 +17,38 @@
 #include <sys/stat.h>
 #include <boost/filesystem.hpp>
 
-#include "Controller.h"
+#include "nddlgen/Controller.h"
 
-using namespace std;
-using namespace sdf;
-
-namespace base
+namespace nddlgen
 {
 
-	const string Controller::ERR_FILE_ID_ALREADY_SET =
+	const std::string Controller::ERR_FILE_ID_ALREADY_SET =
 			"A file identifier has already been set. Create a new instance if necessary.";
-	const string Controller::ERR_FILE_ALREADY_CHECKED =
+	const std::string Controller::ERR_FILE_ALREADY_CHECKED =
 			"The file has already been checked.";
-	const string Controller::ERR_FILE_ALREADY_PARSED =
+	const std::string Controller::ERR_FILE_ALREADY_PARSED =
 			"The file has already been parsed.";
-	const string Controller::ERR_NDDL_ALREADY_GENERATED =
+	const std::string Controller::ERR_NDDL_ALREADY_GENERATED =
 			"The NDDL-file has already been generated.";
-	const string Controller::ERR_SET_FILE_ID_FIRST =
+	const std::string Controller::ERR_SET_FILE_ID_FIRST =
 			"No file identifier has been set. Set one by calling Controller::setFileIdentifier(fileIdentifier).";
-	const string Controller::ERR_CHECK_FILE_FIRST =
+	const std::string Controller::ERR_CHECK_FILE_FIRST =
 			"The file was not checked. Check it by calling Controller::checkFile().";
-	const string Controller::ERR_PARSE_FILE_FIRST =
+	const std::string Controller::ERR_PARSE_FILE_FIRST =
 			"The file was not parsed. Parse it by calling Controller::parseFile().";
-	const string Controller::ERR_FILE_MUST_BE_SDF =
+	const std::string Controller::ERR_FILE_MUST_BE_SDF =
 			"File must be an .sdf file.";
-	const string Controller::ERR_FILE_NOT_EXISTING =
+	const std::string Controller::ERR_FILE_NOT_EXISTING =
 			"File does not exist.";
-	const string Controller::ERR_INITIALIZING_SDF =
+	const std::string Controller::ERR_INITIALIZING_SDF =
 			"Unable to initialize .sdf file.";
-	const string Controller::ERR_READING_SDF_FILE =
+	const std::string Controller::ERR_READING_SDF_FILE =
 			"Unable to read .sdf file.";
 
 
-	Controller::Controller(string* errorText)
+	Controller::Controller(std::string* errorText)
 	{
-		this->cerrStdRdBuf = cerr.rdbuf();
+		this->cerrStdRdBuf = std::cerr.rdbuf();
 
 		this->errorText = errorText;
 
@@ -61,9 +58,9 @@ namespace base
 		this->isNddlGenerated = false;
 	}
 
-	Controller::Controller(string fileIdentifier, string* errorText)
+	Controller::Controller(std::string fileIdentifier, std::string* errorText)
 	{
-		this->cerrStdRdBuf = cerr.rdbuf();
+		this->cerrStdRdBuf = std::cerr.rdbuf();
 
 		this->fileIdentifier = fileIdentifier;
 
@@ -81,7 +78,7 @@ namespace base
 	}
 
 
-	bool Controller::setFileIdentifier(string fileIdentifier)
+	bool Controller::setFileIdentifier(std::string fileIdentifier)
 	{
 		// Check if file identifier has already been set
 		if (this->isFileIdentifierSet)
@@ -96,15 +93,15 @@ namespace base
 		return true;
 	}
 
-	string Controller::getOutputFileName()
+	std::string Controller::getOutputFileName()
 	{
-		string fileStem = boost::filesystem::path(this->fileIdentifier).stem().string();
+		std::string fileStem = boost::filesystem::path(this->fileIdentifier).stem().string();
 		return fileStem + ".nddl";
 	}
 
 	bool Controller::checkFile()
 	{
-		SDFPtr sdf(new SDF);
+		sdf::SDFPtr sdf(new sdf::SDF);
 
 		// Check if file has already been checked
 		if (this->isFileChecked)
@@ -257,7 +254,7 @@ namespace base
 		std::cerr.rdbuf(this->cerrStdRdBuf);
 	}
 
-	string Controller::getBufferedCerrOutput()
+	std::string Controller::getBufferedCerrOutput()
 	{
 		return this->cerrOvRdBuf.str();
 	}

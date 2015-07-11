@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-#include "SDFParser.h"
+#include "SdfParser.h"
 
 namespace core
 {

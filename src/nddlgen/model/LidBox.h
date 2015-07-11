@@ -14,20 +14,25 @@
  * limitations under the License.
  */
 
-#include "NDDLGenerator.h"
+#ifndef NDDLGEN_MODEL_LIDBOX_H_
+#define NDDLGEN_MODEL_LIDBOX_H_
 
-namespace core
-{
+#include "nddlgen/model/Box.h"
 
-	NDDLGenerator::NDDLGenerator()
-	{
-		// TODO Auto-generated constructor stub
+namespace nddlgen { namespace model {
 
-	}
+	class LidBox : public nddlgen::model::Box {
 
-	NDDLGenerator::~NDDLGenerator()
-	{
-		// TODO Auto-generated destructor stub
-	}
+		public:
 
-} /* namespace core */
+			LidBox();
+			virtual ~LidBox();
+
+			virtual std::string generateDomainAsString();
+			virtual std::string generateInitialStateAsString();
+
+	};
+
+}}
+
+#endif
