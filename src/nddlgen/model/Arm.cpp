@@ -19,14 +19,36 @@
 namespace nddlgen { namespace model
 {
 
-	Arm::Arm(nddlgen::model::Workspace* workspace)
+	Arm::Arm()
 	{
-		this->_workspace = workspace;
+		this->_workspace = nullptr;
 	}
 
 	Arm::~Arm()
 	{
 		delete this->_workspace;
+	}
+
+
+	std::string Arm::generateModelAsString()
+	{
+		return "";
+	}
+
+	std::string Arm::generateInitialStateAsString()
+	{
+		return "";
+	}
+
+
+	void Arm::setWorkspace(nddlgen::model::Workspace* workspace)
+	{
+		this->_workspace = workspace;
+	}
+
+	nddlgen::model::Workspace* Arm::getWorkspace()
+	{
+		return this->_workspace;
 	}
 
 }}

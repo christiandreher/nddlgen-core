@@ -34,7 +34,7 @@ namespace nddlgen { namespace model
 			LidBox(bool isOpened);
 			virtual ~LidBox();
 
-			virtual std::string generateDomainAsString();
+			virtual std::string generateModelAsString();
 			virtual std::string generateInitialStateAsString();
 
 			bool isOpened();

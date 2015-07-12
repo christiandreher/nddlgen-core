@@ -30,6 +30,17 @@ namespace nddlgen { namespace model
 	}
 
 
+	std::string Workspace::generateModelAsString()
+	{
+		return "";
+	}
+
+	std::string Workspace::generateInitialStateAsString()
+	{
+		return "";
+	}
+
+
 	void Workspace::addToWorkspace(NddlGeneratable* object)
 	{
 		this->_objects.push_back(object);

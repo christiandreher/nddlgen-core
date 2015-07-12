@@ -29,4 +29,15 @@ namespace nddlgen { namespace model
 		// TODO Auto-generated destructor stub
 	}
 
+
+	std::string ObjectSlideContainer::generateModelAsString()
+	{
+		return "";
+	}
+
+	std::string ObjectSlideContainer::generateInitialStateAsString()
+	{
+		return "";
+	}
+
 }}

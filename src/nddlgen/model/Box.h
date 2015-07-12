@@ -30,7 +30,7 @@ namespace nddlgen { namespace model
 			Box();
 			virtual ~Box();
 
-			virtual std::string generateDomainAsString();
+			virtual std::string generateModelAsString();
 			virtual std::string generateInitialStateAsString();
 
 	};

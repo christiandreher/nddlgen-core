@@ -34,7 +34,7 @@ namespace nddlgen { namespace model
 			NddlGeneratable();
 			virtual ~NddlGeneratable();
 
-			virtual std::string generateDomainAsString() = 0;
+			virtual std::string generateModelAsString() = 0;
 			virtual std::string generateInitialStateAsString() = 0;
 
 			void setName(std::string name);

@@ -19,6 +19,16 @@
 namespace nddlgen { namespace model
 {
 
+	NddlGeneratable::NddlGeneratable()
+	{
+
+	}
+
+	NddlGeneratable::~NddlGeneratable()
+	{
+
+	}
+
 	void NddlGeneratable::setName(std::string name)
 	{
 		this->_name = name;

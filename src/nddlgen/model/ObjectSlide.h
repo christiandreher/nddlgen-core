@@ -17,16 +17,21 @@
 #ifndef NDDLGEN_MODEL_OBJECTSLIDE_H_
 #define NDDLGEN_MODEL_OBJECTSLIDE_H_
 
+#include "nddlgen/model/NddlGeneratable.h"
+
 namespace nddlgen { namespace model
 {
 
-	class ObjectSlide
+	class ObjectSlide : public nddlgen::model::NddlGeneratable
 	{
 
 		public:
 
 			ObjectSlide();
 			virtual ~ObjectSlide();
+
+			virtual std::string generateModelAsString();
+			virtual std::string generateInitialStateAsString();
 
 	};
 

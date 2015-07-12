@@ -36,7 +36,7 @@ namespace nddlgen { namespace model
 			Workspace();
 			virtual ~Workspace();
 
-			virtual std::string generateDomainAsString();
+			virtual std::string generateModelAsString();
 			virtual std::string generateInitialStateAsString();
 
 			void addToWorkspace(NddlGeneratable* object);

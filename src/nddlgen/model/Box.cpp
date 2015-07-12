@@ -29,4 +29,15 @@ namespace nddlgen { namespace model
 		// TODO Auto-generated destructor stub
 	}
 
+
+	std::string Box::generateModelAsString()
+	{
+		return "";
+	}
+
+	std::string Box::generateInitialStateAsString()
+	{
+		return "";
+	}
+
 }}

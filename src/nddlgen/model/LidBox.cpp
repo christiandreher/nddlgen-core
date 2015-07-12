@@ -29,6 +29,18 @@ namespace nddlgen { namespace model
 		// TODO Auto-generated destructor stub
 	}
 
+
+	std::string LidBox::generateModelAsString()
+	{
+		return "";
+	}
+
+	std::string LidBox::generateInitialStateAsString()
+	{
+		return "";
+	}
+
+
 	bool LidBox::isOpened()
 	{
 		return this->_isOpened;

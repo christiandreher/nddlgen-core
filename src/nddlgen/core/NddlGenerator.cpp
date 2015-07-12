@@ -14,20 +14,45 @@
  * limitations under the License.
  */
 
-#include "NddlGenerator.h"
+#include "nddlgen/core/NddlGenerator.h"
 
-namespace core
+namespace nddlgen { namespace core
 {
 
-	NDDLGenerator::NDDLGenerator()
+	NddlGenerator::NddlGenerator(nddlgen::model::Arm* armModel)
 	{
-		// TODO Auto-generated constructor stub
-
+		this->_armModel = armModel;
 	}
 
-	NDDLGenerator::~NDDLGenerator()
+	NddlGenerator::~NddlGenerator()
 	{
 		// TODO Auto-generated destructor stub
 	}
 
-} /* namespace core */
+
+	bool NddlGenerator::generateModels()
+	{
+		// Generate domain files...
+		return true;
+	}
+
+	bool NddlGenerator::generateInitialState()
+	{
+		// Generate initial state files...
+		return true;
+	}
+
+
+	bool NddlGenerator::writeModelsToFile()
+	{
+		// Write this->_domain to file
+		return true;
+	}
+
+	bool NddlGenerator::writeInitialStateToFile()
+	{
+		// Write this->_initialState to file
+		return true;
+	}
+
+}}

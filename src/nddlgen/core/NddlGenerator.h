@@ -17,16 +17,35 @@
 #ifndef CORE_NDDLGENERATOR_H_
 #define CORE_NDDLGENERATOR_H_
 
-namespace core
+#include <string>
+
+#include "nddlgen/model/Arm.h"
+
+namespace nddlgen { namespace core
 {
 
-	class NDDLGenerator
+	class NddlGenerator
 	{
+
+		private:
+
+			nddlgen::model::Arm* _armModel;
+			std::string _domain;
+			std::string _initialState;
+
 		public:
-			NDDLGenerator();
-			virtual ~NDDLGenerator();
+
+			NddlGenerator(nddlgen::model::Arm* armModel);
+			virtual ~NddlGenerator();
+
+			bool generateModels();
+			bool generateInitialState();
+
+			bool writeModelsToFile();
+			bool writeInitialStateToFile();
+
 	};
 
-}
+}}
 
 #endif

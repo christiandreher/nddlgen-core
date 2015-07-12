@@ -17,16 +17,29 @@
 #ifndef CORE_SDFPARSER_H_
 #define CORE_SDFPARSER_H_
 
-namespace core
+#include <sdf/sdf.hh>
+
+#include "nddlgen/model/Arm.h"
+
+namespace nddlgen { namespace core
 {
 
-	class SDFParser
+	class SdfParser
 	{
+
+		private:
+
+			nddlgen::model::Arm* _armModel;
+
 		public:
-			SDFParser();
-			virtual ~SDFParser();
+
+			SdfParser(nddlgen::model::Arm* armModel);
+			virtual ~SdfParser();
+
+			bool parseDataStructure(sdf::ElementPtr sdfRoot);
+
 	};
 
-}
+}}
 
 #endif

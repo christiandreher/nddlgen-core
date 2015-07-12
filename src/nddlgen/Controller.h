@@ -20,6 +20,10 @@
 #include <string>
 #include <sdf/sdf.hh>
 
+#include "nddlgen/core/SdfParser.h"
+#include "nddlgen/core/NddlGenerator.h"
+#include "nddlgen/model/Arm.h"
+
 /**
  * Base components for the nddl generator.
  *
@@ -89,6 +93,10 @@ namespace nddlgen
 			 */
 			bool _isNddlGenerated;
 
+			/**
+			 * Arm model to generate nddl files from.
+			 */
+			nddlgen::model::Arm* _armModel;
 
 			/**
 			 * Checks if a file is checkable. This means, that a file identifier has already
@@ -230,12 +238,25 @@ namespace nddlgen
 			bool setFileIdentifier(std::string fileIdentifier);
 
 			/**
-			 * Syntax yet to be defined.
+			 * Returns the path where the output files are saved.
 			 *
-			 * @todo
-			 * @return false, if errors where produced, true if not.
+			 * @return Path of the output files.
 			 */
-			std::string getOutputFileName();
+			std::string getOutputFilesPath();
+
+			/**
+			 * Returns the file name of the domain models output file.
+			 *
+			 * @return Name of the domain models output file.
+			 */
+			std::string getModelsOutputFileName();
+
+			/**
+			 * Returns the file name of the domain initial state output file.
+			 *
+			 * @return Name of the domain initial state output file.
+			 */
+			std::string getInitialStateOutputFileName();
 
 			/**
 			 * Checks if the given file is a .sdf file, if it exists, if it is readable, if it

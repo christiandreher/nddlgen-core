@@ -56,6 +56,8 @@ namespace nddlgen
 		this->_isFileChecked = false;
 		this->_isSdfParsed = false;
 		this->_isNddlGenerated = false;
+
+		this->_armModel = new nddlgen::model::Arm();
 	}
 
 	Controller::Controller(std::string fileIdentifier, std::string* errorText)
@@ -70,11 +72,13 @@ namespace nddlgen
 		this->_isFileChecked = false;
 		this->_isSdfParsed = false;
 		this->_isNddlGenerated = false;
+
+		this->_armModel = new nddlgen::model::Arm();
 	}
 
 	Controller::~Controller()
 	{
-
+		delete this->_armModel;
 	}
 
 
@@ -93,9 +97,23 @@ namespace nddlgen
 		return true;
 	}
 
-	std::string Controller::getOutputFileName()
+	std::string Controller::getOutputFilesPath()
+	{
+		std::string filePath = boost::filesystem::path(this->_fileIdentifier).parent_path().string();
+		return filePath;
+	}
+
+	std::string Controller::getModelsOutputFileName()
 	{
 		std::string fileStem = boost::filesystem::path(this->_fileIdentifier).stem().string();
+		fileStem += "-model";
+		return fileStem + ".nddl";
+	}
+
+	std::string Controller::getInitialStateOutputFileName()
+	{
+		std::string fileStem = boost::filesystem::path(this->_fileIdentifier).stem().string();
+		fileStem += "-initial-state";
 		return fileStem + ".nddl";
 	}
 
@@ -140,7 +158,7 @@ namespace nddlgen
 			return false;
 		}
 
-		// Try to read the file
+		// Try to read the file and generate SDF
 		if (!sdf::readFile(this->_fileIdentifier, sdf))
 		{
 			this->enableCerr();
@@ -158,6 +176,9 @@ namespace nddlgen
 
 	bool Controller::parseSdf()
 	{
+		// Initialize the parser with the already initialized Arm model
+		nddlgen::core::SdfParser* sdfParser = new nddlgen::core::SdfParser(this->_armModel);
+
 		// Check if file has already been parsed
 		if (this->_isSdfParsed)
 		{
@@ -171,12 +192,24 @@ namespace nddlgen
 			return false;
 		}
 
+		// Parse the SDF into the defined data structure and check if it was successful
+		if (!sdfParser->parseDataStructure(this->_sdfRoot))
+		{
+			*this->_errorText = "todo";
+			return false;
+		}
+
+		delete sdfParser;
+
 		this->_isSdfParsed = true;
 		return true;
 	}
 
 	bool Controller::generateNddl()
 	{
+		// Initialize the NDDL generator with the already initialized and populated Arm model
+		nddlgen::core::NddlGenerator* nddlGen = new nddlgen::core::NddlGenerator(this->_armModel);
+
 		// Check if nddl has already been generated
 		if (this->_isNddlGenerated)
 		{
@@ -189,6 +222,36 @@ namespace nddlgen
 		{
 			return false;
 		}
+
+		// Try to generate domain models and check if it was successful
+		if (!nddlGen->generateModels())
+		{
+			*this->_errorText = "todo";
+			return false;
+		}
+
+		// Try to create domain models output file and write generated domain models NDDL into it
+		if (!nddlGen->writeModelsToFile())
+		{
+			*this->_errorText = "todo";
+			return false;
+		}
+
+		// Try to generate domain initial state and check if it was successful
+		if (!nddlGen->generateInitialState())
+		{
+			*this->_errorText = "todo";
+			return false;
+		}
+
+		// Try to create domain initial state output file and  write generated domain initial state NDDL into it
+		if (!nddlGen->writeInitialStateToFile())
+		{
+			*this->_errorText = "todo";
+			return false;
+		}
+
+		delete nddlGen;
 
 		this->_isNddlGenerated = true;
 		return true;

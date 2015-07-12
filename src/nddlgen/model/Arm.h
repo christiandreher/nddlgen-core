@@ -33,11 +33,14 @@ namespace nddlgen { namespace model
 
 		public:
 
-			Arm(nddlgen::model::Workspace* workspace);
+			Arm();
 			virtual ~Arm();
 
-			virtual std::string generateDomainAsString();
+			virtual std::string generateModelAsString();
 			virtual std::string generateInitialStateAsString();
+
+			void setWorkspace(nddlgen::model::Workspace* workspace);
+			nddlgen::model::Workspace* getWorkspace();
 
 	};
 

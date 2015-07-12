@@ -14,20 +14,26 @@
  * limitations under the License.
  */
 
-#include "SdfParser.h"
+#include "nddlgen/core/SdfParser.h"
 
-namespace core
+namespace nddlgen { namespace core
 {
 
-	SDFParser::SDFParser()
+	SdfParser::SdfParser(nddlgen::model::Arm* armModel)
 	{
-		// TODO Auto-generated constructor stub
-
+		this->_armModel = armModel;
 	}
 
-	SDFParser::~SDFParser()
+	SdfParser::~SdfParser()
 	{
 		// TODO Auto-generated destructor stub
 	}
 
-}
+
+	bool SdfParser::parseDataStructure(sdf::ElementPtr sdfRoot)
+	{
+		// Modify Arm model...
+		return true;
+	}
+
+}}
