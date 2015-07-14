@@ -32,12 +32,16 @@ namespace nddlgen { namespace model
 
 	std::string Arm::generateModelAsString()
 	{
-		return "";
+		std::string model = this->_workspace->generateModelAsString();
+
+		return model;
 	}
 
 	std::string Arm::generateInitialStateAsString()
 	{
-		return "";
+		std::string initialState = this->_workspace->generateInitialStateAsString();
+
+		return initialState;
 	}
 
 

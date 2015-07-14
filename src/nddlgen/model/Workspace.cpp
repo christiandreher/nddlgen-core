@@ -26,7 +26,7 @@ namespace nddlgen { namespace model
 
 	Workspace::~Workspace()
 	{
-
+		// @todo watch out to delete objects properly in future
 	}
 
 

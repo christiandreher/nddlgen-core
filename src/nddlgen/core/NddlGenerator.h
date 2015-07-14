@@ -30,7 +30,7 @@ namespace nddlgen { namespace core
 		private:
 
 			nddlgen::model::Arm* _armModel;
-			std::string _domain;
+			std::string _models;
 			std::string _initialState;
 
 		public:

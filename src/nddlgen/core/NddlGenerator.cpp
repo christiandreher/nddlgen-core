@@ -32,20 +32,22 @@ namespace nddlgen { namespace core
 
 	bool NddlGenerator::generateModels()
 	{
-		// Generate domain files...
+		this->_models = this->_armModel->generateModelAsString();
+
 		return true;
 	}
 
 	bool NddlGenerator::generateInitialState()
 	{
-		// Generate initial state files...
+		this->_initialState = this->_armModel->generateInitialStateAsString();
+
 		return true;
 	}
 
 
 	bool NddlGenerator::writeModelsToFile()
 	{
-		// Write this->_domain to file
+		// Write this->_models to file
 		return true;
 	}
 
