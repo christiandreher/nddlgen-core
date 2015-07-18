@@ -17,6 +17,9 @@
 #ifndef NDDLGEN_MODELS_OBJECTSLIDE_H_
 #define NDDLGEN_MODELS_OBJECTSLIDE_H_
 
+#include <iostream>
+#include <fstream>
+
 #include <nddlgen/models/NddlGeneratable.h>
 
 namespace nddlgen { namespace models
@@ -30,8 +33,8 @@ namespace nddlgen { namespace models
 			ObjectSlide();
 			virtual ~ObjectSlide();
 
-			virtual std::string generateModelAsString();
-			virtual std::string generateInitialStateAsString();
+			virtual void generateModelAsString(std::ofstream& ofStream);
+			virtual void generateInitialStateAsString(std::ofstream& ofStream);
 
 	};
 

@@ -18,7 +18,6 @@
 #define CORE_SDFPARSER_H_
 
 #include <boost/algorithm/string.hpp>
-#include <boost/foreach.hpp>
 
 #include <nddlgen/models/Arm.h>
 #include <nddlgen/models/Box.h>
@@ -26,11 +25,10 @@
 #include <nddlgen/models/NddlGeneratable.h>
 #include <nddlgen/models/ObjectSlide.h>
 #include <nddlgen/models/ObjectSlideContainer.h>
+#include <nddlgen/types/Types.hpp>
+#include <nddlgen/utilities/Foreach.hpp>
 
 #include <sdf/sdf.hh>
-
-#include "nddlgen/types/Types.h"
-
 
 namespace nddlgen { namespace core
 {

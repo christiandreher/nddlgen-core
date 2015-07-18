@@ -30,30 +30,21 @@ namespace nddlgen { namespace core
 	}
 
 
-	bool NddlGenerator::generateModels()
+	bool NddlGenerator::generateModels(std::string fileName)
 	{
-		this->_models = this->_armModel->generateModelAsString();
+		std::ofstream ofStream(fileName);
+
+		this->_armModel->generateModelAsString(ofStream);
+
+		ofStream.close();
 
 		return true;
 	}
 
-	bool NddlGenerator::generateInitialState()
+	bool NddlGenerator::generateInitialState(std::string fileName)
 	{
-		this->_initialState = this->_armModel->generateInitialStateAsString();
+		//this->_initialState = this->_armModel->generateInitialStateAsString();
 
-		return true;
-	}
-
-
-	bool NddlGenerator::writeModelsToFile()
-	{
-		// Write this->_models to file
-		return true;
-	}
-
-	bool NddlGenerator::writeInitialStateToFile()
-	{
-		// Write this->_initialState to file
 		return true;
 	}
 

@@ -17,9 +17,16 @@
 #ifndef NDDLGEN_MODELS_WORKSPACE_H_
 #define NDDLGEN_MODELS_WORKSPACE_H_
 
-#include <nddlgen/models/NddlGeneratable.h>
-#include "nddlgen/types/Types.h"
+#include <iostream>
+#include <fstream>
 
+#include <nddlgen/models/NddlGeneratable.h>
+#include <nddlgen/models/Box.h>
+#include <nddlgen/models/LidBox.h>
+#include <nddlgen/models/ObjectSlide.h>
+#include <nddlgen/models/ObjectSlideContainer.h>
+#include <nddlgen/types/Types.hpp>
+#include <nddlgen/utilities/Foreach.hpp>
 
 namespace nddlgen { namespace models
 {
@@ -29,17 +36,19 @@ namespace nddlgen { namespace models
 
 		private:
 
-			nddlgen::types::NddlGeneratableList _objects;
+			nddlgen::types::NddlGeneratableList _modelClasses;
+			nddlgen::types::NddlGeneratableList _models;
 
 		public:
 
 			Workspace();
 			virtual ~Workspace();
 
-			virtual std::string generateModelAsString();
-			virtual std::string generateInitialStateAsString();
+			virtual void generateModelAsString(std::ofstream& ofStream);
+			virtual void generateInitialStateAsString(std::ofstream& ofStream);
 
-			void addToWorkspace(NddlGeneratable* object);
+			void addModelToWorkspace(nddlgen::models::NddlGeneratable* model);
+			nddlgen::models::NddlGeneratable* getModelByName(std::string name);
 
 	};
 

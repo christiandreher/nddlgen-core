@@ -17,6 +17,9 @@
 #ifndef NDDLGEN_MODELS_BOX_H_
 #define NDDLGEN_MODELS_BOX_H_
 
+#include <iostream>
+#include <fstream>
+
 #include <nddlgen/models/NddlGeneratable.h>
 
 namespace nddlgen { namespace models
@@ -30,8 +33,8 @@ namespace nddlgen { namespace models
 			Box();
 			virtual ~Box();
 
-			virtual std::string generateModelAsString();
-			virtual std::string generateInitialStateAsString();
+			virtual void generateModelAsString(std::ofstream& ofStream);
+			virtual void generateInitialStateAsString(std::ofstream& ofStream);
 
 	};
 

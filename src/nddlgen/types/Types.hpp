@@ -14,8 +14,8 @@
  * limitations under the License.
  */
 
-#ifndef NDDLGEN_TYPES_TYPES_H_
-#define NDDLGEN_TYPES_TYPES_H_
+#ifndef NDDLGEN_TYPES_TYPES_HPP_
+#define NDDLGEN_TYPES_TYPES_HPP_
 
 #include <boost/ptr_container/ptr_list.hpp>
 #include <nddlgen/models/NddlGeneratable.h>
@@ -25,7 +25,7 @@
 
 namespace nddlgen { namespace types {
 
-	typedef boost::ptr_list<sdf::Element> ModelList;
+	typedef std::list<sdf::ElementPtr> ModelList;
 
 	typedef boost::ptr_list<nddlgen::models::NddlGeneratable> NddlGeneratableList;
 

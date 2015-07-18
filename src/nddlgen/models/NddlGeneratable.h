@@ -17,6 +17,8 @@
 #ifndef NDDLGEN_MODELS_NDDLGENERATABLE_H_
 #define NDDLGEN_MODELS_NDDLGENERATABLE_H_
 
+#include <iostream>
+#include <fstream>
 #include <string>
 
 namespace nddlgen { namespace models
@@ -34,8 +36,8 @@ namespace nddlgen { namespace models
 			NddlGeneratable();
 			virtual ~NddlGeneratable();
 
-			virtual std::string generateModelAsString() = 0;
-			virtual std::string generateInitialStateAsString() = 0;
+			virtual void generateModelAsString(std::ofstream& ofStream) = 0;
+			virtual void generateInitialStateAsString(std::ofstream& ofStream) = 0;
 
 			void setName(std::string name);
 			std::string getName();

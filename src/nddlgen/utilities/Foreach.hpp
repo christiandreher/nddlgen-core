@@ -14,33 +14,11 @@
  * limitations under the License.
  */
 
-#include <nddlgen/models/ObjectSlide.h>
+#ifndef NDDLGEN_UTILITIES_FOREACH_HPP_
+#define NDDLGEN_UTILITIES_FOREACH_HPP_
 
-namespace nddlgen { namespace models
-{
+#include <boost/foreach.hpp>
 
-	ObjectSlide::ObjectSlide()
-	{
-		// TODO Auto-generated constructor stub
-	}
+#define foreach BOOST_FOREACH
 
-	ObjectSlide::~ObjectSlide()
-	{
-		// TODO Auto-generated destructor stub
-	}
-
-
-	void ObjectSlide::generateModelAsString(std::ofstream& ofStream)
-	{
-		ofStream << "class ObjectSlide" << std::endl;
-		ofStream << "{" << std::endl;
-
-		ofStream << "}" << std::endl;
-	}
-
-	void ObjectSlide::generateInitialStateAsString(std::ofstream& ofStream)
-	{
-
-	}
-
-}}
+#endif

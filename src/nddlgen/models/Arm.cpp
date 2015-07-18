@@ -30,18 +30,21 @@ namespace nddlgen { namespace models
 	}
 
 
-	std::string Arm::generateModelAsString()
+	void Arm::generateModelAsString(std::ofstream& ofStream)
 	{
-		std::string model = this->_workspace->generateModelAsString();
+		this->_workspace->generateModelAsString(ofStream);
 
-		return model;
+		ofStream << std::endl;
+
+		ofStream << "class Arm" << std::endl;
+		ofStream << "{" << std::endl;
+
+		ofStream << "}" << std::endl;
 	}
 
-	std::string Arm::generateInitialStateAsString()
+	void Arm::generateInitialStateAsString(std::ofstream& ofStream)
 	{
-		std::string initialState = this->_workspace->generateInitialStateAsString();
-
-		return initialState;
+		//ofStream << this->_workspace->generateInitialStateAsString(ofStream);
 	}
 
 

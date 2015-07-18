@@ -17,6 +17,9 @@
 #ifndef NDDLGEN_MODELS_LIDBOX_H_
 #define NDDLGEN_MODELS_LIDBOX_H_
 
+#include <iostream>
+#include <fstream>
+
 #include <nddlgen/models/Box.h>
 
 namespace nddlgen { namespace models
@@ -35,8 +38,8 @@ namespace nddlgen { namespace models
 			LidBox(bool isOpened);
 			virtual ~LidBox();
 
-			virtual std::string generateModelAsString();
-			virtual std::string generateInitialStateAsString();
+			virtual void generateModelAsString(std::ofstream& ofStream);
+			virtual void generateInitialStateAsString(std::ofstream& ofStream);
 
 			bool isOpened();
 

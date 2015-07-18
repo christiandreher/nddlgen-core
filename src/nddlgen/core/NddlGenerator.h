@@ -17,9 +17,11 @@
 #ifndef CORE_NDDLGENERATOR_H_
 #define CORE_NDDLGENERATOR_H_
 
-#include <nddlgen/models/Arm.h>
+#include <iostream>
+#include <fstream>
 #include <string>
 
+#include <nddlgen/models/Arm.h>
 
 namespace nddlgen { namespace core
 {
@@ -30,19 +32,14 @@ namespace nddlgen { namespace core
 		private:
 
 			nddlgen::models::Arm* _armModel;
-			std::string _models;
-			std::string _initialState;
 
 		public:
 
 			NddlGenerator(nddlgen::models::Arm* armModel);
 			virtual ~NddlGenerator();
 
-			bool generateModels();
-			bool generateInitialState();
-
-			bool writeModelsToFile();
-			bool writeInitialStateToFile();
+			bool generateModels(std::string fileName);
+			bool generateInitialState(std::string fileName);
 
 	};
 

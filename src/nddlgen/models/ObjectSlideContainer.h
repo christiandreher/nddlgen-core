@@ -17,6 +17,9 @@
 #ifndef NDDLGEN_MODELS_OBJECTSLIDECONTAINER_H_
 #define NDDLGEN_MODELS_OBJECTSLIDECONTAINER_H_
 
+#include <iostream>
+#include <fstream>
+
 #include <nddlgen/models/NddlGeneratable.h>
 
 namespace nddlgen { namespace models
@@ -35,8 +38,8 @@ namespace nddlgen { namespace models
 			ObjectSlideContainer(int capacity);
 			virtual ~ObjectSlideContainer();
 
-			virtual std::string generateModelAsString();
-			virtual std::string generateInitialStateAsString();
+			virtual void generateModelAsString(std::ofstream& ofStream);
+			virtual void generateInitialStateAsString(std::ofstream& ofStream);
 
 			void setCapacity(int capacity);
 			int getCapacity();

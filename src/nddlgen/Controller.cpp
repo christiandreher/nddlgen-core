@@ -223,29 +223,15 @@ namespace nddlgen
 			return false;
 		}
 
-		// Try to generate domain models and check if it was successful
-		if (!nddlGen->generateModels())
-		{
-			*this->_errorText = "todo";
-			return false;
-		}
-
-		// Try to create domain models output file and write generated domain models NDDL into it
-		if (!nddlGen->writeModelsToFile())
+		// Try to generate domain models, write it to a file and check if it was successful
+		if (!nddlGen->generateModels(this->getOutputFilesPath() + "/" + this->getModelsOutputFileName()))
 		{
 			*this->_errorText = "todo";
 			return false;
 		}
 
 		// Try to generate domain initial state and check if it was successful
-		if (!nddlGen->generateInitialState())
-		{
-			*this->_errorText = "todo";
-			return false;
-		}
-
-		// Try to create domain initial state output file and  write generated domain initial state NDDL into it
-		if (!nddlGen->writeInitialStateToFile())
+		if (!nddlGen->generateInitialState(this->getOutputFilesPath() + "/" + this->getInitialStateOutputFileName()))
 		{
 			*this->_errorText = "todo";
 			return false;

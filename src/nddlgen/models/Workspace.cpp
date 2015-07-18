@@ -21,7 +21,10 @@ namespace nddlgen { namespace models
 
 	Workspace::Workspace()
 	{
-
+		this->_modelClasses.push_back(new nddlgen::models::Box());
+		this->_modelClasses.push_back(new nddlgen::models::LidBox());
+		this->_modelClasses.push_back(new nddlgen::models::ObjectSlide());
+		this->_modelClasses.push_back(new nddlgen::models::ObjectSlideContainer());
 	}
 
 	Workspace::~Workspace()
@@ -30,20 +33,47 @@ namespace nddlgen { namespace models
 	}
 
 
-	std::string Workspace::generateModelAsString()
+	void Workspace::generateModelAsString(std::ofstream& ofStream)
 	{
-		return "";
+		foreach (nddlgen::models::NddlGeneratable& generatableModelObject, this->_modelClasses)
+		{
+			nddlgen::models::NddlGeneratable* generatableModel = &generatableModelObject;
+
+			generatableModel->generateModelAsString(ofStream);
+
+			ofStream << std::endl;
+		}
+
+		ofStream << "class Workspace" << std::endl;
+		ofStream << "{" << std::endl;
+
+		ofStream << "}" << std::endl;
 	}
 
-	std::string Workspace::generateInitialStateAsString()
+	void Workspace::generateInitialStateAsString(std::ofstream& ofStream)
 	{
-		return "";
+
 	}
 
 
-	void Workspace::addToWorkspace(NddlGeneratable* object)
+	void Workspace::addModelToWorkspace(nddlgen::models::NddlGeneratable* model)
 	{
-		this->_objects.push_back(object);
+		this->_models.push_back(model);
+	}
+
+	nddlgen::models::NddlGeneratable* Workspace::getModelByName(std::string name)
+	{
+		foreach (nddlgen::models::NddlGeneratable& generatableModelObject, this->_models)
+		{
+			nddlgen::models::NddlGeneratable* generatableModel = &generatableModelObject;
+
+			if (generatableModel->getName() == name)
+			{
+				return generatableModel;
+			}
+		}
+
+		return nullptr;
 	}
 
 }}

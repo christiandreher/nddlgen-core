@@ -35,14 +35,17 @@ namespace nddlgen { namespace models
 	}
 
 
-	std::string LidBox::generateModelAsString()
+	void LidBox::generateModelAsString(std::ofstream& ofStream)
 	{
-		return "";
+		ofStream << "class LidBox" << std::endl;
+		ofStream << "{" << std::endl;
+
+		ofStream << "}" << std::endl;
 	}
 
-	std::string LidBox::generateInitialStateAsString()
+	void LidBox::generateInitialStateAsString(std::ofstream& ofStream)
 	{
-		return "";
+
 	}
 
 

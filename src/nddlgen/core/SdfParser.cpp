@@ -35,21 +35,25 @@ namespace nddlgen { namespace core
 	{
 		nddlgen::types::ModelList models;
 
+		// Try instantiating Workspace model
 		if (!this->instantiateWorkspace())
 		{
 			return false;
 		}
 
+		// Convert sdformat's data structure into one that can be better processed
 		if (!this->convertModelDataStructure(sdfRoot->GetElement("world")->GetElement("model"), &models))
 		{
 			return false;
 		}
 
+		// Try instantiating Models (Boxes, ...)
 		if (!this->instantiateModels(models))
 		{
 			return false;
 		}
 
+		// Try calculating dependencies (Does the lid of a box block another, ...)
 		if (!this->calculateDependencies(models))
 		{
 			return false;
@@ -77,7 +81,7 @@ namespace nddlgen { namespace core
 		// converted into a ModelList here
 		while (currentModelElement != nullptr)
 		{
-			models->push_back(currentModelElement.get());
+			models->push_back(currentModelElement);
 
 			// Iterate
 			currentModelElement = currentModelElement->GetNextElement("model");
@@ -88,9 +92,16 @@ namespace nddlgen { namespace core
 
 	bool SdfParser::instantiateModels(nddlgen::types::ModelList models)
 	{
-		BOOST_FOREACH(sdf::Element model, models)
-		{
+		nddlgen::models::Workspace* workspace = this->_armModel->getWorkspace();
 
+		foreach (sdf::ElementPtr model, models)
+		{
+			nddlgen::models::NddlGeneratable* generatableModel = this->instanceFactory(model);
+
+			if (generatableModel != nullptr)
+			{
+				workspace->addModelToWorkspace(generatableModel);
+			}
 		}
 
 		return true;

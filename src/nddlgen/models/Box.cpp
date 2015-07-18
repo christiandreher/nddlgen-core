@@ -30,14 +30,17 @@ namespace nddlgen { namespace models
 	}
 
 
-	std::string Box::generateModelAsString()
+	void Box::generateModelAsString(std::ofstream& ofStream)
 	{
-		return "";
+		ofStream << "class Box" << std::endl;
+		ofStream << "{" << std::endl;
+
+		ofStream << "}" << std::endl;
 	}
 
-	std::string Box::generateInitialStateAsString()
+	void Box::generateInitialStateAsString(std::ofstream& ofStream)
 	{
-		return "";
+
 	}
 
 }}
