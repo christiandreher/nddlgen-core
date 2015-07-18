@@ -18,6 +18,8 @@
 #define CORE_SDFPARSER_H_
 
 #include <boost/algorithm/string.hpp>
+#include <boost/foreach.hpp>
+
 #include <nddlgen/models/Arm.h>
 #include <nddlgen/models/Box.h>
 #include <nddlgen/models/LidBox.h>
@@ -39,6 +41,11 @@ namespace nddlgen { namespace core
 		private:
 
 			nddlgen::models::Arm* _armModel;
+
+			bool instantiateWorkspace();
+			bool convertModelDataStructure(sdf::ElementPtr modelElements, nddlgen::types::ModelList* models);
+			bool instantiateModels(nddlgen::types::ModelList models);
+			bool calculateDependencies(nddlgen::types::ModelList models);
 
 			nddlgen::models::NddlGeneratable* instanceFactory(sdf::ElementPtr element);
 

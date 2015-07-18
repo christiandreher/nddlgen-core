@@ -25,7 +25,7 @@
 
 namespace nddlgen { namespace types {
 
-	typedef boost::ptr_list<sdf::ElementPtr> ModelList;
+	typedef boost::ptr_list<sdf::Element> ModelList;
 
 	typedef boost::ptr_list<nddlgen::models::NddlGeneratable> NddlGeneratableList;
 

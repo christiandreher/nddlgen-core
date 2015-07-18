@@ -33,28 +33,74 @@ namespace nddlgen { namespace core
 
 	bool SdfParser::parseDataStructure(sdf::ElementPtr sdfRoot)
 	{
+		nddlgen::types::ModelList models;
+
+		if (!this->instantiateWorkspace())
+		{
+			return false;
+		}
+
+		if (!this->convertModelDataStructure(sdfRoot->GetElement("world")->GetElement("model"), &models))
+		{
+			return false;
+		}
+
+		if (!this->instantiateModels(models))
+		{
+			return false;
+		}
+
+		if (!this->calculateDependencies(models))
+		{
+			return false;
+		}
+
+		return true;
+	}
+
+
+	bool SdfParser::instantiateWorkspace()
+	{
 		nddlgen::models::Workspace* workspace = new nddlgen::models::Workspace();
 		workspace->setName("workspace");
 
 		this->_armModel->setWorkspace(workspace);
 
-		sdf::ElementPtr workspaceElement = sdfRoot->GetElement("world");
-		sdf::ElementPtr currentModelElement = workspaceElement->GetElement("model");
+		return true;
+	}
 
-		nddlgen::types::ModelList models;
+	bool SdfParser::convertModelDataStructure(sdf::ElementPtr modelElements, nddlgen::types::ModelList* models)
+	{
+		sdf::ElementPtr currentModelElement = modelElements;
 
+		// The sdf lib only offers a useless data structure for the models, so it is
+		// converted into a ModelList here
 		while (currentModelElement != nullptr)
 		{
-			models.push_back(&currentModelElement);
+			models->push_back(currentModelElement.get());
 
 			// Iterate
 			currentModelElement = currentModelElement->GetNextElement("model");
 		}
 
+		return true;
+	}
 
+	bool SdfParser::instantiateModels(nddlgen::types::ModelList models)
+	{
+		BOOST_FOREACH(sdf::Element model, models)
+		{
+
+		}
 
 		return true;
 	}
+
+	bool SdfParser::calculateDependencies(nddlgen::types::ModelList models)
+	{
+		return true;
+	}
+
 
 	nddlgen::models::NddlGeneratable* SdfParser::instanceFactory(sdf::ElementPtr element)
 	{
