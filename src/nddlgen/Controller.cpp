@@ -57,7 +57,7 @@ namespace nddlgen
 		this->_isSdfParsed = false;
 		this->_isNddlGenerated = false;
 
-		this->_armModel = new nddlgen::model::Arm();
+		this->_armModel = new nddlgen::models::Arm();
 	}
 
 	Controller::Controller(std::string fileIdentifier, std::string* errorText)
@@ -73,7 +73,7 @@ namespace nddlgen
 		this->_isSdfParsed = false;
 		this->_isNddlGenerated = false;
 
-		this->_armModel = new nddlgen::model::Arm();
+		this->_armModel = new nddlgen::models::Arm();
 	}
 
 	Controller::~Controller()

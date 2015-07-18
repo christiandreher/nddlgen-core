@@ -14,31 +14,33 @@
  * limitations under the License.
  */
 
-#ifndef NDDLGEN_MODEL_OBJECTSLIDECONTAINER_H_
-#define NDDLGEN_MODEL_OBJECTSLIDECONTAINER_H_
+#ifndef NDDLGEN_MODELS_ARM_H_
+#define NDDLGEN_MODELS_ARM_H_
 
-#include "nddlgen/model/NddlGeneratable.h"
+#include <nddlgen/models/NddlGeneratable.h>
+#include <nddlgen/models/Workspace.h>
+#include <string>
 
-namespace nddlgen { namespace model
+namespace nddlgen { namespace models
 {
 
-	class ObjectSlideContainer : public nddlgen::model::NddlGeneratable
+	class Arm : public nddlgen::models::NddlGeneratable
 	{
 
 		private:
 
-			int _capacity;
+			nddlgen::models::Workspace* _workspace;
 
 		public:
 
-			ObjectSlideContainer(int capacity);
-			virtual ~ObjectSlideContainer();
+			Arm();
+			virtual ~Arm();
 
 			virtual std::string generateModelAsString();
 			virtual std::string generateInitialStateAsString();
 
-			void setCapacity(int capacity);
-			int getCapacity();
+			void setWorkspace(nddlgen::models::Workspace* workspace);
+			nddlgen::models::Workspace* getWorkspace();
 
 	};
 

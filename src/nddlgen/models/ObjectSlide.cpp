@@ -14,35 +14,30 @@
  * limitations under the License.
  */
 
-#ifndef NDDLGEN_MODEL_WORKSPACE_H_
-#define NDDLGEN_MODEL_WORKSPACE_H_
+#include <nddlgen/models/ObjectSlide.h>
 
-#include <boost/ptr_container/ptr_list.hpp>
-
-#include "nddlgen/model/NddlGeneratable.h"
-
-namespace nddlgen { namespace model
+namespace nddlgen { namespace models
 {
 
-	class Workspace : public nddlgen::model::NddlGeneratable
+	ObjectSlide::ObjectSlide()
 	{
+		// TODO Auto-generated constructor stub
+	}
 
-		private:
+	ObjectSlide::~ObjectSlide()
+	{
+		// TODO Auto-generated destructor stub
+	}
 
-			boost::ptr_list<NddlGeneratable> _objects;
 
-		public:
+	std::string ObjectSlide::generateModelAsString()
+	{
+		return "";
+	}
 
-			Workspace();
-			virtual ~Workspace();
-
-			virtual std::string generateModelAsString();
-			virtual std::string generateInitialStateAsString();
-
-			void addToWorkspace(NddlGeneratable* object);
-
-	};
+	std::string ObjectSlide::generateInitialStateAsString()
+	{
+		return "";
+	}
 
 }}
-
-#endif

@@ -14,36 +14,35 @@
  * limitations under the License.
  */
 
-#include "nddlgen/model/LidBox.h"
+#include <nddlgen/models/ObjectSlideContainer.h>
 
-namespace nddlgen { namespace model
+namespace nddlgen { namespace models
 {
 
-	LidBox::LidBox(bool isOpened)
+	ObjectSlideContainer::ObjectSlideContainer()
 	{
-		this->_isOpened = isOpened;
+		this->_capacity = 36;
 	}
 
-	LidBox::~LidBox()
+	ObjectSlideContainer::ObjectSlideContainer(int capacity)
+	{
+		this->_capacity = capacity;
+	}
+
+	ObjectSlideContainer::~ObjectSlideContainer()
 	{
 		// TODO Auto-generated destructor stub
 	}
 
 
-	std::string LidBox::generateModelAsString()
+	std::string ObjectSlideContainer::generateModelAsString()
 	{
 		return "";
 	}
 
-	std::string LidBox::generateInitialStateAsString()
+	std::string ObjectSlideContainer::generateInitialStateAsString()
 	{
 		return "";
-	}
-
-
-	bool LidBox::isOpened()
-	{
-		return this->_isOpened;
 	}
 
 }}

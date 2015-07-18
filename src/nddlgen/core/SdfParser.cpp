@@ -19,9 +19,10 @@
 namespace nddlgen { namespace core
 {
 
-	SdfParser::SdfParser(nddlgen::model::Arm* armModel)
+	SdfParser::SdfParser(nddlgen::models::Arm* armModel)
 	{
 		this->_armModel = armModel;
+		this->_armModel->setName("arm");
 	}
 
 	SdfParser::~SdfParser()
@@ -32,8 +33,62 @@ namespace nddlgen { namespace core
 
 	bool SdfParser::parseDataStructure(sdf::ElementPtr sdfRoot)
 	{
-		// Modify Arm model...
+		nddlgen::models::Workspace* workspace = new nddlgen::models::Workspace();
+		workspace->setName("workspace");
+
+		this->_armModel->setWorkspace(workspace);
+
+		sdf::ElementPtr workspaceElement = sdfRoot->GetElement("world");
+		sdf::ElementPtr currentModelElement = workspaceElement->GetElement("model");
+
+		nddlgen::types::ModelList models;
+
+		while (currentModelElement != nullptr)
+		{
+			models.push_back(&currentModelElement);
+
+			// Iterate
+			currentModelElement = currentModelElement->GetNextElement("model");
+		}
+
+
+
 		return true;
+	}
+
+	nddlgen::models::NddlGeneratable* SdfParser::instanceFactory(sdf::ElementPtr element)
+	{
+		std::string elementName = element->GetAttribute("name")->GetAsString();
+		std::string elementNameLc = boost::algorithm::to_lower_copy(elementName);
+		nddlgen::models::NddlGeneratable* instance;
+
+		if (boost::algorithm::contains(elementNameLc, "lidbox"))
+		{
+			instance = new nddlgen::models::LidBox();
+		}
+		else if (boost::algorithm::contains(elementNameLc, "box"))
+		{
+			instance = new nddlgen::models::Box();
+		}
+		else if (boost::algorithm::contains(elementNameLc, "objectslidecontainer"))
+		{
+			instance = new nddlgen::models::ObjectSlideContainer();
+		}
+		else if (boost::algorithm::contains(elementNameLc, "objectslide"))
+		{
+			instance = new nddlgen::models::ObjectSlide();
+		}
+		else
+		{
+			instance = nullptr;
+		}
+
+		if (instance != nullptr)
+		{
+			instance->setName(elementName);
+		}
+
+		return instance;
 	}
 
 }}

@@ -19,7 +19,7 @@
 namespace nddlgen { namespace core
 {
 
-	NddlGenerator::NddlGenerator(nddlgen::model::Arm* armModel)
+	NddlGenerator::NddlGenerator(nddlgen::models::Arm* armModel)
 	{
 		this->_armModel = armModel;
 	}

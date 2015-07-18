@@ -17,12 +17,12 @@
 #ifndef NDDLGEN_CONTROLLER_H_
 #define NDDLGEN_CONTROLLER_H_
 
+#include <nddlgen/models/Arm.h>
 #include <string>
 #include <sdf/sdf.hh>
 
 #include "nddlgen/core/SdfParser.h"
 #include "nddlgen/core/NddlGenerator.h"
-#include "nddlgen/model/Arm.h"
 
 /**
  * Base components for the nddl generator.
@@ -96,7 +96,7 @@ namespace nddlgen
 			/**
 			 * Arm model to generate nddl files from.
 			 */
-			nddlgen::model::Arm* _armModel;
+			nddlgen::models::Arm* _armModel;
 
 			/**
 			 * Checks if a file is checkable. This means, that a file identifier has already

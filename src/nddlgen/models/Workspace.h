@@ -14,33 +14,32 @@
  * limitations under the License.
  */
 
-#ifndef NDDLGEN_MODEL_ARM_H_
-#define NDDLGEN_MODEL_ARM_H_
+#ifndef NDDLGEN_MODELS_WORKSPACE_H_
+#define NDDLGEN_MODELS_WORKSPACE_H_
 
-#include <string>
-#include "nddlgen/model/NddlGeneratable.h"
-#include "nddlgen/model/Workspace.h"
+#include <nddlgen/models/NddlGeneratable.h>
+#include "nddlgen/types/Types.h"
 
-namespace nddlgen { namespace model
+
+namespace nddlgen { namespace models
 {
 
-	class Arm : public nddlgen::model::NddlGeneratable
+	class Workspace : public nddlgen::models::NddlGeneratable
 	{
 
 		private:
 
-			nddlgen::model::Workspace* _workspace;
+			nddlgen::types::NddlGeneratableList _objects;
 
 		public:
 
-			Arm();
-			virtual ~Arm();
+			Workspace();
+			virtual ~Workspace();
 
 			virtual std::string generateModelAsString();
 			virtual std::string generateInitialStateAsString();
 
-			void setWorkspace(nddlgen::model::Workspace* workspace);
-			nddlgen::model::Workspace* getWorkspace();
+			void addToWorkspace(NddlGeneratable* object);
 
 	};
 

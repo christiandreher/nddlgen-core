@@ -14,33 +14,45 @@
  * limitations under the License.
  */
 
-#ifndef NDDLGEN_MODEL_LIDBOX_H_
-#define NDDLGEN_MODEL_LIDBOX_H_
+#include <nddlgen/models/Arm.h>
 
-#include "nddlgen/model/Box.h"
-
-namespace nddlgen { namespace model
+namespace nddlgen { namespace models
 {
 
-	class LidBox : public nddlgen::model::Box
+	Arm::Arm()
 	{
+		this->_workspace = nullptr;
+	}
 
-		private:
+	Arm::~Arm()
+	{
+		delete this->_workspace;
+	}
 
-			bool _isOpened;
 
-		public:
+	std::string Arm::generateModelAsString()
+	{
+		std::string model = this->_workspace->generateModelAsString();
 
-			LidBox(bool isOpened);
-			virtual ~LidBox();
+		return model;
+	}
 
-			virtual std::string generateModelAsString();
-			virtual std::string generateInitialStateAsString();
+	std::string Arm::generateInitialStateAsString()
+	{
+		std::string initialState = this->_workspace->generateInitialStateAsString();
 
-			bool isOpened();
+		return initialState;
+	}
 
-	};
+
+	void Arm::setWorkspace(nddlgen::models::Workspace* workspace)
+	{
+		this->_workspace = workspace;
+	}
+
+	nddlgen::models::Workspace* Arm::getWorkspace()
+	{
+		return this->_workspace;
+	}
 
 }}
-
-#endif

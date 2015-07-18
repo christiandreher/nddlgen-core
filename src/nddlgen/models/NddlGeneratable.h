@@ -14,36 +14,34 @@
  * limitations under the License.
  */
 
-#include "nddlgen/model/Workspace.h"
+#ifndef NDDLGEN_MODELS_NDDLGENERATABLE_H_
+#define NDDLGEN_MODELS_NDDLGENERATABLE_H_
 
-namespace nddlgen { namespace model
+#include <string>
+
+namespace nddlgen { namespace models
 {
 
-	Workspace::Workspace()
+	class NddlGeneratable
 	{
 
-	}
+		private:
 
-	Workspace::~Workspace()
-	{
-		// @todo watch out to delete objects properly in future
-	}
+			std::string _name;
 
+		public:
 
-	std::string Workspace::generateModelAsString()
-	{
-		return "";
-	}
+			NddlGeneratable();
+			virtual ~NddlGeneratable();
 
-	std::string Workspace::generateInitialStateAsString()
-	{
-		return "";
-	}
+			virtual std::string generateModelAsString() = 0;
+			virtual std::string generateInitialStateAsString() = 0;
 
+			void setName(std::string name);
+			std::string getName();
 
-	void Workspace::addToWorkspace(NddlGeneratable* object)
-	{
-		this->_objects.push_back(object);
-	}
+	};
 
 }}
+
+#endif

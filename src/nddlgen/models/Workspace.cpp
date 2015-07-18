@@ -14,45 +14,36 @@
  * limitations under the License.
  */
 
-#include "nddlgen/model/Arm.h"
+#include <nddlgen/models/Workspace.h>
 
-namespace nddlgen { namespace model
+namespace nddlgen { namespace models
 {
 
-	Arm::Arm()
+	Workspace::Workspace()
 	{
-		this->_workspace = nullptr;
+
 	}
 
-	Arm::~Arm()
+	Workspace::~Workspace()
 	{
-		delete this->_workspace;
-	}
-
-
-	std::string Arm::generateModelAsString()
-	{
-		std::string model = this->_workspace->generateModelAsString();
-
-		return model;
-	}
-
-	std::string Arm::generateInitialStateAsString()
-	{
-		std::string initialState = this->_workspace->generateInitialStateAsString();
-
-		return initialState;
+		// @todo watch out to delete objects properly in future
 	}
 
 
-	void Arm::setWorkspace(nddlgen::model::Workspace* workspace)
+	std::string Workspace::generateModelAsString()
 	{
-		this->_workspace = workspace;
+		return "";
 	}
 
-	nddlgen::model::Workspace* Arm::getWorkspace()
+	std::string Workspace::generateInitialStateAsString()
 	{
-		return this->_workspace;
+		return "";
+	}
+
+
+	void Workspace::addToWorkspace(NddlGeneratable* object)
+	{
+		this->_objects.push_back(object);
 	}
 
 }}

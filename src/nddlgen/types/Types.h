@@ -14,30 +14,21 @@
  * limitations under the License.
  */
 
-#include "nddlgen/model/Box.h"
+#ifndef NDDLGEN_TYPES_TYPES_H_
+#define NDDLGEN_TYPES_TYPES_H_
 
-namespace nddlgen { namespace model
-{
+#include <boost/ptr_container/ptr_list.hpp>
+#include <nddlgen/models/NddlGeneratable.h>
 
-	Box::Box()
-	{
-		// TODO Auto-generated constructor stub
-	}
-
-	Box::~Box()
-	{
-		// TODO Auto-generated destructor stub
-	}
+#include <sdf/sdf.hh>
 
 
-	std::string Box::generateModelAsString()
-	{
-		return "";
-	}
+namespace nddlgen { namespace types {
 
-	std::string Box::generateInitialStateAsString()
-	{
-		return "";
-	}
+	typedef boost::ptr_list<sdf::ElementPtr> ModelList;
+
+	typedef boost::ptr_list<nddlgen::models::NddlGeneratable> NddlGeneratableList;
 
 }}
+
+#endif

@@ -14,43 +14,41 @@
  * limitations under the License.
  */
 
-#ifndef CORE_SDFPARSER_H_
-#define CORE_SDFPARSER_H_
-
-#include <boost/algorithm/string.hpp>
-#include <nddlgen/models/Arm.h>
-#include <nddlgen/models/Box.h>
 #include <nddlgen/models/LidBox.h>
-#include <nddlgen/models/NddlGeneratable.h>
-#include <nddlgen/models/ObjectSlide.h>
-#include <nddlgen/models/ObjectSlideContainer.h>
 
-#include <sdf/sdf.hh>
-
-#include "nddlgen/types/Types.h"
-
-
-namespace nddlgen { namespace core
+namespace nddlgen { namespace models
 {
 
-	class SdfParser
+	LidBox::LidBox()
 	{
+		this->_isOpened = false;
+	}
 
-		private:
+	LidBox::LidBox(bool isOpened)
+	{
+		this->_isOpened = isOpened;
+	}
 
-			nddlgen::models::Arm* _armModel;
+	LidBox::~LidBox()
+	{
+		// TODO Auto-generated destructor stub
+	}
 
-			nddlgen::models::NddlGeneratable* instanceFactory(sdf::ElementPtr element);
 
-		public:
+	std::string LidBox::generateModelAsString()
+	{
+		return "";
+	}
 
-			SdfParser(nddlgen::models::Arm* armModel);
-			virtual ~SdfParser();
+	std::string LidBox::generateInitialStateAsString()
+	{
+		return "";
+	}
 
-			bool parseDataStructure(sdf::ElementPtr sdfRoot);
 
-	};
+	bool LidBox::isOpened()
+	{
+		return this->_isOpened;
+	}
 
 }}
-
-#endif

@@ -14,27 +14,31 @@
  * limitations under the License.
  */
 
-#ifndef NDDLGEN_MODEL_BOX_H_
-#define NDDLGEN_MODEL_BOX_H_
+#include <nddlgen/models/NddlGeneratable.h>
 
-#include "nddlgen/model/NddlGeneratable.h"
-
-namespace nddlgen { namespace model
+namespace nddlgen { namespace models
 {
 
-	class Box : public nddlgen::model::NddlGeneratable
+	NddlGeneratable::NddlGeneratable()
 	{
 
-		public:
+	}
 
-			Box();
-			virtual ~Box();
+	NddlGeneratable::~NddlGeneratable()
+	{
 
-			virtual std::string generateModelAsString();
-			virtual std::string generateInitialStateAsString();
+	}
 
-	};
+	void NddlGeneratable::setName(std::string name)
+	{
+		this->_name = name;
+	}
+
+	std::string NddlGeneratable::getName()
+	{
+		return this->_name;
+	}
 
 }}
 
-#endif
+

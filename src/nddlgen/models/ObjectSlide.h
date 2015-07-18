@@ -14,15 +14,15 @@
  * limitations under the License.
  */
 
-#ifndef NDDLGEN_MODEL_OBJECTSLIDE_H_
-#define NDDLGEN_MODEL_OBJECTSLIDE_H_
+#ifndef NDDLGEN_MODELS_OBJECTSLIDE_H_
+#define NDDLGEN_MODELS_OBJECTSLIDE_H_
 
-#include "nddlgen/model/NddlGeneratable.h"
+#include <nddlgen/models/NddlGeneratable.h>
 
-namespace nddlgen { namespace model
+namespace nddlgen { namespace models
 {
 
-	class ObjectSlide : public nddlgen::model::NddlGeneratable
+	class ObjectSlide : public nddlgen::models::NddlGeneratable
 	{
 
 		public:

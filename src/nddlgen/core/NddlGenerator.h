@@ -17,9 +17,9 @@
 #ifndef CORE_NDDLGENERATOR_H_
 #define CORE_NDDLGENERATOR_H_
 
+#include <nddlgen/models/Arm.h>
 #include <string>
 
-#include "nddlgen/model/Arm.h"
 
 namespace nddlgen { namespace core
 {
@@ -29,13 +29,13 @@ namespace nddlgen { namespace core
 
 		private:
 
-			nddlgen::model::Arm* _armModel;
+			nddlgen::models::Arm* _armModel;
 			std::string _models;
 			std::string _initialState;
 
 		public:
 
-			NddlGenerator(nddlgen::model::Arm* armModel);
+			NddlGenerator(nddlgen::models::Arm* armModel);
 			virtual ~NddlGenerator();
 
 			bool generateModels();
