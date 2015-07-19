@@ -6,15 +6,23 @@ This package is the core of the nddl-generator. It is compiled as a static libra
 
 ## Dependencies
 
-Compiling a project with nddl-generator-core needs a linking against following libraries:
- * boost_system (part of libboost-all-dev)
- * boost_filesystem (part of libboost-all-dev)
- * sdfformat (part of libsdfformat2-dev)
+### Build Artifact
+ * Artifact type: *Static library*
+ * Artifact name: *nddl-generator-core*
+ * Artifact extention: *a*
+ * Output prefix: *lib*
 
-## Include Paths (-l)
+### Compiler
 
-Following include paths need to be set for the compiler
- * /usr/include/sdformat-2.3
+#### Include paths (-l)
+ * *path to sdformat-2.3*
+ * *path to nddl-generator-core src directory*
+
+#### Include files (-include)
+ * *none*
+
+#### Miscellaneous
+ * Other flags: *-c -fmessage-length=0 -std=c++0x*
 
 ## License
 
