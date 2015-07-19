@@ -17,10 +17,10 @@
 #ifndef NDDLGEN_CONTROLLER_H_
 #define NDDLGEN_CONTROLLER_H_
 
-#include <nddlgen/models/Arm.h>
 #include <string>
 #include <sdf/sdf.hh>
 
+#include <nddlgen/models/Arm.h>
 #include "nddlgen/core/SdfParser.h"
 #include "nddlgen/core/NddlGenerator.h"
 
@@ -142,6 +142,11 @@ namespace nddlgen
 			std::string getBufferedCerrOutput();
 
 		public:
+
+			/**
+			 * Version
+			 */
+			static const std::string NDDLGEN_VERSION;
 
 			/**
 			 * Error message when a file identifier has already been set.

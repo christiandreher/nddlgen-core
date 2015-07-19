@@ -22,6 +22,8 @@
 namespace nddlgen
 {
 
+	const std::string Controller::NDDLGEN_VERSION = "1.0.0";
+
 	const std::string Controller::ERR_FILE_ID_ALREADY_SET =
 			"A file identifier has already been set. Create a new instance if necessary.";
 	const std::string Controller::ERR_FILE_ALREADY_CHECKED =
