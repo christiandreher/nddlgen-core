@@ -21,6 +21,8 @@
 #include <fstream>
 #include <string>
 
+#include <nddlgen/utilities/WriteStream.hpp>
+
 namespace nddlgen { namespace models
 {
 
@@ -30,6 +32,7 @@ namespace nddlgen { namespace models
 		private:
 
 			std::string _name;
+			std::string _className;
 
 		public:
 
@@ -41,7 +44,11 @@ namespace nddlgen { namespace models
 
 			void setName(std::string name);
 			std::string getName();
+			std::string getNamePref();
+			std::string getNamePrefSuff();
 
+			void setClassName(std::string className);
+			std::string getClassName();
 	};
 
 }}

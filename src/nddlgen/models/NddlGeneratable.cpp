@@ -39,6 +39,26 @@ namespace nddlgen { namespace models
 		return this->_name;
 	}
 
+	std::string NddlGeneratable::getNamePref()
+	{
+		return "_" + this->getName();
+	}
+
+	std::string NddlGeneratable::getNamePrefSuff()
+	{
+		return this->getNamePref() + "_param";
+	}
+
+	void NddlGeneratable::setClassName(std::string className)
+	{
+		this->_className = className;
+	}
+
+	std::string NddlGeneratable::getClassName()
+	{
+		return this->_className;
+	}
+
 }}
 
 

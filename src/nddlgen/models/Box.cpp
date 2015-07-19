@@ -21,7 +21,7 @@ namespace nddlgen { namespace models
 
 	Box::Box()
 	{
-		// TODO Auto-generated constructor stub
+		this->setClassName("Box");
 	}
 
 	Box::~Box()
@@ -32,10 +32,9 @@ namespace nddlgen { namespace models
 
 	void Box::generateModelAsString(std::ofstream& ofStream)
 	{
-		ofStream << "class Box" << std::endl;
-		ofStream << "{" << std::endl;
-
-		ofStream << "}" << std::endl;
+		wrln(0, "class Box", 					1);
+		wrln(0, "{",							1);
+		wrln(0, "}",							2);
 	}
 
 	void Box::generateInitialStateAsString(std::ofstream& ofStream)

@@ -21,11 +21,15 @@ namespace nddlgen { namespace models
 
 	ObjectSlideContainer::ObjectSlideContainer()
 	{
+		this->setClassName("ObjectSlideContainer");
+
 		this->_capacity = 36;
 	}
 
 	ObjectSlideContainer::ObjectSlideContainer(int capacity)
 	{
+		this->setClassName("ObjectSlideContainer");
+
 		this->_capacity = capacity;
 	}
 
@@ -37,10 +41,9 @@ namespace nddlgen { namespace models
 
 	void ObjectSlideContainer::generateModelAsString(std::ofstream& ofStream)
 	{
-		ofStream << "class ObjectSlideContainer" << std::endl;
-		ofStream << "{" << std::endl;
-
-		ofStream << "}" << std::endl;
+		wrln(0, "class ObjectSlideContainer", 	1);
+		wrln(0, "{",							1);
+		wrln(0, "}",							2);
 	}
 
 	void ObjectSlideContainer::generateInitialStateAsString(std::ofstream& ofStream)

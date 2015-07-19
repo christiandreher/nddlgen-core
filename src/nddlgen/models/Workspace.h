@@ -39,6 +39,9 @@ namespace nddlgen { namespace models
 			nddlgen::types::NddlGeneratableList _modelClasses;
 			nddlgen::types::NddlGeneratableList _models;
 
+			void generateWorkspaceMembers(std::ofstream& ofStream);
+			void generateWorkspaceConstructor(std::ofstream& ofStream);
+
 		public:
 
 			Workspace();

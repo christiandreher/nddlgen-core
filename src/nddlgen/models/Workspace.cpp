@@ -21,6 +21,8 @@ namespace nddlgen { namespace models
 
 	Workspace::Workspace()
 	{
+		this->setClassName("Workspace");
+
 		this->_modelClasses.push_back(new nddlgen::models::Box());
 		this->_modelClasses.push_back(new nddlgen::models::LidBox());
 		this->_modelClasses.push_back(new nddlgen::models::ObjectSlide());
@@ -29,7 +31,8 @@ namespace nddlgen { namespace models
 
 	Workspace::~Workspace()
 	{
-		// @todo watch out to delete objects properly in future
+		this->_modelClasses.clear();
+		this->_models.clear();
 	}
 
 
@@ -40,14 +43,16 @@ namespace nddlgen { namespace models
 			nddlgen::models::NddlGeneratable* generatableModel = &generatableModelObject;
 
 			generatableModel->generateModelAsString(ofStream);
-
-			ofStream << std::endl;
 		}
 
-		ofStream << "class Workspace" << std::endl;
-		ofStream << "{" << std::endl;
+		wrln(0, "class Workspace", 				1);
+		wrln(0, "{",							1);
 
-		ofStream << "}" << std::endl;
+		this->generateWorkspaceMembers(ofStream);
+
+		this->generateWorkspaceConstructor(ofStream);
+
+		wrln(0, "}",							2);
 	}
 
 	void Workspace::generateInitialStateAsString(std::ofstream& ofStream)
@@ -74,6 +79,48 @@ namespace nddlgen { namespace models
 		}
 
 		return nullptr;
+	}
+
+	void Workspace::generateWorkspaceMembers(std::ofstream& ofStream)
+	{
+		foreach (nddlgen::models::NddlGeneratable& generatableModelObject, this->_models)
+		{
+			nddlgen::models::NddlGeneratable* generatableModel = &generatableModelObject;
+
+			std::string className = generatableModel->getClassName();
+			std::string instanceName = generatableModel->getNamePref();
+
+			wrln(1, className + " " + instanceName + ";", 		1);
+		}
+
+		wrel(1);
+	}
+
+	void Workspace::generateWorkspaceConstructor(std::ofstream& ofStream)
+	{
+		std::string constructorHeader = this->getClassName() + "(";
+
+		foreach (nddlgen::models::NddlGeneratable& generatableModelObject, this->_models)
+		{
+			nddlgen::models::NddlGeneratable* generatableModel = &generatableModelObject;
+			std::string parameter = generatableModel->getClassName() + " " + generatableModel->getNamePrefSuff() + ", ";
+			constructorHeader += parameter;
+		}
+
+		constructorHeader = constructorHeader.substr(0, constructorHeader.length() - 2) + ")";
+
+		wrln(1, constructorHeader,								1);
+		wrln(1, "{",											1);
+
+		foreach (nddlgen::models::NddlGeneratable& generatableModelObject, this->_models)
+		{
+			nddlgen::models::NddlGeneratable* generatableModel = &generatableModelObject;
+			std::string assignment = generatableModel->getNamePref() + " = " + generatableModel->getNamePrefSuff() + ";";
+
+			wrln(2, assignment, 1);
+		}
+
+		wrln(1, "}",											1);
 	}
 
 }}

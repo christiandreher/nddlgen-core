@@ -59,6 +59,8 @@ namespace nddlgen { namespace core
 			return false;
 		}
 
+		models.clear();
+
 		return true;
 	}
 

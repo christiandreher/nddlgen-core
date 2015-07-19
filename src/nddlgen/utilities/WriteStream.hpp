@@ -14,32 +14,11 @@
  * limitations under the License.
  */
 
-#include <nddlgen/models/ObjectSlide.h>
+#ifndef NDDLGEN_UTILITIES_WRITESTREAM_HPP_
+#define NDDLGEN_UTILITIES_WRITESTREAM_HPP_
 
-namespace nddlgen { namespace models
-{
+#define wrln(indents,line,endls) for(int i=0;i<indents;i++){ofStream<<"\t";}ofStream<<line;for(int i=0;i<endls;i++){ofStream<<std::endl;}
 
-	ObjectSlide::ObjectSlide()
-	{
-		this->setClassName("ObjectSlide");
-	}
+#define wrel(endls) wrln(0,"",endls)
 
-	ObjectSlide::~ObjectSlide()
-	{
-		// TODO Auto-generated destructor stub
-	}
-
-
-	void ObjectSlide::generateModelAsString(std::ofstream& ofStream)
-	{
-		wrln(0, "class ObjectSlide", 			1);
-		wrln(0, "{",							1);
-		wrln(0, "}",							2);
-	}
-
-	void ObjectSlide::generateInitialStateAsString(std::ofstream& ofStream)
-	{
-
-	}
-
-}}
+#endif
