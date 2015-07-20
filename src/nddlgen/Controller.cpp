@@ -59,6 +59,8 @@ namespace nddlgen
 		this->_isSdfParsed = false;
 		this->_isNddlGenerated = false;
 
+		this->_controllerMeta = new nddlgen::utilities::ControllerMeta();
+
 		this->_armModel = new nddlgen::models::Arm();
 	}
 
@@ -75,11 +77,14 @@ namespace nddlgen
 		this->_isSdfParsed = false;
 		this->_isNddlGenerated = false;
 
+		this->_controllerMeta = new nddlgen::utilities::ControllerMeta();
+
 		this->_armModel = new nddlgen::models::Arm();
 	}
 
 	Controller::~Controller()
 	{
+		delete this->_controllerMeta;
 		delete this->_armModel;
 	}
 
@@ -95,6 +100,14 @@ namespace nddlgen
 
 		this->_fileIdentifier = fileIdentifier;
 		this->_isFileIdentifierSet = true;
+
+		this->_controllerMeta->nddlgenVersion = nddlgen::Controller::NDDLGEN_VERSION;
+		this->_controllerMeta->inputFile = this->_fileIdentifier;
+		this->_controllerMeta->outputFilePath = this->getOutputFilesPath();
+		this->_controllerMeta->outputFileModels = this->getModelsOutputFileName();
+		this->_controllerMeta->outputFileInitialState = this->getInitialStateOutputFileName();
+
+		this->_armModel->setControllerMeta(this->_controllerMeta);
 
 		return true;
 	}

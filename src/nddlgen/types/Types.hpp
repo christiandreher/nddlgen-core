@@ -18,16 +18,31 @@
 #define NDDLGEN_TYPES_TYPES_HPP_
 
 #include <boost/ptr_container/ptr_list.hpp>
-#include <nddlgen/models/NddlGeneratable.h>
 
 #include <sdf/sdf.hh>
 
+// Forward declaration
+namespace nddlgen
+{
+	namespace models
+	{
+		class NddlGeneratable;
+	}
 
-namespace nddlgen { namespace types {
+	namespace utilities
+	{
+		class ModelAction;
+	}
+}
+
+namespace nddlgen { namespace types
+{
 
 	typedef std::list<sdf::ElementPtr> ModelList;
 
 	typedef boost::ptr_list<nddlgen::models::NddlGeneratable> NddlGeneratableList;
+
+	typedef boost::ptr_list<nddlgen::utilities::ModelAction> ActionList;
 
 }}
 

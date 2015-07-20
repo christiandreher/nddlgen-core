@@ -39,14 +39,7 @@ namespace nddlgen { namespace models
 	}
 
 
-	void ObjectSlideContainer::generateModelAsString(std::ofstream& ofStream)
-	{
-		wrln(0, "class ObjectSlideContainer", 	1);
-		wrln(0, "{",							1);
-		wrln(0, "}",							2);
-	}
-
-	void ObjectSlideContainer::generateInitialStateAsString(std::ofstream& ofStream)
+	void ObjectSlideContainer::generateInitialState(std::ofstream& ofStream)
 	{
 
 	}

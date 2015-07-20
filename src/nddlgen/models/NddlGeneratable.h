@@ -21,7 +21,10 @@
 #include <fstream>
 #include <string>
 
+#include <nddlgen/types/Types.hpp>
 #include <nddlgen/utilities/WriteStream.hpp>
+#include <nddlgen/utilities/Foreach.hpp>
+#include <nddlgen/utilities/ModelAction.hpp>
 
 namespace nddlgen { namespace models
 {
@@ -33,14 +36,17 @@ namespace nddlgen { namespace models
 
 			std::string _name;
 			std::string _className;
+			nddlgen::types::NddlGeneratableList _blockedBy;
+			std::list<std::string> _predicates;
+			nddlgen::types::ActionList _actions;
 
 		public:
 
 			NddlGeneratable();
 			virtual ~NddlGeneratable();
 
-			virtual void generateModelAsString(std::ofstream& ofStream) = 0;
-			virtual void generateInitialStateAsString(std::ofstream& ofStream) = 0;
+			virtual void generateModel(std::ofstream& ofStream);
+			virtual void generateInitialState(std::ofstream& ofStream) = 0;
 
 			void setName(std::string name);
 			std::string getName();
@@ -49,6 +55,17 @@ namespace nddlgen { namespace models
 
 			void setClassName(std::string className);
 			std::string getClassName();
+
+			void addBlockingObject(nddlgen::models::NddlGeneratable* blockingObject);
+			bool isBlocked();
+
+			void addPredicate(std::string predicate);
+			bool hasPredicates();
+
+			void addAction(nddlgen::utilities::ModelAction* action);
+			bool hasActions();
+			nddlgen::types::ActionList getActions();
+
 	};
 
 }}

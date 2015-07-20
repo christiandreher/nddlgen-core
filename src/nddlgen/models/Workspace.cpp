@@ -36,13 +36,13 @@ namespace nddlgen { namespace models
 	}
 
 
-	void Workspace::generateModelAsString(std::ofstream& ofStream)
+	void Workspace::generateModel(std::ofstream& ofStream)
 	{
 		foreach (nddlgen::models::NddlGeneratable& generatableModelObject, this->_modelClasses)
 		{
 			nddlgen::models::NddlGeneratable* generatableModel = &generatableModelObject;
 
-			generatableModel->generateModelAsString(ofStream);
+			generatableModel->generateModel(ofStream);
 		}
 
 		wrln(0, "class Workspace", 				1);
@@ -55,7 +55,7 @@ namespace nddlgen { namespace models
 		wrln(0, "}",							2);
 	}
 
-	void Workspace::generateInitialStateAsString(std::ofstream& ofStream)
+	void Workspace::generateInitialState(std::ofstream& ofStream)
 	{
 
 	}

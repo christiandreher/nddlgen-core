@@ -34,7 +34,7 @@ namespace nddlgen { namespace core
 	{
 		std::ofstream ofStream(fileName);
 
-		this->_armModel->generateModelAsString(ofStream);
+		this->_armModel->generateModel(ofStream);
 
 		ofStream.close();
 

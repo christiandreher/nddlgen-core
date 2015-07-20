@@ -47,8 +47,8 @@ namespace nddlgen { namespace models
 			Workspace();
 			virtual ~Workspace();
 
-			virtual void generateModelAsString(std::ofstream& ofStream);
-			virtual void generateInitialStateAsString(std::ofstream& ofStream);
+			virtual void generateModel(std::ofstream& ofStream);
+			virtual void generateInitialState(std::ofstream& ofStream);
 
 			void addModelToWorkspace(nddlgen::models::NddlGeneratable* model);
 			nddlgen::models::NddlGeneratable* getModelByName(std::string name);

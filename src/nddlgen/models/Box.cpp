@@ -30,14 +30,7 @@ namespace nddlgen { namespace models
 	}
 
 
-	void Box::generateModelAsString(std::ofstream& ofStream)
-	{
-		wrln(0, "class Box", 					1);
-		wrln(0, "{",							1);
-		wrln(0, "}",							2);
-	}
-
-	void Box::generateInitialStateAsString(std::ofstream& ofStream)
+	void Box::generateInitialState(std::ofstream& ofStream)
 	{
 
 	}

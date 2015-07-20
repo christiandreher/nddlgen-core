@@ -39,16 +39,7 @@ namespace nddlgen { namespace models
 	}
 
 
-	void LidBox::generateModelAsString(std::ofstream& ofStream)
-	{
-		wrln(0, "class LidBox", 				1);
-		wrln(0, "{",							1);
-		wrln(1, 	"predicate opened {}",		1);
-		wrln(1,		"predicate closed {}",		1);
-		wrln(0, "}",							2);
-	}
-
-	void LidBox::generateInitialStateAsString(std::ofstream& ofStream)
+	void LidBox::generateInitialState(std::ofstream& ofStream)
 	{
 
 	}
@@ -59,4 +50,20 @@ namespace nddlgen { namespace models
 		return this->_isOpened;
 	}
 
+	void LidBox::init()
+	{
+		std::string openedPredicate = "opened";
+		std::string closedPredicate = "closed";
+
+		nddlgen::utilities::ModelAction* openAction = new nddlgen::utilities::ModelAction();
+		nddlgen::utilities::ModelAction* closeAction = new nddlgen::utilities::ModelAction();
+
+		this->setClassName("LidBox");
+
+		this->addPredicate(openedPredicate);
+		this->addPredicate(closedPredicate);
+
+		openAction->setName("open" + this->getNamePref());
+		openAction->setDuration("1");
+	}
 }}

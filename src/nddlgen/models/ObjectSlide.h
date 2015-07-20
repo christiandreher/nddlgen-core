@@ -33,8 +33,7 @@ namespace nddlgen { namespace models
 			ObjectSlide();
 			virtual ~ObjectSlide();
 
-			virtual void generateModelAsString(std::ofstream& ofStream);
-			virtual void generateInitialStateAsString(std::ofstream& ofStream);
+			virtual void generateInitialState(std::ofstream& ofStream);
 
 	};
 

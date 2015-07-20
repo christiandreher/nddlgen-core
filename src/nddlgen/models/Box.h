@@ -33,8 +33,7 @@ namespace nddlgen { namespace models
 			Box();
 			virtual ~Box();
 
-			virtual void generateModelAsString(std::ofstream& ofStream);
-			virtual void generateInitialStateAsString(std::ofstream& ofStream);
+			virtual void generateInitialState(std::ofstream& ofStream);
 
 	};
 

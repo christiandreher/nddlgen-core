@@ -23,6 +23,7 @@
 
 #include <nddlgen/models/NddlGeneratable.h>
 #include <nddlgen/models/Workspace.h>
+#include <nddlgen/utilities/ControllerMeta.hpp>
 
 namespace nddlgen { namespace models
 {
@@ -34,16 +35,20 @@ namespace nddlgen { namespace models
 
 			nddlgen::models::Workspace* _workspace;
 
+			nddlgen::utilities::ControllerMeta* _controllerMeta;
+
 		public:
 
 			Arm();
 			virtual ~Arm();
 
-			virtual void generateModelAsString(std::ofstream& ofStream);
-			virtual void generateInitialStateAsString(std::ofstream& ofStream);
+			virtual void generateModel(std::ofstream& ofStream);
+			virtual void generateInitialState(std::ofstream& ofStream);
 
 			void setWorkspace(nddlgen::models::Workspace* workspace);
 			nddlgen::models::Workspace* getWorkspace();
+
+			void setControllerMeta(nddlgen::utilities::ControllerMeta* controllerMeta);
 
 	};
 

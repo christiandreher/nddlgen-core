@@ -20,9 +20,10 @@
 #include <string>
 #include <sdf/sdf.hh>
 
+#include <nddlgen/core/SdfParser.h>
+#include <nddlgen/core/NddlGenerator.h>
 #include <nddlgen/models/Arm.h>
-#include "nddlgen/core/SdfParser.h"
-#include "nddlgen/core/NddlGenerator.h"
+#include <nddlgen/utilities/ControllerMeta.hpp>
 
 /**
  * Base components for the nddl generator.
@@ -97,6 +98,11 @@ namespace nddlgen
 			 * Arm model to generate nddl files from.
 			 */
 			nddlgen::models::Arm* _armModel;
+
+			/**
+			 * Object holding controller meta data to make it accessible for other classes
+			 */
+			nddlgen::utilities::ControllerMeta* _controllerMeta;
 
 			/**
 			 * Checks if a file is checkable. This means, that a file identifier has already
