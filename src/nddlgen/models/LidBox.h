@@ -32,13 +32,13 @@ namespace nddlgen { namespace models
 
 			bool _isOpened;
 
-			void init();
-
 		public:
 
 			LidBox();
 			LidBox(bool isOpened);
 			virtual ~LidBox();
+
+			virtual void postInitProcessing();
 
 			virtual void generateInitialState(std::ofstream& ofStream);
 

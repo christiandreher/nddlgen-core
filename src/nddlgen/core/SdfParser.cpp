@@ -59,8 +59,6 @@ namespace nddlgen { namespace core
 			return false;
 		}
 
-		models.clear();
-
 		return true;
 	}
 
@@ -111,6 +109,8 @@ namespace nddlgen { namespace core
 
 	bool SdfParser::calculateDependencies(nddlgen::types::ModelList models)
 	{
+		this->_armModel->getWorkspace()->postInitProcessing();
+
 		return true;
 	}
 

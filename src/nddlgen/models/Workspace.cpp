@@ -22,37 +22,50 @@ namespace nddlgen { namespace models
 	Workspace::Workspace()
 	{
 		this->setClassName("Workspace");
-
-		this->_modelClasses.push_back(new nddlgen::models::Box());
-		this->_modelClasses.push_back(new nddlgen::models::LidBox());
-		this->_modelClasses.push_back(new nddlgen::models::ObjectSlide());
-		this->_modelClasses.push_back(new nddlgen::models::ObjectSlideContainer());
 	}
 
 	Workspace::~Workspace()
 	{
-		this->_modelClasses.clear();
-		this->_models.clear();
+
+	}
+
+
+	void Workspace::postInitProcessing()
+	{
+		foreach (nddlgen::models::NddlGeneratable& generatableModelObject, this->_models)
+		{
+			nddlgen::models::NddlGeneratable* generatableModel = &generatableModelObject;
+
+			generatableModel->postInitProcessing();
+		}
 	}
 
 
 	void Workspace::generateModel(std::ofstream& ofStream)
 	{
-		foreach (nddlgen::models::NddlGeneratable& generatableModelObject, this->_modelClasses)
+		std::list<std::string> alreadyDefinedClasses;
+
+		foreach (nddlgen::models::NddlGeneratable& generatableModelObject, this->_models)
 		{
 			nddlgen::models::NddlGeneratable* generatableModel = &generatableModelObject;
 
-			generatableModel->generateModel(ofStream);
+			if (std::find(alreadyDefinedClasses.begin(), alreadyDefinedClasses.end(), generatableModel->getClassName())
+				== alreadyDefinedClasses.end())
+			{
+				generatableModel->generateModel(ofStream);
+				alreadyDefinedClasses.push_back(generatableModel->getClassName());
+			}
+
 		}
 
-		wrln(0, "class Workspace", 				1);
-		wrln(0, "{",							1);
+		wrln(0, "class " + this->getClassName(),	1);
+		wrln(0, "{",								1);
 
 		this->generateWorkspaceMembers(ofStream);
 
 		this->generateWorkspaceConstructor(ofStream);
 
-		wrln(0, "}",							2);
+		wrln(0, "}",								2);
 	}
 
 	void Workspace::generateInitialState(std::ofstream& ofStream)
@@ -79,6 +92,22 @@ namespace nddlgen { namespace models
 		}
 
 		return nullptr;
+	}
+
+	nddlgen::types::ActionList Workspace::getActions()
+	{
+		nddlgen::types::ActionList actionList;
+
+		foreach (nddlgen::models::NddlGeneratable& generatableModelObject, this->_models)
+		{
+			nddlgen::models::NddlGeneratable* generatableModel = &generatableModelObject;
+			nddlgen::types::ActionList actions = generatableModel->getActions();
+
+
+			actionList.insert(actionList.end(), actions.begin(), actions.end());
+		}
+
+		return actionList;
 	}
 
 	void Workspace::generateWorkspaceMembers(std::ofstream& ofStream)

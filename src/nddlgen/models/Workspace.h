@@ -36,7 +36,6 @@ namespace nddlgen { namespace models
 
 		private:
 
-			nddlgen::types::NddlGeneratableList _modelClasses;
 			nddlgen::types::NddlGeneratableList _models;
 
 			void generateWorkspaceMembers(std::ofstream& ofStream);
@@ -47,11 +46,15 @@ namespace nddlgen { namespace models
 			Workspace();
 			virtual ~Workspace();
 
+			virtual void postInitProcessing();
+
 			virtual void generateModel(std::ofstream& ofStream);
 			virtual void generateInitialState(std::ofstream& ofStream);
 
 			void addModelToWorkspace(nddlgen::models::NddlGeneratable* model);
 			nddlgen::models::NddlGeneratable* getModelByName(std::string name);
+
+			virtual nddlgen::types::ActionList getActions();
 
 	};
 

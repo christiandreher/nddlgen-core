@@ -32,7 +32,7 @@ namespace nddlgen { namespace models
 	class NddlGeneratable
 	{
 
-		private:
+		protected:
 
 			std::string _name;
 			std::string _className;
@@ -44,6 +44,8 @@ namespace nddlgen { namespace models
 
 			NddlGeneratable();
 			virtual ~NddlGeneratable();
+
+			virtual void postInitProcessing();
 
 			virtual void generateModel(std::ofstream& ofStream);
 			virtual void generateInitialState(std::ofstream& ofStream) = 0;
@@ -64,7 +66,7 @@ namespace nddlgen { namespace models
 
 			void addAction(nddlgen::utilities::ModelAction* action);
 			bool hasActions();
-			nddlgen::types::ActionList getActions();
+			virtual nddlgen::types::ActionList getActions();
 
 	};
 

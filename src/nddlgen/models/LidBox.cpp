@@ -35,7 +35,46 @@ namespace nddlgen { namespace models
 
 	LidBox::~LidBox()
 	{
-		// TODO Auto-generated destructor stub
+
+	}
+
+
+	void LidBox::postInitProcessing()
+	{
+		std::string openedPredicate = "opened";
+		std::string closedPredicate = "closed";
+
+		nddlgen::utilities::ModelAction* openAction = new nddlgen::utilities::ModelAction();
+		nddlgen::utilities::ModelAction* closeAction = new nddlgen::utilities::ModelAction();
+
+		this->setClassName("LidBox");
+
+		openAction->setName("open" + this->getNamePref());
+		openAction->setDuration("1");
+		openAction->setMetByCondition(this->getNamePref(), closedPredicate);
+
+		if (this->isBlocked())
+		{
+			foreach (nddlgen::models::NddlGeneratable& generatableModelObject, this->_blockedBy)
+			{
+				nddlgen::models::NddlGeneratable* generatableModel = &generatableModelObject;
+
+				openAction->setContainedByCondition(generatableModel->getNamePref(), closedPredicate);
+			}
+		}
+
+		openAction->setMeetsEffect(this->getNamePref(), openedPredicate);
+
+		closeAction->setName("close" + this->getNamePref());
+		closeAction->setDuration("1");
+		closeAction->setMetByCondition(this->getNamePref(), openedPredicate);
+		closeAction->setMeetsEffect(this->getNamePref(), closedPredicate);
+
+		this->addPredicate(openedPredicate);
+		this->addPredicate(closedPredicate);
+
+		this->addAction(openAction);
+		this->addAction(closeAction);
 	}
 
 
@@ -50,20 +89,4 @@ namespace nddlgen { namespace models
 		return this->_isOpened;
 	}
 
-	void LidBox::init()
-	{
-		std::string openedPredicate = "opened";
-		std::string closedPredicate = "closed";
-
-		nddlgen::utilities::ModelAction* openAction = new nddlgen::utilities::ModelAction();
-		nddlgen::utilities::ModelAction* closeAction = new nddlgen::utilities::ModelAction();
-
-		this->setClassName("LidBox");
-
-		this->addPredicate(openedPredicate);
-		this->addPredicate(closedPredicate);
-
-		openAction->setName("open" + this->getNamePref());
-		openAction->setDuration("1");
-	}
 }}

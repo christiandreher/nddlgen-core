@@ -84,8 +84,9 @@ namespace nddlgen
 
 	Controller::~Controller()
 	{
-		delete this->_controllerMeta;
-		delete this->_armModel;
+		boost::checked_delete(this->_controllerMeta);
+		boost::checked_delete(this->_armModel);
+		this->_sdfRoot->ClearElements();
 	}
 
 
@@ -214,7 +215,7 @@ namespace nddlgen
 			return false;
 		}
 
-		delete sdfParser;
+		boost::checked_delete(sdfParser);
 
 		this->_isSdfParsed = true;
 		return true;
@@ -252,7 +253,7 @@ namespace nddlgen
 			return false;
 		}
 
-		delete nddlGen;
+		boost::checked_delete(nddlGen);
 
 		this->_isNddlGenerated = true;
 		return true;

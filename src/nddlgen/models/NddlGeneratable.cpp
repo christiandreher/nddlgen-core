@@ -30,6 +30,12 @@ namespace nddlgen { namespace models
 	}
 
 
+	void NddlGeneratable::postInitProcessing()
+	{
+
+	}
+
+
 	void NddlGeneratable::generateModel(std::ofstream& ofStream)
 	{
 		wrln(0, "class " + this->_className,	1);
