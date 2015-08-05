@@ -14,39 +14,14 @@
  * limitations under the License.
  */
 
-#ifndef NDDLGEN_MODELS_ARM_H_
-#define NDDLGEN_MODELS_ARM_H_
+#include <nddlgen/utilities/Meta.h>
 
-#include <string>
-#include <iostream>
-#include <fstream>
-
-#include <nddlgen/models/NddlGeneratable.h>
-#include <nddlgen/models/Workspace.h>
-
-namespace nddlgen { namespace models
+namespace nddlgen { namespace utilities
 {
 
-	class Arm : public nddlgen::models::NddlGeneratable
-	{
-
-		private:
-
-			nddlgen::models::Workspace* _workspace;
-
-		public:
-
-			Arm();
-			virtual ~Arm();
-
-			virtual void generateModel(std::ofstream& ofStream);
-			virtual void generateInitialState(std::ofstream& ofStream);
-
-			void setWorkspace(nddlgen::models::Workspace* workspace);
-			nddlgen::models::Workspace* getWorkspace();
-
-	};
+	const std::string Meta::NDDLGEN_VERSION = "1.1.0";
+	const std::string Meta::NDDLGEN_PROJECT_HOMEPAGE = "nddlgen.charlydelta.org";
+	const std::string Meta::NDDLGEN_SUPPORT_EMAIL = "nddlgen-support@charlydelta.org";
+	const std::string Meta::AUTHOR_CHR_DREHER_EMAIL = "dreher@charlydelta.org";
 
 }}
-
-#endif

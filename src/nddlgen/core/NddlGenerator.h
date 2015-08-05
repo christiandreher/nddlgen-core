@@ -1,5 +1,5 @@
 /**
- * Copyright 2015 Christian Dreher (christian.dreher@student.kit.edu)
+ * Copyright 2015 Christian Dreher (dreher@charlydelta.org)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,7 +21,12 @@
 #include <fstream>
 #include <string>
 
+#include <boost/algorithm/string.hpp>
+#include <boost/date_time/posix_time/posix_time.hpp>
+
 #include <nddlgen/models/Arm.h>
+#include <nddlgen/utilities/ControllerMeta.hpp>
+#include <nddlgen/utilities/Meta.h>
 
 namespace nddlgen { namespace core
 {
@@ -31,11 +36,15 @@ namespace nddlgen { namespace core
 
 		private:
 
+			nddlgen::utilities::ControllerMeta* _controllerMeta;
+
 			nddlgen::models::Arm* _armModel;
+
+			std::string getPrettifiedDate();
 
 		public:
 
-			NddlGenerator(nddlgen::models::Arm* armModel);
+			NddlGenerator(nddlgen::models::Arm* armModel, nddlgen::utilities::ControllerMeta* controllerMeta);
 			virtual ~NddlGenerator();
 
 			bool generateModels(std::string fileName);

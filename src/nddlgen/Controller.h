@@ -1,5 +1,5 @@
 /**
- * Copyright 2015 Christian Dreher (christian.dreher@student.kit.edu)
+ * Copyright 2015 Christian Dreher (dreher@charlydelta.org)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -60,7 +60,7 @@ namespace nddlgen
 			/**
 			 * Pointer to a string to write error messages to. Must be supplied through the constructor.
 			 */
-			std::string* _errorText;
+			std::string _errorText;
 
 			/**
 			 * Identifier for the sdf file to generate nddl files from. Must contain file name and extension
@@ -150,11 +150,6 @@ namespace nddlgen
 		public:
 
 			/**
-			 * Version
-			 */
-			static const std::string NDDLGEN_VERSION;
-
-			/**
 			 * Error message when a file identifier has already been set.
 			 */
 			static const std::string ERR_FILE_ID_ALREADY_SET;
@@ -215,26 +210,30 @@ namespace nddlgen
 
 
 			/**
-			 * Constructor to initialize a Controller object with given errorText pointer.
-			 *
-			 * @param errorText Pointer to the string where error texts should be written to.
+			 * Constructor to initialize a Controller object.
 			 */
-			Controller(std::string* errorText);
+			Controller();
 
 			/**
-			 * Constructor to initialize a Controller object with given fileIdentifier and
-			 * errorText pointer.
+			 * Constructor to initialize a Controller object with given fileIdentifier.
 			 *
 			 * @param fileIdentifier Identifier to locate file. Can be a relative or absolute
 			 * 		and must contain a file name and the .sdf file extension.
-			 * @param errorText Pointer to the string where error texts should be written to.
 			 */
-			Controller(std::string fileIdentifier, std::string* errorText);
+			Controller(std::string fileIdentifier);
 
 			/**
 			 * Destructor to destroy the object and free resources.
 			 */
 			virtual ~Controller();
+
+
+			/**
+			 * Gets the most recent error which occurred when a control function returned false
+			 *
+			 * @return Last error message
+			 */
+			std::string getErrorText();
 
 
 			/**
@@ -291,6 +290,13 @@ namespace nddlgen
 			 * @return false, if errors where produced, true if not.
 			 */
 			bool generateNddl();
+
+			/**
+			 * Set adapter name and version to indicate it in the generated files.
+			 *
+			 * @param adapter name and version of the adapter. E.g "nddlgen-cli v0.0.0"
+			 */
+			void setAdapter(std::string adapter);
 
 	};
 
