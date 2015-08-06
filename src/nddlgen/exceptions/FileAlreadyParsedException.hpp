@@ -14,14 +14,28 @@
  * limitations under the License.
  */
 
-#include <nddlgen/utilities/Meta.h>
+#ifndef NDDLGEN_EXCEPTIONS_FILEALREADYPARSEDEXCEPTION_HPP_
+#define NDDLGEN_EXCEPTIONS_FILEALREADYPARSEDEXCEPTION_HPP_
 
-namespace nddlgen { namespace utilities
+#include <exception>
+
+namespace nddlgen { namespace exceptions
 {
 
-	const std::string Meta::NDDLGEN_VERSION = "1.2.0";
-	const std::string Meta::NDDLGEN_PROJECT_HOMEPAGE = "nddlgen.charlydelta.org";
-	const std::string Meta::NDDLGEN_SUPPORT_EMAIL = "nddlgen-support@charlydelta.org";
-	const std::string Meta::AUTHOR_CHR_DREHER_EMAIL = "dreher@charlydelta.org";
+	class FileAlreadyParsedException : public std::exception
+	{
+		public:
+
+			FileAlreadyParsedException() {}
+			virtual ~FileAlreadyParsedException() throw (){}
+
+			virtual const char* what() const throw()
+			{
+				return "The file has already been parsed.";
+			}
+
+	};
 
 }}
+
+#endif

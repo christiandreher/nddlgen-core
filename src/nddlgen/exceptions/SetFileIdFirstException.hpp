@@ -14,14 +14,28 @@
  * limitations under the License.
  */
 
-#include <nddlgen/utilities/Meta.h>
+#ifndef NDDLGEN_EXCEPTIONS_SETFILEIDFIRSTEXCEPTION_HPP_
+#define NDDLGEN_EXCEPTIONS_SETFILEIDFIRSTEXCEPTION_HPP_
 
-namespace nddlgen { namespace utilities
+#include <exception>
+
+namespace nddlgen { namespace exceptions
 {
 
-	const std::string Meta::NDDLGEN_VERSION = "1.2.0";
-	const std::string Meta::NDDLGEN_PROJECT_HOMEPAGE = "nddlgen.charlydelta.org";
-	const std::string Meta::NDDLGEN_SUPPORT_EMAIL = "nddlgen-support@charlydelta.org";
-	const std::string Meta::AUTHOR_CHR_DREHER_EMAIL = "dreher@charlydelta.org";
+	class SetFileIdFirstException : public std::exception
+	{
+		public:
+
+			SetFileIdFirstException() {}
+			virtual ~SetFileIdFirstException() throw (){}
+
+			virtual const char* what() const throw()
+			{
+				return "No file identifier has been set. Set one by calling Controller::setFileIdentifier(fileIdentifier).";
+			}
+
+	};
 
 }}
+
+#endif

@@ -14,14 +14,34 @@
  * limitations under the License.
  */
 
-#include <nddlgen/utilities/Meta.h>
+#ifndef NDDLGEN_EXCEPTIONS_INITIALIZINGSDFEXCEPTION_HPP_
+#define NDDLGEN_EXCEPTIONS_INITIALIZINGSDFEXCEPTION_HPP_
 
-namespace nddlgen { namespace utilities
+#include <exception>
+
+namespace nddlgen { namespace exceptions
 {
 
-	const std::string Meta::NDDLGEN_VERSION = "1.2.0";
-	const std::string Meta::NDDLGEN_PROJECT_HOMEPAGE = "nddlgen.charlydelta.org";
-	const std::string Meta::NDDLGEN_SUPPORT_EMAIL = "nddlgen-support@charlydelta.org";
-	const std::string Meta::AUTHOR_CHR_DREHER_EMAIL = "dreher@charlydelta.org";
+	class InitializingSdfException : public std::exception
+	{
+
+		protected:
+
+	    	std::string _cerrOutput;
+
+		public:
+
+			explicit InitializingSdfException(const std::string& message): _cerrOutput(message) {}
+			virtual ~InitializingSdfException() throw (){}
+
+			virtual const char* what() const throw()
+			{
+				std:: string errorMsg = "Unable to initialize .sdf file.\n" + this->_cerrOutput;
+				return errorMsg.c_str();
+			}
+
+	};
 
 }}
+
+#endif
