@@ -18,13 +18,11 @@
 #define NDDLGEN_CONTROLLER_H_
 
 #include <string>
+
 #include <sdf/sdf.hh>
 
 #include <nddlgen/core/SdfParser.h>
 #include <nddlgen/core/NddlGenerator.h>
-#include <nddlgen/models/Arm.h>
-#include <nddlgen/utilities/ControllerMeta.hpp>
-
 #include <nddlgen/exceptions/CheckFileFirstException.hpp>
 #include <nddlgen/exceptions/FileAlreadyCheckedException.hpp>
 #include <nddlgen/exceptions/FileAlreadyParsedException.hpp>
@@ -39,12 +37,13 @@
 #include <nddlgen/exceptions/ParseFileFirstException.hpp>
 #include <nddlgen/exceptions/ReadingSdfFileException.hpp>
 #include <nddlgen/exceptions/SetFileIdFirstException.hpp>
+#include <nddlgen/models/Arm.h>
+#include <nddlgen/utilities/ControllerMeta.hpp>
 
 /**
  * Base components for the nddl generator.
  *
  * @author Christian Dreher
- * @version v1.0.0
  */
 namespace nddlgen
 {
@@ -54,7 +53,6 @@ namespace nddlgen
 	 * files (nddl) out of an sdf file.
 	 *
 	 * @author Christian Dreher
-	 * @version v1.0.0
 	 */
 	class Controller
 	{
@@ -71,6 +69,11 @@ namespace nddlgen
 			 */
 			std::streambuf* _cerrStdRdBuf;
 
+
+			/**
+			 * Path to output files.
+			 */
+			std::string _outputFilesPath;
 
 			/**
 			 * Identifier for the sdf file to generate nddl files from. Must contain file name and extension
@@ -100,7 +103,7 @@ namespace nddlgen
 			bool _isSdfParsed;
 
 			/**
-			 * Flag to control the workflow and check if the nddl files has been generated.
+			 * Flag to control the workflow and check if the .nddl files has been generated.
 			 */
 			bool _isNddlGenerated;
 
@@ -182,6 +185,54 @@ namespace nddlgen
 			 */
 			void setFileIdentifier(std::string fileIdentifier);
 
+
+			/**
+			 * Checks if the given file is a .sdf file, if it exists, if it is readable, if it
+			 * complies with the SDF standard.
+			 */
+			void checkFile();
+
+			/**
+			 * Parses the SDF into a data structure where possible collisions and
+			 * blocks can be computed.
+			 */
+			void parseSdf();
+
+			/**
+			 * Uses the data structures to generate NDDL model and initial state files.
+			 */
+			void generateNddl();
+
+
+			/**
+			 * Sets adapter name and version to indicate it in the generated files.
+			 *
+			 * @param adapter name and version of the adapter. E.g "nddlgen-cli v0.0.0".
+			 */
+			void setAdapter(std::string adapter);
+
+			/**
+			 * Sets output files path.
+			 *
+			 * @param outputFilesPath Path to output files.
+			 */
+			void setOutputFilesPath(std::string outputFilesPath);
+
+
+			/**
+			 * Returns the input file path.
+			 *
+			 * @return Path of the input file.
+			 */
+			std::string getInputFilePath();
+
+			/**
+			 * Returns the input file name.
+			 *
+			 * @return Input file name.
+			 */
+			std::string getInputFileName();
+
 			/**
 			 * Returns the path where the output files are saved.
 			 *
@@ -202,30 +253,6 @@ namespace nddlgen
 			 * @return Name of the domain initial state output file.
 			 */
 			std::string getInitialStateOutputFileName();
-
-			/**
-			 * Checks if the given file is a .sdf file, if it exists, if it is readable, if it
-			 * complies with the SDF standard.
-			 */
-			void checkFile();
-
-			/**
-			 * Parses the SDF into a data structure where possible collisions and
-			 * blocks can be computed.
-			 */
-			void parseSdf();
-
-			/**
-			 * Uses the data structures to generate nddl model and initial state files.
-			 */
-			void generateNddl();
-
-			/**
-			 * Set adapter name and version to indicate it in the generated files.
-			 *
-			 * @param adapter name and version of the adapter. E.g "nddlgen-cli v0.0.0"
-			 */
-			void setAdapter(std::string adapter);
 
 	};
 

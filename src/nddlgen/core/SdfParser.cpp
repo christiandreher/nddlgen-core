@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-#include "nddlgen/core/SdfParser.h"
+#include <nddlgen/core/SdfParser.h>
 
 namespace nddlgen { namespace core
 {

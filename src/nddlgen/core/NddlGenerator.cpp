@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-#include "nddlgen/core/NddlGenerator.h"
+#include <nddlgen/core/NddlGenerator.h>
 
 namespace nddlgen { namespace core
 {
@@ -27,7 +27,7 @@ namespace nddlgen { namespace core
 
 	NddlGenerator::~NddlGenerator()
 	{
-		// TODO Auto-generated destructor stub
+
 	}
 
 
@@ -44,6 +44,7 @@ namespace nddlgen { namespace core
 		std::string adapter = this->_controllerMeta->adapter;
 		std::string outputFile = this->_controllerMeta->outputFileModels;
 		std::string inputFile = this->_controllerMeta->inputFile;
+		std::string inputFilePath = this->_controllerMeta->inputFilePath;
 
 		std::string now = this->getPrettifiedDate();
 
@@ -57,8 +58,9 @@ namespace nddlgen { namespace core
 		wrln(0, "// Author: Christian Dreher <" + authorChrDreherEmail + ">", 1);
 		wrln(0, "// Support: <" + nddlgenSupportEmail + ">", 2);
 
-		wrln(0, "// This NDDL model file (" + outputFile + ") was generated from \"" + inputFile + "\" ", 1);
-		wrln(0, "// by nddlgen-core v" + nddlgenVersion + " using " + adapter + "", 1);
+		wrln(0, "// This NDDL model file (" + outputFile + ") was generated from ", 1);
+		wrln(0, "// \"" + inputFile + "\" originally located in \"" + inputFilePath + "\" by", 1);
+		wrln(0, "// nddlgen-core v" + nddlgenVersion + " using " + adapter + "", 1);
 		wrln(0, "// Creation date: " + now, 2);
 		// End declaimer / meta
 

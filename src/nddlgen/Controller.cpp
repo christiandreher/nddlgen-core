@@ -15,9 +15,10 @@
  */
 
 #include <sys/stat.h>
+
 #include <boost/filesystem.hpp>
 
-#include "nddlgen/Controller.h"
+#include <nddlgen/Controller.h>
 
 namespace nddlgen
 {
@@ -75,30 +76,11 @@ namespace nddlgen
 		this->_fileIdentifier = fileIdentifier;
 		this->_isFileIdentifierSet = true;
 
-		this->_controllerMeta->inputFile = this->_fileIdentifier;
+		this->_controllerMeta->inputFile = this->getInputFileName();
+		this->_controllerMeta->inputFilePath = this->getInputFilePath();
 		this->_controllerMeta->outputFilePath = this->getOutputFilesPath();
 		this->_controllerMeta->outputFileModels = this->getModelsOutputFileName();
 		this->_controllerMeta->outputFileInitialState = this->getInitialStateOutputFileName();
-	}
-
-	std::string Controller::getOutputFilesPath()
-	{
-		std::string filePath = boost::filesystem::path(this->_fileIdentifier).parent_path().string();
-		return filePath;
-	}
-
-	std::string Controller::getModelsOutputFileName()
-	{
-		std::string fileStem = boost::filesystem::path(this->_fileIdentifier).stem().string();
-		fileStem += "-model";
-		return fileStem + ".nddl";
-	}
-
-	std::string Controller::getInitialStateOutputFileName()
-	{
-		std::string fileStem = boost::filesystem::path(this->_fileIdentifier).stem().string();
-		fileStem += "-initial-state";
-		return fileStem + ".nddl";
 	}
 
 	void Controller::checkFile()
@@ -209,6 +191,50 @@ namespace nddlgen
 	void Controller::setAdapter(std::string adapter)
 	{
 		this->_controllerMeta->adapter = adapter;
+	}
+
+	void Controller::setOutputFilesPath(std::string outputFilesPath)
+	{
+		this->_outputFilesPath = outputFilesPath;
+	}
+
+
+	std::string Controller::getInputFilePath()
+	{
+		std::string filePath = boost::filesystem::path(this->_fileIdentifier).parent_path().string();
+		return filePath;
+	}
+
+	std::string Controller::getInputFileName()
+	{
+		std::string fileName = boost::filesystem::path(this->_fileIdentifier).filename().string();
+		return fileName;
+	}
+
+	std::string Controller::getOutputFilesPath()
+	{
+		std::string outputFilesPath = this->getInputFilePath();
+
+		if (this->_outputFilesPath != "")
+		{
+			outputFilesPath = this->_outputFilesPath;
+		}
+
+		return outputFilesPath;
+	}
+
+	std::string Controller::getModelsOutputFileName()
+	{
+		std::string fileStem = boost::filesystem::path(this->_fileIdentifier).stem().string();
+		fileStem += "-model";
+		return fileStem + ".nddl";
+	}
+
+	std::string Controller::getInitialStateOutputFileName()
+	{
+		std::string fileStem = boost::filesystem::path(this->_fileIdentifier).stem().string();
+		fileStem += "-initial-state";
+		return fileStem + ".nddl";
 	}
 
 

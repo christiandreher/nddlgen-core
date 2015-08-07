@@ -23,6 +23,7 @@ namespace nddlgen { namespace utilities {
 	{
 		public:
 			std::string inputFile;
+			std::string inputFilePath;
 			std::string outputFilePath;
 			std::string outputFileModels;
 			std::string outputFileInitialState;
