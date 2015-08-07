@@ -18,6 +18,9 @@
 #define NDDLGEN_CONTROLLER_H_
 
 #include <string>
+#include <sys/stat.h>
+
+#include <boost/filesystem.hpp>
 
 #include <sdf/sdf.hh>
 
@@ -160,14 +163,6 @@ namespace nddlgen
 			 * Constructor to initialize a Controller object.
 			 */
 			Controller();
-
-			/**
-			 * Constructor to initialize a Controller object with given fileIdentifier.
-			 *
-			 * @param fileIdentifier Identifier to locate file. Can be a relative or absolute
-			 * 		and must contain a file name and the .sdf file extension.
-			 */
-			Controller(std::string fileIdentifier);
 
 			/**
 			 * Destructor to destroy the object and free resources.

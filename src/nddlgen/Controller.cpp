@@ -14,10 +14,6 @@
  * limitations under the License.
  */
 
-#include <sys/stat.h>
-
-#include <boost/filesystem.hpp>
-
 #include <nddlgen/Controller.h>
 
 namespace nddlgen
@@ -25,31 +21,19 @@ namespace nddlgen
 
 	Controller::Controller()
 	{
+		// Save standard cerr buffer to be able to restore it
 		this->_cerrStdRdBuf = std::cerr.rdbuf();
 
+		// Initialize workflow indicators
 		this->_isFileIdentifierSet = false;
 		this->_isFileChecked = false;
 		this->_isSdfParsed = false;
 		this->_isNddlGenerated = false;
 
+		// Instantiate controller meta data object
 		this->_controllerMeta = new nddlgen::utilities::ControllerMeta();
 
-		this->_armModel = new nddlgen::models::Arm();
-	}
-
-	Controller::Controller(std::string fileIdentifier)
-	{
-		this->_cerrStdRdBuf = std::cerr.rdbuf();
-
-		this->_fileIdentifier = fileIdentifier;
-
-		this->_isFileIdentifierSet = true;
-		this->_isFileChecked = false;
-		this->_isSdfParsed = false;
-		this->_isNddlGenerated = false;
-
-		this->_controllerMeta = new nddlgen::utilities::ControllerMeta();
-
+		// Instantiate arm model
 		this->_armModel = new nddlgen::models::Arm();
 	}
 
@@ -58,6 +42,7 @@ namespace nddlgen
 		boost::checked_delete(this->_controllerMeta);
 		boost::checked_delete(this->_armModel);
 
+		// Check if SDF was parsed before calling member functions on SDF root
 		if (this->_isSdfParsed)
 		{
 			this->_sdfRoot->ClearElements();
@@ -73,9 +58,11 @@ namespace nddlgen
 			throw nddlgen::exceptions::FileIdAlreadySetException();
 		}
 
+		// Set file identifier and check workflow control variable
 		this->_fileIdentifier = fileIdentifier;
 		this->_isFileIdentifierSet = true;
 
+		// Initialize controller meta data object
 		this->_controllerMeta->inputFile = this->getInputFileName();
 		this->_controllerMeta->inputFilePath = this->getInputFilePath();
 		this->_controllerMeta->outputFilePath = this->getOutputFilesPath();
@@ -108,11 +95,13 @@ namespace nddlgen
 			throw nddlgen::exceptions::FileDoesNotExistException();
 		}
 
+		// Disable standard cerr output, since the output of the SDF library can't be suppressed otherwise
 		this->disableCerr();
 
 		// Init .sdf based on installed sdf_format.xml file
 		if (!sdf::init(sdf))
 		{
+			// Re-enable standard cerr
 			this->enableCerr();
 			throw nddlgen::exceptions::InitializingSdfException(this->getBufferedCerrOutput());
 		}
@@ -120,14 +109,18 @@ namespace nddlgen
 		// Try to read the file and generate SDF
 		if (!sdf::readFile(this->_fileIdentifier, sdf))
 		{
+			// Re-enable cerr
 			this->enableCerr();
 			throw nddlgen::exceptions::ReadingSdfFileException(this->getBufferedCerrOutput());
 		}
 
+		// Save root to member
 		this->_sdfRoot = sdf->root;
 
+		// Re-enable cerr
 		this->enableCerr();
 
+		// Check workflow control variable
 		this->_isFileChecked = true;
 	}
 
@@ -151,8 +144,10 @@ namespace nddlgen
 			throw nddlgen::exceptions::ParseDataStructureException();
 		}
 
+		// Delete SDF parser
 		boost::checked_delete(sdfParser);
 
+		// Check workflow control variable
 		this->_isSdfParsed = true;
 	}
 
@@ -182,8 +177,10 @@ namespace nddlgen
 			throw nddlgen::exceptions::GeneratingInitialStateException();
 		}
 
+		// Delete NDDL generator
 		boost::checked_delete(nddlgen);
 
+		// Check workflow control variable
 		this->_isNddlGenerated = true;
 	}
 
@@ -213,8 +210,10 @@ namespace nddlgen
 
 	std::string Controller::getOutputFilesPath()
 	{
+		// Standard output path is the path of the input file
 		std::string outputFilesPath = this->getInputFilePath();
 
+		// If a custom output path was set, override local variable
 		if (this->_outputFilesPath != "")
 		{
 			outputFilesPath = this->_outputFilesPath;
@@ -227,6 +226,7 @@ namespace nddlgen
 	{
 		std::string fileStem = boost::filesystem::path(this->_fileIdentifier).stem().string();
 		fileStem += "-model";
+
 		return fileStem + ".nddl";
 	}
 
@@ -234,6 +234,7 @@ namespace nddlgen
 	{
 		std::string fileStem = boost::filesystem::path(this->_fileIdentifier).stem().string();
 		fileStem += "-initial-state";
+
 		return fileStem + ".nddl";
 	}
 
