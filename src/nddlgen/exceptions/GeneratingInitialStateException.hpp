@@ -24,6 +24,7 @@ namespace nddlgen { namespace exceptions
 
 	class GeneratingInitialStateException : public std::exception
 	{
+
 		public:
 
 			GeneratingInitialStateException() {}

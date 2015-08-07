@@ -24,6 +24,7 @@ namespace nddlgen { namespace exceptions
 
 	class NddlAlreadyGeneratedException : public std::exception
 	{
+
 		public:
 
 			NddlAlreadyGeneratedException() {}

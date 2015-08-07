@@ -24,6 +24,7 @@ namespace nddlgen { namespace exceptions
 
 	class CheckFileFirstException : public std::exception
 	{
+
 		public:
 
 			CheckFileFirstException() {}

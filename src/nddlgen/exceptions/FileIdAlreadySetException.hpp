@@ -24,6 +24,7 @@ namespace nddlgen { namespace exceptions
 
 	class FileIdAlreadySetException : public std::exception
 	{
+
 		public:
 
 			FileIdAlreadySetException() {}

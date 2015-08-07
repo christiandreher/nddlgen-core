@@ -24,6 +24,7 @@ namespace nddlgen { namespace exceptions
 
 	class FileDoesNotExistException : public std::exception
 	{
+
 		public:
 
 			FileDoesNotExistException() {}

@@ -24,9 +24,10 @@ namespace nddlgen { namespace exceptions
 
 	class FileAlreadyCheckedException : public std::exception
 	{
+
 		public:
 
-		FileAlreadyCheckedException() {}
+			FileAlreadyCheckedException() {}
 			virtual ~FileAlreadyCheckedException() throw (){}
 
 			virtual const char* what() const throw()

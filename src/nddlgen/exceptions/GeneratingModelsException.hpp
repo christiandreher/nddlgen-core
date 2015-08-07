@@ -24,6 +24,7 @@ namespace nddlgen { namespace exceptions
 
 	class GeneratingModelsException : public std::exception
 	{
+
 		public:
 
 			GeneratingModelsException() {}

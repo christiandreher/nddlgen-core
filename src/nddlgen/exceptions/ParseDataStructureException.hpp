@@ -24,6 +24,7 @@ namespace nddlgen { namespace exceptions
 
 	class ParseDataStructureException : public std::exception
 	{
+
 		public:
 
 			ParseDataStructureException() {}

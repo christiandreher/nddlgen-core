@@ -24,6 +24,7 @@ namespace nddlgen { namespace exceptions
 
 	class FileAlreadyParsedException : public std::exception
 	{
+
 		public:
 
 			FileAlreadyParsedException() {}

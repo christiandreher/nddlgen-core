@@ -24,6 +24,7 @@ namespace nddlgen { namespace exceptions
 
 	class ParseFileFirstException : public std::exception
 	{
+
 		public:
 
 			ParseFileFirstException() {}
@@ -31,7 +32,7 @@ namespace nddlgen { namespace exceptions
 
 			virtual const char* what() const throw()
 			{
-				return "The file was not parsed. Parse it by calling Controller::parseFile().";
+				return "The file was not parsed. Parse it by calling Controller::parseSdf().";
 			}
 
 	};

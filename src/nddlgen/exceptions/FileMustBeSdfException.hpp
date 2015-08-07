@@ -24,6 +24,7 @@ namespace nddlgen { namespace exceptions
 
 	class FileMustBeSdfException : public std::exception
 	{
+
 		public:
 
 			FileMustBeSdfException() {}
