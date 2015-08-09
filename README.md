@@ -7,9 +7,9 @@ This package is the core of the nddl-generator. It is compiled as a static libra
 ## Dependencies
 
 ### Build Artifact
- * Artifact type: *Static library*
+ * Artifact type: *Shared library*
  * Artifact name: *nddl-generator-core*
- * Artifact extention: *a*
+ * Artifact extention: *so*
  * Output prefix: *lib*
 
 ### Compiler
@@ -22,7 +22,7 @@ This package is the core of the nddl-generator. It is compiled as a static libra
  * *none*
 
 #### Miscellaneous
- * Other flags: *-c -fmessage-length=0 -std=c++0x*
+ * Other flags: *-c -fmessage-length=0 -std=c++0x -fPIC*
 
 ## License
 
