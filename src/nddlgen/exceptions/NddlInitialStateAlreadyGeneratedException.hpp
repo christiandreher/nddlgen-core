@@ -14,25 +14,25 @@
  * limitations under the License.
  */
 
-#ifndef NDDLGEN_EXCEPTIONS_CHECKFILEFIRSTEXCEPTION_HPP_
-#define NDDLGEN_EXCEPTIONS_CHECKFILEFIRSTEXCEPTION_HPP_
+#ifndef NDDLGEN_EXCEPTIONS_NDDLINITIALSTATEALREADYGENERATEDEXCEPTION_HPP_
+#define NDDLGEN_EXCEPTIONS_NDDLINITIALSTATEALREADYGENERATEDEXCEPTION_HPP_
 
 #include <exception>
 
 namespace nddlgen { namespace exceptions
 {
 
-	class CheckFileFirstException : public std::exception
+	class NddlInitialStateAlreadyGeneratedException : public std::exception
 	{
 
 		public:
 
-			CheckFileFirstException() {}
-			virtual ~CheckFileFirstException() throw (){}
+			NddlInitialStateAlreadyGeneratedException() {}
+			virtual ~NddlInitialStateAlreadyGeneratedException() throw (){}
 
 			virtual const char* what() const throw()
 			{
-				return "The file was not checked. Check it by calling Controller::checkFile().";
+				return "The NDDL initial state file has already been generated.";
 			}
 
 	};

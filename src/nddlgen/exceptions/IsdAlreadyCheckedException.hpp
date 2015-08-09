@@ -14,25 +14,25 @@
  * limitations under the License.
  */
 
-#ifndef NDDLGEN_EXCEPTIONS_FILEALREADYCHECKEDEXCEPTION_HPP_
-#define NDDLGEN_EXCEPTIONS_FILEALREADYCHECKEDEXCEPTION_HPP_
+#ifndef NDDLGEN_EXCEPTIONS_ISDALREADYCHECKEDEXCEPTION_HPP_
+#define NDDLGEN_EXCEPTIONS_ISDALREADYCHECKEDEXCEPTION_HPP_
 
 #include <exception>
 
 namespace nddlgen { namespace exceptions
 {
 
-	class FileAlreadyCheckedException : public std::exception
+	class IsdAlreadyCheckedException : public std::exception
 	{
 
 		public:
 
-			FileAlreadyCheckedException() {}
-			virtual ~FileAlreadyCheckedException() throw (){}
+			IsdAlreadyCheckedException() {}
+			virtual ~IsdAlreadyCheckedException() throw (){}
 
 			virtual const char* what() const throw()
 			{
-				return "The file has already been checked.";
+				return "The ISD input file has already been checked.";
 			}
 
 	};

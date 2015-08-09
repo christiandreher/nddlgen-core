@@ -14,25 +14,25 @@
  * limitations under the License.
  */
 
-#ifndef NDDLGEN_EXCEPTIONS_NDDLALREADYGENERATEDEXCEPTION_HPP_
-#define NDDLGEN_EXCEPTIONS_NDDLALREADYGENERATEDEXCEPTION_HPP_
+#ifndef NDDLGEN_EXCEPTIONS_FILEMUSTBEISDEXCEPTION_HPP_
+#define NDDLGEN_EXCEPTIONS_FILEMUSTBEISDEXCEPTION_HPP_
 
 #include <exception>
 
 namespace nddlgen { namespace exceptions
 {
 
-	class NddlAlreadyGeneratedException : public std::exception
+	class FileMustBeIsdException : public std::exception
 	{
 
 		public:
 
-			NddlAlreadyGeneratedException() {}
-			virtual ~NddlAlreadyGeneratedException() throw (){}
+			FileMustBeIsdException() {}
+			virtual ~FileMustBeIsdException() throw (){}
 
 			virtual const char* what() const throw()
 			{
-				return "The NDDL-file has already been generated.";
+				return "File must be an .isd file.";
 			}
 
 	};

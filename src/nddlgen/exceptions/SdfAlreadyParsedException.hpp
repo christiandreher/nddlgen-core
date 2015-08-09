@@ -14,25 +14,25 @@
  * limitations under the License.
  */
 
-#ifndef NDDLGEN_EXCEPTIONS_SETFILEIDFIRSTEXCEPTION_HPP_
-#define NDDLGEN_EXCEPTIONS_SETFILEIDFIRSTEXCEPTION_HPP_
+#ifndef NDDLGEN_EXCEPTIONS_ISDALREADYPARSEDEXCEPTION_HPP_
+#define NDDLGEN_EXCEPTIONS_ISDALREADYPARSEDEXCEPTION_HPP_
 
 #include <exception>
 
 namespace nddlgen { namespace exceptions
 {
 
-	class SetFileIdFirstException : public std::exception
+	class IsdAlreadyParsedException : public std::exception
 	{
 
 		public:
 
-			SetFileIdFirstException() {}
-			virtual ~SetFileIdFirstException() throw (){}
+			IsdAlreadyParsedException() {}
+			virtual ~IsdAlreadyParsedException() throw (){}
 
 			virtual const char* what() const throw()
 			{
-				return "No file identifier has been set. Set one by calling Controller::setFileIdentifier(fileIdentifier).";
+				return "The ISD input file has already been parsed.";
 			}
 
 	};
