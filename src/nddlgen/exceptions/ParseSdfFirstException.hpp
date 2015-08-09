@@ -14,30 +14,25 @@
  * limitations under the License.
  */
 
-#ifndef NDDLGEN_EXCEPTIONS_FILEDOESNOTEXISTEXCEPTION_HPP_
-#define NDDLGEN_EXCEPTIONS_FILEDOESNOTEXISTEXCEPTION_HPP_
+#ifndef NDDLGEN_EXCEPTIONS_PARSESDFFIRSTEXCEPTION_HPP_
+#define NDDLGEN_EXCEPTIONS_PARSESDFFIRSTEXCEPTION_HPP_
 
 #include <exception>
 
 namespace nddlgen { namespace exceptions
 {
 
-	class FileDoesNotExistException : public std::exception
+	class ParseSdfFirstException : public std::exception
 	{
-
-		protected:
-
-			std::string _fileName;
 
 		public:
 
-			explicit FileDoesNotExistException(const std::string& fileName): _fileName(fileName) {}
-			virtual ~FileDoesNotExistException() throw (){}
+			ParseSdfFirstException() {}
+			virtual ~ParseSdfFirstException() throw (){}
 
 			virtual const char* what() const throw()
 			{
-				std::string output = "The file \"" + this->_fileName + "\" does not exist.";
-				return output.c_str();
+				return "The SDF file was not parsed. Parse it by calling Controller::parseSdf().";
 			}
 
 	};

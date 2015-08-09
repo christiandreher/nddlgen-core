@@ -22,8 +22,10 @@ namespace nddlgen { namespace utilities {
 	class ControllerMeta
 	{
 		public:
-			std::string inputFile;
-			std::string inputFilePath;
+			std::string inputSdfFileName;
+			std::string inputIsdFileName;
+			std::string inputSdfFilePath;
+			std::string inputIsdFilePath;
 			std::string outputFilePath;
 			std::string outputFileModels;
 			std::string outputFileInitialState;

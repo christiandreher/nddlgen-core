@@ -14,25 +14,25 @@
  * limitations under the License.
  */
 
-#ifndef NDDLGEN_EXCEPTIONS_PARSEFILEFIRSTEXCEPTION_HPP_
-#define NDDLGEN_EXCEPTIONS_PARSEFILEFIRSTEXCEPTION_HPP_
+#ifndef NDDLGEN_EXCEPTIONS_INPUTSDFFILENOTSETEXCEPTION_HPP_
+#define NDDLGEN_EXCEPTIONS_INPUTSDFFILENOTSETEXCEPTION_HPP_
 
 #include <exception>
 
 namespace nddlgen { namespace exceptions
 {
 
-	class ParseFileFirstException : public std::exception
+	class InputSdfFileNotSetException : public std::exception
 	{
 
 		public:
 
-			ParseFileFirstException() {}
-			virtual ~ParseFileFirstException() throw (){}
+			InputSdfFileNotSetException() {}
+			virtual ~InputSdfFileNotSetException() throw (){}
 
 			virtual const char* what() const throw()
 			{
-				return "The file was not parsed. Parse it by calling Controller::parseSdf().";
+				return "Input SDF file has not been set.";
 			}
 
 	};

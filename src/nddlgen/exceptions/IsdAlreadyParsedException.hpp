@@ -14,25 +14,25 @@
  * limitations under the License.
  */
 
-#ifndef NDDLGEN_EXCEPTIONS_FILEALREADYPARSEDEXCEPTION_HPP_
-#define NDDLGEN_EXCEPTIONS_FILEALREADYPARSEDEXCEPTION_HPP_
+#ifndef NDDLGEN_EXCEPTIONS_SDFALREADYPARSEDEXCEPTION_HPP_
+#define NDDLGEN_EXCEPTIONS_SDFALREADYPARSEDEXCEPTION_HPP_
 
 #include <exception>
 
 namespace nddlgen { namespace exceptions
 {
 
-	class FileAlreadyParsedException : public std::exception
+	class SdfAlreadyParsedException : public std::exception
 	{
 
 		public:
 
-			FileAlreadyParsedException() {}
-			virtual ~FileAlreadyParsedException() throw (){}
+			SdfAlreadyParsedException() {}
+			virtual ~SdfAlreadyParsedException() throw (){}
 
 			virtual const char* what() const throw()
 			{
-				return "The file has already been parsed.";
+				return "The SDF input file has already been parsed.";
 			}
 
 	};

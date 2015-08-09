@@ -24,11 +24,20 @@ namespace nddlgen
 		// Save standard cerr buffer to be able to restore it
 		this->_cerrStdRdBuf = std::cerr.rdbuf();
 
-		// Initialize workflow indicators
-		this->_isFileIdentifierSet = false;
-		this->_isFileChecked = false;
+		// Initialize model workflow indicators
+		this->_isSdfChecked = false;
 		this->_isSdfParsed = false;
-		this->_isNddlGenerated = false;
+		this->_isNddlModelGenerated = false;
+
+		// Initialize initial state workflow indicators
+		this->_isIsdChecked = false;
+		this->_isIsdParsed = false;
+		this->_isNddlInitialStateGenerated = false;
+
+		// Initialize as empty strings
+		this->_inputSdfFile = "";
+		this->_inputIsdFile = "";
+		this->_outputFilesPath = "";
 
 		// Instantiate controller meta data object
 		this->_controllerMeta = new nddlgen::utilities::ControllerMeta();
@@ -50,49 +59,32 @@ namespace nddlgen
 	}
 
 
-	void Controller::setFileIdentifier(std::string fileIdentifier)
-	{
-		// Check if file identifier has already been set
-		if (this->_isFileIdentifierSet)
-		{
-			throw nddlgen::exceptions::FileIdAlreadySetException();
-		}
-
-		// Set file identifier and check workflow control variable
-		this->_fileIdentifier = fileIdentifier;
-		this->_isFileIdentifierSet = true;
-
-		// Initialize controller meta data object
-		this->_controllerMeta->inputFile = this->getInputFileName();
-		this->_controllerMeta->inputFilePath = this->getInputFilePath();
-		this->_controllerMeta->outputFilePath = this->getOutputFilesPath();
-		this->_controllerMeta->outputFileModels = this->getModelsOutputFileName();
-		this->_controllerMeta->outputFileInitialState = this->getInitialStateOutputFileName();
-	}
-
-	void Controller::checkFile()
+	void Controller::checkSdfInput()
 	{
 		sdf::SDFPtr sdf(new sdf::SDF);
 
-		// Check if file has already been checked
-		if (this->_isFileChecked)
+		// Check if SDF has already been checked
+		if (this->_isSdfChecked)
 		{
-			throw nddlgen::exceptions::FileAlreadyCheckedException();
+			throw nddlgen::exceptions::SdfAlreadyCheckedException();
 		}
 
-		// Check if file is checkable
-		this->isCheckable();
+		// Check if input SDF file has been set
+		if (this->_inputSdfFile == "")
+		{
+			throw nddlgen::exceptions::InputSdfFileNotSetException();
+		}
 
-		// Check if file is an .sdf file
-		if (boost::filesystem::path(this->_fileIdentifier).extension().string() != ".sdf")
+		// Check if input SDF file is an .sdf file
+		if (boost::filesystem::path(this->_inputSdfFile).extension().string() != ".sdf")
 		{
 			throw nddlgen::exceptions::FileMustBeSdfException();
 		}
 
-		// Check if file exists
-		if (!boost::filesystem::exists(this->_fileIdentifier))
+		// Check if SDF file exists
+		if (!boost::filesystem::exists(this->_inputSdfFile))
 		{
-			throw nddlgen::exceptions::FileDoesNotExistException();
+			throw nddlgen::exceptions::FileDoesNotExistException(this->_inputSdfFile);
 		}
 
 		// Disable standard cerr output, since the output of the SDF library can't be suppressed otherwise
@@ -107,7 +99,7 @@ namespace nddlgen
 		}
 
 		// Try to read the file and generate SDF
-		if (!sdf::readFile(this->_fileIdentifier, sdf))
+		if (!sdf::readFile(this->_inputSdfFile, sdf))
 		{
 			// Re-enable cerr
 			this->enableCerr();
@@ -121,22 +113,22 @@ namespace nddlgen
 		this->enableCerr();
 
 		// Check workflow control variable
-		this->_isFileChecked = true;
+		this->_isSdfChecked = true;
 	}
 
 	void Controller::parseSdf()
 	{
-		// Initialize the parser with the already initialized Arm model
-		nddlgen::core::SdfParser* sdfParser = new nddlgen::core::SdfParser(this->_armModel);
-
 		// Check if file has already been parsed
 		if (this->_isSdfParsed)
 		{
-			throw nddlgen::exceptions::FileAlreadyParsedException();
+			throw nddlgen::exceptions::SdfAlreadyParsedException();
 		}
 
 		// Check if file is parsable
-		this->isParsable();
+		this->isSdfParsable();
+
+		// Initialize the parser with the already initialized Arm model
+		nddlgen::core::SdfParser* sdfParser = new nddlgen::core::SdfParser(this->_armModel);
 
 		// Parse the SDF into the defined data structure and check if it was successful
 		if (!sdfParser->parseDataStructure(this->_sdfRoot))
@@ -151,28 +143,127 @@ namespace nddlgen
 		this->_isSdfParsed = true;
 	}
 
-	void Controller::generateNddl()
+	void Controller::generateNddlModel()
 	{
-		// Initialize the NDDL generator with the already initialized and populated Arm model
-		nddlgen::core::NddlGenerator* nddlgen = new nddlgen::core::NddlGenerator(this->_armModel, this->_controllerMeta);
+		this->generateNddlModel(false);
+	}
 
+	void Controller::generateNddlModel(bool forceOverwrite)
+	{
 		// Check if NDDL has already been generated
-		if (this->_isNddlGenerated)
+		if (this->_isNddlModelGenerated)
 		{
-			throw nddlgen::exceptions::NddlAlreadyGeneratedException();
+			throw nddlgen::exceptions::NddlModelAlreadyGeneratedException();
 		}
 
 		// Check if files are generatable
-		this->isGeneratable();
+		this->isNddlModelGeneratable();
+
+		std::string nddlOutputModelFile = this->getOutputFilesPath() + "/" + this->getModelsOutputFileName();
+
+		// Check if file already exists
+		if (!forceOverwrite && boost::filesystem::exists(nddlOutputModelFile))
+		{
+			throw nddlgen::exceptions::FileAlreadyExists(nddlOutputModelFile);
+		}
+
+		// Initialize the NDDL generator with the already initialized and populated Arm model
+		nddlgen::core::NddlGenerator* nddlgen = new nddlgen::core::NddlGenerator(this->_armModel, this->_controllerMeta);
 
 		// Try to generate domain models, write it to a file and check if it was successful
-		if (!nddlgen->generateModels(this->getOutputFilesPath() + "/" + this->getModelsOutputFileName()))
+		if (!nddlgen->generateModels(nddlOutputModelFile))
 		{
 			throw nddlgen::exceptions::GeneratingModelsException();
 		}
 
+		// Delete NDDL generator
+		boost::checked_delete(nddlgen);
+
+		// Check workflow control variable
+		this->_isNddlModelGenerated = true;
+	}
+
+
+	void Controller::checkIsdInput()
+	{
+		sdf::SDFPtr sdf(new sdf::SDF);
+
+		// Check if ISD has already been checked
+		if (this->_isIsdChecked)
+		{
+			throw nddlgen::exceptions::IsdAlreadyCheckedException();
+		}
+
+		// Check if input ISD file has been set
+		if (this->_inputIsdFile == "")
+		{
+			throw nddlgen::exceptions::InputInitialStateFileNotSetException();
+		}
+
+		// Check if input ISD file is an .isd file
+		if (boost::filesystem::path(this->_inputIsdFile).extension().string() != ".isd")
+		{
+			throw nddlgen::exceptions::FileMustBeIsdException();
+		}
+
+		// Check if file exists
+		if (!boost::filesystem::exists(this->_inputIsdFile))
+		{
+			throw nddlgen::exceptions::FileDoesNotExistException(this->_inputIsdFile);
+		}
+
+		// todo: get contents from isd file with tinyxml
+
+		// Check workflow control variable
+		this->_isIsdChecked = true;
+	}
+
+	void Controller::parseIsd()
+	{
+		// Check if file has already been parsed
+		if (this->_isIsdParsed)
+		{
+			throw nddlgen::exceptions::IsdAlreadyParsedException();
+		}
+
+		// Check if file is parsable
+		this->isIsdParsable();
+
+		// todo: parse xml from tinyxml
+
+		// Check workflow control variable
+		this->_isIsdParsed = true;
+	}
+
+	void Controller::generateNddlInitialState()
+	{
+		this->generateNddlInitialState(false);
+	}
+
+	void Controller::generateNddlInitialState(bool forceOverwrite)
+	{
+		// Check if NDDL has already been generated
+		if (this->_isNddlInitialStateGenerated)
+		{
+			throw nddlgen::exceptions::NddlInitialStateAlreadyGeneratedException();
+		}
+
+		// Check if files are generatable
+		this->isNddlInitialStateGeneratable();
+
+		std::string nddlOutputInitialStateFile = this->getOutputFilesPath() + "/" + this->getInitialStateOutputFileName();
+
+		// Check if file already exists
+		if (!forceOverwrite && boost::filesystem::exists(nddlOutputInitialStateFile))
+		{
+			throw nddlgen::exceptions::FileAlreadyExists(nddlOutputInitialStateFile);
+		}
+
+		// Initialize the NDDL generator with the already initialized and populated Arm model
+		nddlgen::core::NddlGenerator* nddlgen = new nddlgen::core::NddlGenerator(this->_armModel, this->_controllerMeta);
+
 		// Try to generate domain initial state and check if it was successful
-		if (!nddlgen->generateInitialState(this->getOutputFilesPath() + "/" + this->getInitialStateOutputFileName()))
+		if (!nddlgen->generateInitialState(nddlOutputInitialStateFile))
 		{
 			throw nddlgen::exceptions::GeneratingInitialStateException();
 		}
@@ -181,7 +272,7 @@ namespace nddlgen
 		boost::checked_delete(nddlgen);
 
 		// Check workflow control variable
-		this->_isNddlGenerated = true;
+		this->_isNddlInitialStateGenerated = true;
 	}
 
 
@@ -190,28 +281,78 @@ namespace nddlgen
 		this->_controllerMeta->adapter = adapter;
 	}
 
+	void Controller::setInputSdfFile(std::string inputSdfFile)
+	{
+		if (this->_inputSdfFile == "")
+		{
+			this->_inputSdfFile = inputSdfFile;
+			this->_controllerMeta->inputSdfFileName = this->getInputSdfFileName();
+			this->_controllerMeta->inputSdfFilePath = this->getInputSdfFilePath();
+		}
+		else
+		{
+			// todo: throw exception
+		}
+	}
+
+	void Controller::setInputIsdFile(std::string inputIsdFile)
+	{
+		if (this->_inputIsdFile == "")
+		{
+			this->_inputIsdFile = inputIsdFile;
+			this->_controllerMeta->inputIsdFileName = this->getInputIsdFileName();
+			this->_controllerMeta->inputIsdFilePath = this->getInputIsdFilePath();
+		}
+		else
+		{
+			// todo: throw exception
+		}
+	}
+
 	void Controller::setOutputFilesPath(std::string outputFilesPath)
 	{
-		this->_outputFilesPath = outputFilesPath;
+		if (this->_outputFilesPath == "")
+		{
+			this->_outputFilesPath = outputFilesPath;
+			this->_controllerMeta->outputFilePath = this->getOutputFilesPath();
+			this->_controllerMeta->outputFileModels = this->getModelsOutputFileName();
+			this->_controllerMeta->outputFileInitialState = this->getInitialStateOutputFileName();
+		}
+		else
+		{
+			// todo: throw exception
+		}
 	}
 
 
-	std::string Controller::getInputFilePath()
+	std::string Controller::getInputSdfFilePath()
 	{
-		std::string filePath = boost::filesystem::path(this->_fileIdentifier).parent_path().string();
+		std::string filePath = boost::filesystem::path(this->_inputSdfFile).parent_path().string();
 		return filePath;
 	}
 
-	std::string Controller::getInputFileName()
+	std::string Controller::getInputIsdFilePath()
 	{
-		std::string fileName = boost::filesystem::path(this->_fileIdentifier).filename().string();
+		std::string filePath = boost::filesystem::path(this->_inputIsdFile).parent_path().string();
+		return filePath;
+	}
+
+	std::string Controller::getInputSdfFileName()
+	{
+		std::string fileName = boost::filesystem::path(this->_inputSdfFile).filename().string();
+		return fileName;
+	}
+
+	std::string Controller::getInputIsdFileName()
+	{
+		std::string fileName = boost::filesystem::path(this->_inputIsdFile).filename().string();
 		return fileName;
 	}
 
 	std::string Controller::getOutputFilesPath()
 	{
 		// Standard output path is the path of the input file
-		std::string outputFilesPath = this->getInputFilePath();
+		std::string outputFilesPath = this->getInputSdfFilePath();
 
 		// If a custom output path was set, override local variable
 		if (this->_outputFilesPath != "")
@@ -224,7 +365,7 @@ namespace nddlgen
 
 	std::string Controller::getModelsOutputFileName()
 	{
-		std::string fileStem = boost::filesystem::path(this->_fileIdentifier).stem().string();
+		std::string fileStem = boost::filesystem::path(this->_inputSdfFile).stem().string();
 		fileStem += "-model";
 
 		return fileStem + ".nddl";
@@ -232,43 +373,53 @@ namespace nddlgen
 
 	std::string Controller::getInitialStateOutputFileName()
 	{
-		std::string fileStem = boost::filesystem::path(this->_fileIdentifier).stem().string();
+		std::string fileStem = boost::filesystem::path(this->_inputSdfFile).stem().string();
 		fileStem += "-initial-state";
 
 		return fileStem + ".nddl";
 	}
 
 
-	void Controller::isCheckable()
+	void Controller::isSdfParsable()
 	{
-		// Check if file identifier was set
-		if (!this->_isFileIdentifierSet)
+		// Check if SDF file was checked
+		if (!this->_isSdfChecked)
 		{
-			throw nddlgen::exceptions::SetFileIdFirstException();
+			throw nddlgen::exceptions::CheckSdfFirstException();
 		}
 	}
 
-	void Controller::isParsable()
+	void Controller::isNddlModelGeneratable()
 	{
-		// Check if file is checkable
-		this->isCheckable();
+		// Check if SDF is parsable
+		this->isSdfParsable();
 
-		// Check if file was checked
-		if (!this->_isFileChecked)
-		{
-			throw nddlgen::exceptions::CheckFileFirstException();
-		}
-	}
-
-	void Controller::isGeneratable()
-	{
-		// Check if file is parsable
-		this->isParsable();
-
-		// Check if file was parsed
+		// Check if SDF was parsed
 		if (!this->_isSdfParsed)
 		{
-			throw nddlgen::exceptions::ParseFileFirstException();
+			throw nddlgen::exceptions::ParseSdfFirstException();
+		}
+	}
+
+
+	void Controller::isIsdParsable()
+	{
+		// Check if ISD file was checked
+		if (!this->_isIsdChecked)
+		{
+			throw nddlgen::exceptions::CheckIsdFirstException();
+		}
+	}
+
+	void Controller::isNddlInitialStateGeneratable()
+	{
+		// Check if ISD is parsable
+		this->isIsdParsable();
+
+		// Check if ISD was parsed
+		if (!this->_isIsdParsed)
+		{
+			throw nddlgen::exceptions::ParseIsdFirstException();
 		}
 	}
 

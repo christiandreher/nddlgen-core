@@ -14,30 +14,24 @@
  * limitations under the License.
  */
 
-#ifndef NDDLGEN_EXCEPTIONS_FILEDOESNOTEXISTEXCEPTION_HPP_
-#define NDDLGEN_EXCEPTIONS_FILEDOESNOTEXISTEXCEPTION_HPP_
+#ifndef NDDLGEN_EXCEPTIONS_CHECKISDFIRSTEXCEPTION_HPP_
+#define NDDLGEN_EXCEPTIONS_CHECKISDFIRSTEXCEPTION_HPP_
 
 #include <exception>
 
 namespace nddlgen { namespace exceptions
 {
 
-	class FileDoesNotExistException : public std::exception
+	class CheckIsdFirstException : public std::exception
 	{
-
-		protected:
-
-			std::string _fileName;
-
 		public:
 
-			explicit FileDoesNotExistException(const std::string& fileName): _fileName(fileName) {}
-			virtual ~FileDoesNotExistException() throw (){}
+			CheckIsdFirstException() {}
+			virtual ~CheckIsdFirstException() throw (){}
 
 			virtual const char* what() const throw()
 			{
-				std::string output = "The file \"" + this->_fileName + "\" does not exist.";
-				return output.c_str();
+				return "The ISD file was not checked. Check it by calling Controller::checkIsdInput().";
 			}
 
 	};

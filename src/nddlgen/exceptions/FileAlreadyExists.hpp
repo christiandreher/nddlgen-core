@@ -14,15 +14,15 @@
  * limitations under the License.
  */
 
-#ifndef NDDLGEN_EXCEPTIONS_FILEDOESNOTEXISTEXCEPTION_HPP_
-#define NDDLGEN_EXCEPTIONS_FILEDOESNOTEXISTEXCEPTION_HPP_
+#ifndef NDDLGEN_EXCEPTIONS_FILEALREADYEXISTS_HPP_
+#define NDDLGEN_EXCEPTIONS_FILEALREADYEXISTS_HPP_
 
 #include <exception>
 
 namespace nddlgen { namespace exceptions
 {
 
-	class FileDoesNotExistException : public std::exception
+	class FileAlreadyExists : public std::exception
 	{
 
 		protected:
@@ -31,12 +31,12 @@ namespace nddlgen { namespace exceptions
 
 		public:
 
-			explicit FileDoesNotExistException(const std::string& fileName): _fileName(fileName) {}
-			virtual ~FileDoesNotExistException() throw (){}
+			explicit FileAlreadyExists(const std::string& fileName): _fileName(fileName) {}
+			virtual ~FileAlreadyExists() throw (){}
 
 			virtual const char* what() const throw()
 			{
-				std::string output = "The file \"" + this->_fileName + "\" does not exist.";
+				std::string output = "The file \"" + this->_fileName + "\" already exists.";
 				return output.c_str();
 			}
 

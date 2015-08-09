@@ -14,25 +14,25 @@
  * limitations under the License.
  */
 
-#ifndef NDDLGEN_EXCEPTIONS_FILEIDALREADYSETEXCEPTION_HPP_
-#define NDDLGEN_EXCEPTIONS_FILEIDALREADYSETEXCEPTION_HPP_
+#ifndef NDDLGEN_EXCEPTIONS_INPUTINITIALSTATEFILENOTSETEXCEPTION_HPP_
+#define NDDLGEN_EXCEPTIONS_INPUTINITIALSTATEFILENOTSETEXCEPTION_HPP_
 
 #include <exception>
 
 namespace nddlgen { namespace exceptions
 {
 
-	class FileIdAlreadySetException : public std::exception
+	class InputInitialStateFileNotSetException : public std::exception
 	{
 
 		public:
 
-			FileIdAlreadySetException() {}
-			virtual ~FileIdAlreadySetException() throw (){}
+			InputInitialStateFileNotSetException() {}
+			virtual ~InputInitialStateFileNotSetException() throw (){}
 
 			virtual const char* what() const throw()
 			{
-				return "A file identifier has already been set. Create a new Controller instance if necessary.";
+				return "Input initial state file has not been set.";
 			}
 
 	};

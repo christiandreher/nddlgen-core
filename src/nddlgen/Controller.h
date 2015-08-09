@@ -26,20 +26,27 @@
 
 #include <nddlgen/core/SdfParser.h>
 #include <nddlgen/core/NddlGenerator.h>
-#include <nddlgen/exceptions/CheckFileFirstException.hpp>
-#include <nddlgen/exceptions/FileAlreadyCheckedException.hpp>
-#include <nddlgen/exceptions/FileAlreadyParsedException.hpp>
+#include <nddlgen/exceptions/CheckIsdFirstException.hpp>
+#include <nddlgen/exceptions/CheckSdfFirstException.hpp>
+#include <nddlgen/exceptions/FileAlreadyExists.hpp>
 #include <nddlgen/exceptions/FileDoesNotExistException.hpp>
-#include <nddlgen/exceptions/FileIdAlreadySetException.hpp>
+#include <nddlgen/exceptions/FileMustBeIsdException.hpp>
 #include <nddlgen/exceptions/FileMustBeSdfException.hpp>
 #include <nddlgen/exceptions/GeneratingInitialStateException.hpp>
 #include <nddlgen/exceptions/GeneratingModelsException.hpp>
 #include <nddlgen/exceptions/InitializingSdfException.hpp>
-#include <nddlgen/exceptions/NddlAlreadyGeneratedException.hpp>
+#include <nddlgen/exceptions/InputInitialStateFileNotSetException.hpp>
+#include <nddlgen/exceptions/InputSdfFileNotSetException.hpp>
+#include <nddlgen/exceptions/IsdAlreadyCheckedException.hpp>
+#include <nddlgen/exceptions/IsdAlreadyParsedException.hpp>
+#include <nddlgen/exceptions/NddlInitialStateAlreadyGeneratedException.hpp>
+#include <nddlgen/exceptions/NddlModelAlreadyGeneratedException.hpp>
 #include <nddlgen/exceptions/ParseDataStructureException.hpp>
-#include <nddlgen/exceptions/ParseFileFirstException.hpp>
+#include <nddlgen/exceptions/ParseIsdFirstException.hpp>
+#include <nddlgen/exceptions/ParseSdfFirstException.hpp>
 #include <nddlgen/exceptions/ReadingSdfFileException.hpp>
-#include <nddlgen/exceptions/SetFileIdFirstException.hpp>
+#include <nddlgen/exceptions/SdfAlreadyCheckedException.hpp>
+#include <nddlgen/exceptions/SdfAlreadyParsedException.hpp>
 #include <nddlgen/models/Arm.h>
 #include <nddlgen/utilities/ControllerMeta.hpp>
 
@@ -74,15 +81,20 @@ namespace nddlgen
 
 
 			/**
+			 * Input SDF file. Can be just an absolute or relative path.
+			 */
+			std::string _inputSdfFile;
+
+			/**
+			 * Initial state file to generate the initial state NDDL file from.
+			 */
+			std::string _inputIsdFile;
+
+			/**
 			 * Path to output files.
 			 */
 			std::string _outputFilesPath;
 
-			/**
-			 * Identifier for the sdf file to generate nddl files from. Must contain file name and extension
-			 * (.sdf) and can be a relative or absolute path.
-			 */
-			std::string _fileIdentifier;
 
 			/**
 			 * Root element of the sdf file.
@@ -90,25 +102,17 @@ namespace nddlgen
 			sdf::ElementPtr _sdfRoot;
 
 
-			/**
-			 * Flag to control the workflow and check if a file identifier has been set.
-			 */
-			bool _isFileIdentifierSet;
+			bool _isSdfChecked;
 
-			/**
-			 * Flag to control the workflow and check if the file has been checked.
-			 */
-			bool _isFileChecked;
-
-			/**
-			 * Flag to control the workflow and check if the SDF has been parsed.
-			 */
 			bool _isSdfParsed;
 
-			/**
-			 * Flag to control the workflow and check if the .nddl files has been generated.
-			 */
-			bool _isNddlGenerated;
+			bool _isNddlModelGenerated;
+
+			bool _isIsdChecked;
+
+			bool _isIsdParsed;
+
+			bool _isNddlInitialStateGenerated;
 
 			/**
 			 * Arm model to generate nddl files from.
@@ -120,24 +124,22 @@ namespace nddlgen
 			 */
 			nddlgen::utilities::ControllerMeta* _controllerMeta;
 
-			/**
-			 * Checks if a file is checkable. This means, that a file identifier has already
-			 * been set.
-			 */
-			void isCheckable();
 
 			/**
 			 * Checks if a file is parsable. This means, that a file identifier has already
 			 * been set, and the file has been checked.
 			 */
-			void isParsable();
+			void isSdfParsable();
 
 			/**
 			 * Checks if nddl files are generatable. This means, that a file identifier has already
 			 * been set, the file has been checked and parsed.
 			 */
-			void isGeneratable();
+			void isNddlModelGeneratable();
 
+			void isIsdParsable();
+
+			void isNddlInitialStateGeneratable();
 
 			/**
 			 * Helper to disable the cerr output to the console.
@@ -171,21 +173,10 @@ namespace nddlgen
 
 
 			/**
-			 * Sets the file identifier. A file identifier locates the .sdf file. It must
-			 * contain the file name and the .sdf file extension. Can be a relative or
-			 * absolute path.
-			 *
-			 * @param fileIdentifier Identifier to locate file. Can be a relative or absolute
-			 * 		and must contain a file name and the .sdf file extension.
-			 */
-			void setFileIdentifier(std::string fileIdentifier);
-
-
-			/**
 			 * Checks if the given file is a .sdf file, if it exists, if it is readable, if it
 			 * complies with the SDF standard.
 			 */
-			void checkFile();
+			void checkSdfInput();
 
 			/**
 			 * Parses the SDF into a data structure where possible collisions and
@@ -196,8 +187,18 @@ namespace nddlgen
 			/**
 			 * Uses the data structures to generate NDDL model and initial state files.
 			 */
-			void generateNddl();
+			void generateNddlModel();
 
+			void generateNddlModel(bool forceOverwrite);
+
+
+			void checkIsdInput();
+
+			void parseIsd();
+
+			void generateNddlInitialState();
+
+			void generateNddlInitialState(bool forceOverwrite);
 
 			/**
 			 * Sets adapter name and version to indicate it in the generated files.
@@ -205,6 +206,10 @@ namespace nddlgen
 			 * @param adapter name and version of the adapter. E.g "nddlgen-cli v0.0.0".
 			 */
 			void setAdapter(std::string adapter);
+
+			void setInputSdfFile(std::string inputSdfFile);
+
+			void setInputIsdFile(std::string inputIsdFile);
 
 			/**
 			 * Sets output files path.
@@ -219,14 +224,18 @@ namespace nddlgen
 			 *
 			 * @return Path of the input file.
 			 */
-			std::string getInputFilePath();
+			std::string getInputSdfFilePath();
+
+			std::string getInputIsdFilePath();
 
 			/**
 			 * Returns the input file name.
 			 *
 			 * @return Input file name.
 			 */
-			std::string getInputFileName();
+			std::string getInputSdfFileName();
+
+			std::string getInputIsdFileName();
 
 			/**
 			 * Returns the path where the output files are saved.
