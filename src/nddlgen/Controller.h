@@ -20,35 +20,13 @@
 #include <string>
 #include <sys/stat.h>
 
-#include <boost/filesystem.hpp>
-
 #include <sdf/sdf.hh>
 
 #include <nddlgen/core/SdfParser.h>
 #include <nddlgen/core/NddlGenerator.h>
-#include <nddlgen/exceptions/CheckIsdFirstException.hpp>
-#include <nddlgen/exceptions/CheckSdfFirstException.hpp>
-#include <nddlgen/exceptions/FileAlreadyExists.hpp>
-#include <nddlgen/exceptions/FileDoesNotExistException.hpp>
-#include <nddlgen/exceptions/FileMustBeIsdException.hpp>
-#include <nddlgen/exceptions/FileMustBeSdfException.hpp>
-#include <nddlgen/exceptions/GeneratingInitialStateException.hpp>
-#include <nddlgen/exceptions/GeneratingModelsException.hpp>
-#include <nddlgen/exceptions/InitializingSdfException.hpp>
-#include <nddlgen/exceptions/InputInitialStateFileNotSetException.hpp>
-#include <nddlgen/exceptions/InputSdfFileNotSetException.hpp>
-#include <nddlgen/exceptions/IsdAlreadyCheckedException.hpp>
-#include <nddlgen/exceptions/IsdAlreadyParsedException.hpp>
-#include <nddlgen/exceptions/NddlInitialStateAlreadyGeneratedException.hpp>
-#include <nddlgen/exceptions/NddlModelAlreadyGeneratedException.hpp>
-#include <nddlgen/exceptions/ParseDataStructureException.hpp>
-#include <nddlgen/exceptions/ParseIsdFirstException.hpp>
-#include <nddlgen/exceptions/ParseSdfFirstException.hpp>
-#include <nddlgen/exceptions/ReadingSdfFileException.hpp>
-#include <nddlgen/exceptions/SdfAlreadyCheckedException.hpp>
-#include <nddlgen/exceptions/SdfAlreadyParsedException.hpp>
 #include <nddlgen/models/Arm.h>
-#include <nddlgen/utilities/ControllerMeta.hpp>
+#include <nddlgen/utilities/ControllerConfig.h>
+#include <nddlgen/utilities/Exceptions.hpp>
 
 /**
  * Base components for the nddl generator.
@@ -81,22 +59,6 @@ namespace nddlgen
 
 
 			/**
-			 * Input SDF file. Can be just an absolute or relative path.
-			 */
-			std::string _inputSdfFile;
-
-			/**
-			 * Initial state file to generate the initial state NDDL file from.
-			 */
-			std::string _inputIsdFile;
-
-			/**
-			 * Path to output files.
-			 */
-			std::string _outputFilesPath;
-
-
-			/**
 			 * Root element of the sdf file.
 			 */
 			sdf::ElementPtr _sdfRoot;
@@ -122,7 +84,7 @@ namespace nddlgen
 			/**
 			 * Object holding controller meta data to make it accessible for other classes
 			 */
-			nddlgen::utilities::ControllerMeta* _controllerMeta;
+			nddlgen::utilities::ControllerConfig* _config;
 
 
 			/**
@@ -162,9 +124,11 @@ namespace nddlgen
 		public:
 
 			/**
-			 * Constructor to initialize a Controller object.
+			 * Constructor to initialize a Controller object with given config object.
+			 *
+			 * @param config Controller configuration
 			 */
-			Controller();
+			Controller(nddlgen::utilities::ControllerConfig* config);
 
 			/**
 			 * Destructor to destroy the object and free resources.
@@ -199,64 +163,6 @@ namespace nddlgen
 			void generateNddlInitialState();
 
 			void generateNddlInitialState(bool forceOverwrite);
-
-			/**
-			 * Sets adapter name and version to indicate it in the generated files.
-			 *
-			 * @param adapter name and version of the adapter. E.g "nddlgen-cli v0.0.0".
-			 */
-			void setAdapter(std::string adapter);
-
-			void setInputSdfFile(std::string inputSdfFile);
-
-			void setInputIsdFile(std::string inputIsdFile);
-
-			/**
-			 * Sets output files path.
-			 *
-			 * @param outputFilesPath Path to output files.
-			 */
-			void setOutputFilesPath(std::string outputFilesPath);
-
-
-			/**
-			 * Returns the input file path.
-			 *
-			 * @return Path of the input file.
-			 */
-			std::string getInputSdfFilePath();
-
-			std::string getInputIsdFilePath();
-
-			/**
-			 * Returns the input file name.
-			 *
-			 * @return Input file name.
-			 */
-			std::string getInputSdfFileName();
-
-			std::string getInputIsdFileName();
-
-			/**
-			 * Returns the path where the output files are saved.
-			 *
-			 * @return Path of the output files.
-			 */
-			std::string getOutputFilesPath();
-
-			/**
-			 * Returns the file name of the domain models output file.
-			 *
-			 * @return Name of the domain models output file.
-			 */
-			std::string getModelsOutputFileName();
-
-			/**
-			 * Returns the file name of the domain initial state output file.
-			 *
-			 * @return Name of the domain initial state output file.
-			 */
-			std::string getInitialStateOutputFileName();
 
 	};
 

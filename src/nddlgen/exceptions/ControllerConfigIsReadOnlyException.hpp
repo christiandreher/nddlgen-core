@@ -14,32 +14,27 @@
  * limitations under the License.
  */
 
-#ifndef NDDLGEN_UTILITIES_CONTROLLERMETA_HPP_
-#define NDDLGEN_UTILITIES_CONTROLLERMETA_HPP_
+#ifndef NDDLGEN_EXCEPTIONS_CONTROLLERCONFIGISREADONLYEXCEPTION_HPP_
+#define NDDLGEN_EXCEPTIONS_CONTROLLERCONFIGISREADONLYEXCEPTION_HPP_
 
-namespace nddlgen { namespace utilities {
+#include <exception>
 
-	class ControllerMeta
+namespace nddlgen { namespace exceptions
+{
+
+	class ControllerConfigIsReadOnlyException : public std::exception
 	{
+
 		public:
-			std::string inputSdfFileName;
-			std::string inputIsdFileName;
-			std::string inputSdfFilePath;
-			std::string inputIsdFilePath;
-			std::string outputFilePath;
-			std::string outputFileModels;
-			std::string outputFileInitialState;
-			std::string adapter;
 
-			ControllerMeta()
+			ControllerConfigIsReadOnlyException() {}
+			virtual ~ControllerConfigIsReadOnlyException() throw (){}
+
+			virtual const char* what() const throw()
 			{
-
+				return "This ControllerConfig object was marked read-only.";
 			}
 
-			~ControllerMeta()
-			{
-
-			}
 	};
 
 }}

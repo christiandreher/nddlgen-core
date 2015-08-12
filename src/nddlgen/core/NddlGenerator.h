@@ -25,7 +25,7 @@
 #include <boost/date_time/posix_time/posix_time.hpp>
 
 #include <nddlgen/models/Arm.h>
-#include <nddlgen/utilities/ControllerMeta.hpp>
+#include <nddlgen/utilities/ControllerConfig.h>
 #include <nddlgen/utilities/Meta.h>
 
 namespace nddlgen { namespace core
@@ -36,7 +36,7 @@ namespace nddlgen { namespace core
 
 		private:
 
-			nddlgen::utilities::ControllerMeta* _controllerMeta;
+			nddlgen::utilities::ControllerConfig* _controllerConfig;
 
 			nddlgen::models::Arm* _armModel;
 
@@ -44,7 +44,7 @@ namespace nddlgen { namespace core
 
 		public:
 
-			NddlGenerator(nddlgen::models::Arm* armModel, nddlgen::utilities::ControllerMeta* controllerMeta);
+			NddlGenerator(nddlgen::models::Arm* armModel, nddlgen::utilities::ControllerConfig* controllerConfig);
 			virtual ~NddlGenerator();
 
 			bool generateModels(std::string fileName);

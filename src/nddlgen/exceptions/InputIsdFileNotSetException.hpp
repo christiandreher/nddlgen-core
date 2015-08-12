@@ -14,25 +14,25 @@
  * limitations under the License.
  */
 
-#ifndef NDDLGEN_EXCEPTIONS_INPUTINITIALSTATEFILENOTSETEXCEPTION_HPP_
-#define NDDLGEN_EXCEPTIONS_INPUTINITIALSTATEFILENOTSETEXCEPTION_HPP_
+#ifndef NDDLGEN_EXCEPTIONS_INPUTISDFILENOTSETEXCEPTION_HPP_
+#define NDDLGEN_EXCEPTIONS_INPUTISDFILENOTSETEXCEPTION_HPP_
 
 #include <exception>
 
 namespace nddlgen { namespace exceptions
 {
 
-	class InputInitialStateFileNotSetException : public std::exception
+	class InputIsdFileNotSetException : public std::exception
 	{
 
 		public:
 
-			InputInitialStateFileNotSetException() {}
-			virtual ~InputInitialStateFileNotSetException() throw (){}
+			InputIsdFileNotSetException() {}
+			virtual ~InputIsdFileNotSetException() throw (){}
 
 			virtual const char* what() const throw()
 			{
-				return "Input initial state file has not been set.";
+				return "Input ISD file has not been set.";
 			}
 
 	};

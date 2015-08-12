@@ -19,8 +19,12 @@
 namespace nddlgen
 {
 
-	Controller::Controller()
+	Controller::Controller(nddlgen::utilities::ControllerConfig* config)
 	{
+		// Mark config object as read only, set local config member
+		config->setReadOnly();
+		this->_config = config;
+
 		// Save standard cerr buffer to be able to restore it
 		this->_cerrStdRdBuf = std::cerr.rdbuf();
 
@@ -34,21 +38,12 @@ namespace nddlgen
 		this->_isIsdParsed = false;
 		this->_isNddlInitialStateGenerated = false;
 
-		// Initialize as empty strings
-		this->_inputSdfFile = "";
-		this->_inputIsdFile = "";
-		this->_outputFilesPath = "";
-
-		// Instantiate controller meta data object
-		this->_controllerMeta = new nddlgen::utilities::ControllerMeta();
-
 		// Instantiate arm model
 		this->_armModel = new nddlgen::models::Arm();
 	}
 
 	Controller::~Controller()
 	{
-		boost::checked_delete(this->_controllerMeta);
 		boost::checked_delete(this->_armModel);
 
 		// Check if SDF was parsed before calling member functions on SDF root
@@ -70,21 +65,21 @@ namespace nddlgen
 		}
 
 		// Check if input SDF file has been set
-		if (this->_inputSdfFile == "")
+		if (this->_config->getInputSdfFile() == "")
 		{
 			throw nddlgen::exceptions::InputSdfFileNotSetException();
 		}
 
 		// Check if input SDF file is an .sdf file
-		if (boost::filesystem::path(this->_inputSdfFile).extension().string() != ".sdf")
+		if (this->_config->getInputSdfFileExt() != ".sdf")
 		{
 			throw nddlgen::exceptions::FileMustBeSdfException();
 		}
 
 		// Check if SDF file exists
-		if (!boost::filesystem::exists(this->_inputSdfFile))
+		if (!boost::filesystem::exists(this->_config->getInputSdfFile()))
 		{
-			throw nddlgen::exceptions::FileDoesNotExistException(this->_inputSdfFile);
+			throw nddlgen::exceptions::FileDoesNotExistException(this->_config->getInputSdfFile());
 		}
 
 		// Disable standard cerr output, since the output of the SDF library can't be suppressed otherwise
@@ -99,7 +94,7 @@ namespace nddlgen
 		}
 
 		// Try to read the file and generate SDF
-		if (!sdf::readFile(this->_inputSdfFile, sdf))
+		if (!sdf::readFile(this->_config->getInputSdfFile(), sdf))
 		{
 			// Re-enable cerr
 			this->enableCerr();
@@ -159,7 +154,7 @@ namespace nddlgen
 		// Check if files are generatable
 		this->isNddlModelGeneratable();
 
-		std::string nddlOutputModelFile = this->getOutputFilesPath() + "/" + this->getModelsOutputFileName();
+		std::string nddlOutputModelFile = this->_config->getOutputModelFile();
 
 		// Check if file already exists
 		if (!forceOverwrite && boost::filesystem::exists(nddlOutputModelFile))
@@ -168,7 +163,7 @@ namespace nddlgen
 		}
 
 		// Initialize the NDDL generator with the already initialized and populated Arm model
-		nddlgen::core::NddlGenerator* nddlgen = new nddlgen::core::NddlGenerator(this->_armModel, this->_controllerMeta);
+		nddlgen::core::NddlGenerator* nddlgen = new nddlgen::core::NddlGenerator(this->_armModel, this->_config);
 
 		// Try to generate domain models, write it to a file and check if it was successful
 		if (!nddlgen->generateModels(nddlOutputModelFile))
@@ -195,21 +190,21 @@ namespace nddlgen
 		}
 
 		// Check if input ISD file has been set
-		if (this->_inputIsdFile == "")
+		if (this->_config->getInputIsdFile() == "")
 		{
-			throw nddlgen::exceptions::InputInitialStateFileNotSetException();
+			throw nddlgen::exceptions::InputIsdFileNotSetException();
 		}
 
 		// Check if input ISD file is an .isd file
-		if (boost::filesystem::path(this->_inputIsdFile).extension().string() != ".isd")
+		if (this->_config->getInputIsdFileExt() != ".isd")
 		{
 			throw nddlgen::exceptions::FileMustBeIsdException();
 		}
 
 		// Check if file exists
-		if (!boost::filesystem::exists(this->_inputIsdFile))
+		if (!boost::filesystem::exists(this->_config->getInputIsdFile()))
 		{
-			throw nddlgen::exceptions::FileDoesNotExistException(this->_inputIsdFile);
+			throw nddlgen::exceptions::FileDoesNotExistException(this->_config->getInputIsdFile());
 		}
 
 		// todo: get contents from isd file with tinyxml
@@ -251,7 +246,7 @@ namespace nddlgen
 		// Check if files are generatable
 		this->isNddlInitialStateGeneratable();
 
-		std::string nddlOutputInitialStateFile = this->getOutputFilesPath() + "/" + this->getInitialStateOutputFileName();
+		std::string nddlOutputInitialStateFile = this->_config->getOutputInitialStateFile();
 
 		// Check if file already exists
 		if (!forceOverwrite && boost::filesystem::exists(nddlOutputInitialStateFile))
@@ -260,7 +255,7 @@ namespace nddlgen
 		}
 
 		// Initialize the NDDL generator with the already initialized and populated Arm model
-		nddlgen::core::NddlGenerator* nddlgen = new nddlgen::core::NddlGenerator(this->_armModel, this->_controllerMeta);
+		nddlgen::core::NddlGenerator* nddlgen = new nddlgen::core::NddlGenerator(this->_armModel, this->_config);
 
 		// Try to generate domain initial state and check if it was successful
 		if (!nddlgen->generateInitialState(nddlOutputInitialStateFile))
@@ -273,110 +268,6 @@ namespace nddlgen
 
 		// Check workflow control variable
 		this->_isNddlInitialStateGenerated = true;
-	}
-
-
-	void Controller::setAdapter(std::string adapter)
-	{
-		this->_controllerMeta->adapter = adapter;
-	}
-
-	void Controller::setInputSdfFile(std::string inputSdfFile)
-	{
-		if (this->_inputSdfFile == "")
-		{
-			this->_inputSdfFile = inputSdfFile;
-			this->_controllerMeta->inputSdfFileName = this->getInputSdfFileName();
-			this->_controllerMeta->inputSdfFilePath = this->getInputSdfFilePath();
-		}
-		else
-		{
-			// todo: throw exception
-		}
-	}
-
-	void Controller::setInputIsdFile(std::string inputIsdFile)
-	{
-		if (this->_inputIsdFile == "")
-		{
-			this->_inputIsdFile = inputIsdFile;
-			this->_controllerMeta->inputIsdFileName = this->getInputIsdFileName();
-			this->_controllerMeta->inputIsdFilePath = this->getInputIsdFilePath();
-		}
-		else
-		{
-			// todo: throw exception
-		}
-	}
-
-	void Controller::setOutputFilesPath(std::string outputFilesPath)
-	{
-		if (this->_outputFilesPath == "")
-		{
-			this->_outputFilesPath = outputFilesPath;
-			this->_controllerMeta->outputFilePath = this->getOutputFilesPath();
-			this->_controllerMeta->outputFileModels = this->getModelsOutputFileName();
-			this->_controllerMeta->outputFileInitialState = this->getInitialStateOutputFileName();
-		}
-		else
-		{
-			// todo: throw exception
-		}
-	}
-
-
-	std::string Controller::getInputSdfFilePath()
-	{
-		std::string filePath = boost::filesystem::path(this->_inputSdfFile).parent_path().string();
-		return filePath;
-	}
-
-	std::string Controller::getInputIsdFilePath()
-	{
-		std::string filePath = boost::filesystem::path(this->_inputIsdFile).parent_path().string();
-		return filePath;
-	}
-
-	std::string Controller::getInputSdfFileName()
-	{
-		std::string fileName = boost::filesystem::path(this->_inputSdfFile).filename().string();
-		return fileName;
-	}
-
-	std::string Controller::getInputIsdFileName()
-	{
-		std::string fileName = boost::filesystem::path(this->_inputIsdFile).filename().string();
-		return fileName;
-	}
-
-	std::string Controller::getOutputFilesPath()
-	{
-		// Standard output path is the path of the input file
-		std::string outputFilesPath = this->getInputSdfFilePath();
-
-		// If a custom output path was set, override local variable
-		if (this->_outputFilesPath != "")
-		{
-			outputFilesPath = this->_outputFilesPath;
-		}
-
-		return outputFilesPath;
-	}
-
-	std::string Controller::getModelsOutputFileName()
-	{
-		std::string fileStem = boost::filesystem::path(this->_inputSdfFile).stem().string();
-		fileStem += "-model";
-
-		return fileStem + ".nddl";
-	}
-
-	std::string Controller::getInitialStateOutputFileName()
-	{
-		std::string fileStem = boost::filesystem::path(this->_inputSdfFile).stem().string();
-		fileStem += "-initial-state";
-
-		return fileStem + ".nddl";
 	}
 
 
