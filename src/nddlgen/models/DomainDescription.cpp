@@ -14,29 +14,29 @@
  * limitations under the License.
  */
 
-#ifndef NDDLGEN_EXCEPTIONS_SDFALREADYPARSEDEXCEPTION_HPP_
-#define NDDLGEN_EXCEPTIONS_SDFALREADYPARSEDEXCEPTION_HPP_
+#include <nddlgen/models/DomainDescription.h>
 
-#include <exception>
-
-namespace nddlgen { namespace exceptions
+namespace nddlgen { namespace models
 {
 
-	class SdfAlreadyParsedException : public std::exception
+	DomainDescription::DomainDescription()
+	{
+		this->_arm = nullptr;
+	}
+
+	DomainDescription::~DomainDescription()
 	{
 
-		public:
+	}
 
-			SdfAlreadyParsedException() {}
-			virtual ~SdfAlreadyParsedException() throw (){}
+	void DomainDescription::setArm(nddlgen::models::Arm* arm)
+	{
+		this->_arm = arm;
+	}
 
-			virtual const char* what() const throw()
-			{
-				return "The SDF input file has already been parsed.";
-			}
-
-	};
+	nddlgen::models::Arm* DomainDescription::getArm()
+	{
+		return this->_arm;
+	}
 
 }}
-
-#endif

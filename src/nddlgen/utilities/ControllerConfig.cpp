@@ -23,8 +23,8 @@ namespace nddlgen { namespace utilities
 	{
 		this->_adapter = "a custom adapter";
 
-		this->_inputSdfFile = "";
-		this->_inputIsdFile = "";
+		this->_sdfInputFile = "";
+		this->_isdInputFile = "";
 		this->_outputFilesPath = "";
 
 		this->_readOnly = false;
@@ -43,23 +43,23 @@ namespace nddlgen { namespace utilities
 		this->_adapter = adapter;
 	}
 
-	void ControllerConfig::setInputSdfFile(std::string inputSdfFile)
+	void ControllerConfig::setSdfInputFile(std::string sdfInputFile)
 	{
 		this->trySet();
 
-		if (inputSdfFile != "")
+		if (sdfInputFile != "")
 		{
-			this->_inputSdfFile = this->normalizePath(inputSdfFile);
+			this->_sdfInputFile = this->normalizePath(sdfInputFile);
 		}
 	}
 
-	void ControllerConfig::setInputIsdFile(std::string inputIsdFile)
+	void ControllerConfig::setIsdInputFile(std::string isdInputFile)
 	{
 		this->trySet();
 
-		if (inputIsdFile != "")
+		if (isdInputFile != "")
 		{
-			this->_inputIsdFile = this->normalizePath(inputIsdFile);
+			this->_isdInputFile = this->normalizePath(isdInputFile);
 		}
 	}
 
@@ -84,54 +84,54 @@ namespace nddlgen { namespace utilities
 		return this->_adapter;
 	}
 
-	std::string ControllerConfig::getInputSdfFile()
+	std::string ControllerConfig::getSdfInputFile()
 	{
-		return this->_inputSdfFile;
+		return this->_sdfInputFile;
 	}
 
-	std::string ControllerConfig::getInputSdfFileExt()
+	std::string ControllerConfig::getSdfInputFileExt()
 	{
-		return boost::filesystem::path(this->_inputSdfFile).extension().string();
+		return boost::filesystem::path(this->_sdfInputFile).extension().string();
 	}
 
-	std::string ControllerConfig::getInputSdfFileName()
+	std::string ControllerConfig::getSdfInputFileName()
 	{
-		std::string fileName = boost::filesystem::path(this->_inputSdfFile).filename().string();
+		std::string fileName = boost::filesystem::path(this->_sdfInputFile).filename().string();
 		return fileName;
 	}
 
-	std::string ControllerConfig::getInputSdfFilePath()
+	std::string ControllerConfig::getSdfInputFilePath()
 	{
-		std::string filePath = boost::filesystem::path(this->_inputSdfFile).parent_path().string();
+		std::string filePath = boost::filesystem::path(this->_sdfInputFile).parent_path().string();
 		return filePath;
 	}
 
-	std::string ControllerConfig::getInputIsdFile()
+	std::string ControllerConfig::getIsdInputFile()
 	{
-		return this->_inputIsdFile;
+		return this->_isdInputFile;
 	}
 
-	std::string ControllerConfig::getInputIsdFileExt()
+	std::string ControllerConfig::getIsdInputFileExt()
 	{
-		return boost::filesystem::path(this->_inputIsdFile).extension().string();
+		return boost::filesystem::path(this->_isdInputFile).extension().string();
 	}
 
-	std::string ControllerConfig::getInputIsdFileName()
+	std::string ControllerConfig::getIsdInputFileName()
 	{
-		std::string fileName = boost::filesystem::path(this->_inputIsdFile).filename().string();
+		std::string fileName = boost::filesystem::path(this->_isdInputFile).filename().string();
 		return fileName;
 	}
 
-	std::string ControllerConfig::getInputIsdFilePath()
+	std::string ControllerConfig::getIsdInputFilePath()
 	{
-		std::string filePath = boost::filesystem::path(this->_inputIsdFile).parent_path().string();
+		std::string filePath = boost::filesystem::path(this->_isdInputFile).parent_path().string();
 		return filePath;
 	}
 
 	std::string ControllerConfig::getOutputFilesPath()
 	{
 		// Standard output path is the path of the input file
-		std::string outputFilesPath = this->getInputSdfFilePath();
+		std::string outputFilesPath = this->getSdfInputFilePath();
 
 		// If a custom output path was set, override local variable
 		if (this->_outputFilesPath != "")
@@ -149,7 +149,7 @@ namespace nddlgen { namespace utilities
 
 	std::string ControllerConfig::getOutputModelFileName()
 	{
-		std::string fileStem = boost::filesystem::path(this->_inputSdfFile).stem().string();
+		std::string fileStem = boost::filesystem::path(this->_sdfInputFile).stem().string();
 		fileStem += "-model";
 
 		return fileStem + ".nddl";
@@ -162,7 +162,7 @@ namespace nddlgen { namespace utilities
 
 	std::string ControllerConfig::getOutputInitialStateFileName()
 	{
-		std::string fileStem = boost::filesystem::path(this->_inputIsdFile).stem().string();
+		std::string fileStem = boost::filesystem::path(this->_isdInputFile).stem().string();
 		fileStem += "-initial-state";
 
 		return fileStem + ".nddl";

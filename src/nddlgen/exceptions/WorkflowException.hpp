@@ -14,25 +14,29 @@
  * limitations under the License.
  */
 
-#ifndef NDDLGEN_EXCEPTIONS_ISDALREADYPARSEDEXCEPTION_HPP_
-#define NDDLGEN_EXCEPTIONS_ISDALREADYPARSEDEXCEPTION_HPP_
+#ifndef NDDLGEN_EXCEPTIONS_WORKFLOWEXCEPTION_HPP_
+#define NDDLGEN_EXCEPTIONS_WORKFLOWEXCEPTION_HPP_
 
 #include <exception>
 
 namespace nddlgen { namespace exceptions
 {
 
-	class IsdAlreadyParsedException : public std::exception
+	class WorkflowException : public std::exception
 	{
+
+		protected:
+
+			std::string _workflowError;
 
 		public:
 
-			IsdAlreadyParsedException() {}
-			virtual ~IsdAlreadyParsedException() throw (){}
+			explicit WorkflowException(const std::string& workflowError): _workflowError(workflowError) {}
+			virtual ~WorkflowException() throw (){}
 
 			virtual const char* what() const throw()
 			{
-				return "The ISD input file has already been parsed.";
+				return this->_workflowError.c_str();
 			}
 
 	};

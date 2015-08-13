@@ -14,66 +14,49 @@
  * limitations under the License.
  */
 
-#include <nddlgen/core/SdfParser.h>
+#include <nddlgen/core/DomainDescriptionFactory.h>
 
 namespace nddlgen { namespace core
 {
 
-	SdfParser::SdfParser(nddlgen::models::Arm* armModel)
-	{
-		this->_armModel = armModel;
-		this->_armModel->setName("arm");
-	}
-
-	SdfParser::~SdfParser()
+	DomainDescriptionFactory::DomainDescriptionFactory()
 	{
 
 	}
 
-
-	bool SdfParser::parseDataStructure(sdf::ElementPtr sdfRoot)
+	DomainDescriptionFactory::~DomainDescriptionFactory()
 	{
+
+	}
+
+
+	nddlgen::models::DomainDescription* DomainDescriptionFactory::getDomainDescription(sdf::ElementPtr sdfRoot)
+	{
+		nddlgen::models::DomainDescription* ddm = new nddlgen::models::DomainDescription();
+		nddlgen::models::Arm* arm = new nddlgen::models::Arm();
 		nddlgen::types::ModelList models;
 
-		// Try instantiating Workspace model
-		if (!this->instantiateWorkspace())
-		{
-			return false;
-		}
+		arm->setName("arm");
+		ddm->setArm(arm);
 
-		// Convert sdformat's data structure into one that can be better processed
-		if (!this->convertModelDataStructure(sdfRoot->GetElement("world")->GetElement("model"), &models))
-		{
-			return false;
-		}
+		DomainDescriptionFactory::instantiateWorkspace(ddm);
+		DomainDescriptionFactory::populateModelListFromSdf(sdfRoot->GetElement("world")->GetElement("model"), &models);
+		DomainDescriptionFactory::addRelevantModelsToWorkspace(ddm, models);
+		DomainDescriptionFactory::calculateDependencies(ddm, models);
 
-		// Try instantiating Models (Boxes, ...)
-		if (!this->instantiateModels(models))
-		{
-			return false;
-		}
-
-		// Try calculating dependencies (Does the lid of a box block another, ...)
-		if (!this->calculateDependencies(models))
-		{
-			return false;
-		}
-
-		return true;
+		return ddm;
 	}
 
 
-	bool SdfParser::instantiateWorkspace()
+	void DomainDescriptionFactory::instantiateWorkspace(nddlgen::models::DomainDescription* ddm)
 	{
 		nddlgen::models::Workspace* workspace = new nddlgen::models::Workspace();
 		workspace->setName("workspace");
 
-		this->_armModel->setWorkspace(workspace);
-
-		return true;
+		ddm->getArm()->setWorkspace(workspace);
 	}
 
-	bool SdfParser::convertModelDataStructure(sdf::ElementPtr modelElements, nddlgen::types::ModelList* models)
+	void DomainDescriptionFactory::populateModelListFromSdf(sdf::ElementPtr modelElements, nddlgen::types::ModelList* models)
 	{
 		sdf::ElementPtr currentModelElement = modelElements;
 
@@ -86,36 +69,30 @@ namespace nddlgen { namespace core
 			// Iterate
 			currentModelElement = currentModelElement->GetNextElement("model");
 		}
-
-		return true;
 	}
 
-	bool SdfParser::instantiateModels(nddlgen::types::ModelList models)
+	void DomainDescriptionFactory::addRelevantModelsToWorkspace(nddlgen::models::DomainDescription* ddm, nddlgen::types::ModelList models)
 	{
-		nddlgen::models::Workspace* workspace = this->_armModel->getWorkspace();
+		nddlgen::models::Workspace* workspace = ddm->getArm()->getWorkspace();
 
 		foreach (sdf::ElementPtr model, models)
 		{
-			nddlgen::models::NddlGeneratable* generatableModel = this->instanceFactory(model);
+			nddlgen::models::NddlGeneratable* generatableModel = DomainDescriptionFactory::instanceFactory(model);
 
 			if (generatableModel != nullptr)
 			{
 				workspace->addModelToWorkspace(generatableModel);
 			}
 		}
-
-		return true;
 	}
 
-	bool SdfParser::calculateDependencies(nddlgen::types::ModelList models)
+	void DomainDescriptionFactory::calculateDependencies(nddlgen::models::DomainDescription* ddm, nddlgen::types::ModelList models)
 	{
-		this->_armModel->getWorkspace()->postInitProcessing();
-
-		return true;
+		ddm->getArm()->getWorkspace()->postInitProcessing();
 	}
 
 
-	nddlgen::models::NddlGeneratable* SdfParser::instanceFactory(sdf::ElementPtr element)
+	nddlgen::models::NddlGeneratable* DomainDescriptionFactory::instanceFactory(sdf::ElementPtr element)
 	{
 		std::string elementName = element->GetAttribute("name")->GetAsString();
 		std::string elementNameLc = boost::algorithm::to_lower_copy(elementName);

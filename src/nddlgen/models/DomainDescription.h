@@ -14,26 +14,30 @@
  * limitations under the License.
  */
 
-#ifndef NDDLGEN_EXCEPTIONS_NDDLINITIALSTATEALREADYGENERATEDEXCEPTION_HPP_
-#define NDDLGEN_EXCEPTIONS_NDDLINITIALSTATEALREADYGENERATEDEXCEPTION_HPP_
+#ifndef NDDLGEN_MODELS_DOMAINDESCRIPTION_H_
+#define NDDLGEN_MODELS_DOMAINDESCRIPTION_H_
 
-#include <exception>
+#include <cstddef>
 
-namespace nddlgen { namespace exceptions
+#include <nddlgen/models/Arm.h>
+
+namespace nddlgen { namespace models
 {
 
-	class NddlInitialStateAlreadyGeneratedException : public std::exception
+	class DomainDescription
 	{
+
+		private:
+
+			nddlgen::models::Arm* _arm;
 
 		public:
 
-			NddlInitialStateAlreadyGeneratedException() {}
-			virtual ~NddlInitialStateAlreadyGeneratedException() throw (){}
+			DomainDescription();
+			virtual ~DomainDescription();
 
-			virtual const char* what() const throw()
-			{
-				return "The NDDL initial state file has already been generated.";
-			}
+			void setArm(nddlgen::models::Arm* arm);
+			nddlgen::models::Arm* getArm();
 
 	};
 

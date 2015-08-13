@@ -22,8 +22,8 @@
 
 #include <sdf/sdf.hh>
 
-#include <nddlgen/core/SdfParser.h>
 #include <nddlgen/core/NddlGenerator.h>
+#include <nddlgen/core/DomainDescriptionFactory.h>
 #include <nddlgen/models/Arm.h>
 #include <nddlgen/utilities/ControllerConfig.h>
 #include <nddlgen/utilities/Exceptions.hpp>
@@ -58,50 +58,31 @@ namespace nddlgen
 			std::streambuf* _cerrStdRdBuf;
 
 
-			/**
-			 * Root element of the sdf file.
-			 */
-			sdf::ElementPtr _sdfRoot;
+			bool _isSdfInputFileParsed;
 
+			bool _isIsdInputFileParsed;
 
-			bool _isSdfChecked;
+			bool _isDomainDescriptionBuilt;
 
-			bool _isSdfParsed;
+			bool _isNddlModelFileWritten;
 
-			bool _isNddlModelGenerated;
+			bool _isNddlInitialStateFileWritten;
 
-			bool _isIsdChecked;
-
-			bool _isIsdParsed;
-
-			bool _isNddlInitialStateGenerated;
-
-			/**
-			 * Arm model to generate nddl files from.
-			 */
-			nddlgen::models::Arm* _armModel;
 
 			/**
 			 * Object holding controller meta data to make it accessible for other classes
 			 */
 			nddlgen::utilities::ControllerConfig* _config;
 
+			sdf::ElementPtr _sdfRoot;
 
-			/**
-			 * Checks if a file is parsable. This means, that a file identifier has already
-			 * been set, and the file has been checked.
-			 */
-			void isSdfParsable();
+			nddlgen::models::DomainDescription* _domainDescription;
 
-			/**
-			 * Checks if nddl files are generatable. This means, that a file identifier has already
-			 * been set, the file has been checked and parsed.
-			 */
-			void isNddlModelGeneratable();
-
-			void isIsdParsable();
-
-			void isNddlInitialStateGeneratable();
+			void assertParseSdfInputFilePreconditions();
+			void assertParseIsdInputFilePreconditions();
+			void assertBuildDomainDescriptionPreconditions();
+			void assertWriteNddlModelFilePreconditions(bool forceOverwrite);
+			void assertWriteNddlInitialStateFilePreconditions(bool forceOverwrite);
 
 			/**
 			 * Helper to disable the cerr output to the console.
@@ -135,34 +116,27 @@ namespace nddlgen
 			 */
 			virtual ~Controller();
 
-
-			/**
-			 * Checks if the given file is a .sdf file, if it exists, if it is readable, if it
-			 * complies with the SDF standard.
-			 */
-			void checkSdfInput();
-
 			/**
 			 * Parses the SDF into a data structure where possible collisions and
 			 * blocks can be computed.
 			 */
-			void parseSdf();
+			void parseSdfInputFile();
+
+			void parseIsdInputFile();
+
+			void buildDomainDescription();
 
 			/**
-			 * Uses the data structures to generate NDDL model and initial state files.
+			 * Uses the data structures to generate NDDL model file.
 			 */
-			void generateNddlModel();
+			void writeNddlModelFile();
 
-			void generateNddlModel(bool forceOverwrite);
+			void writeNddlModelFile(bool forceOverwrite);
 
 
-			void checkIsdInput();
+			void writeNddlInitialStateFile();
 
-			void parseIsd();
-
-			void generateNddlInitialState();
-
-			void generateNddlInitialState(bool forceOverwrite);
+			void writeNddlInitialStateFile(bool forceOverwrite);
 
 	};
 

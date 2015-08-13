@@ -23,6 +23,7 @@
 
 #include <nddlgen/models/Arm.h>
 #include <nddlgen/models/Box.h>
+#include <nddlgen/models/DomainDescription.h>
 #include <nddlgen/models/LidBox.h>
 #include <nddlgen/models/NddlGeneratable.h>
 #include <nddlgen/models/ObjectSlide.h>
@@ -33,26 +34,24 @@
 namespace nddlgen { namespace core
 {
 
-	class SdfParser
+	class DomainDescriptionFactory
 	{
 
 		private:
 
-			nddlgen::models::Arm* _armModel;
+			static void instantiateWorkspace(nddlgen::models::DomainDescription* ddm);
+			static void populateModelListFromSdf(sdf::ElementPtr modelElements, nddlgen::types::ModelList* models);
+			static void addRelevantModelsToWorkspace(nddlgen::models::DomainDescription* ddm, nddlgen::types::ModelList models);
+			static void calculateDependencies(nddlgen::models::DomainDescription* ddm, nddlgen::types::ModelList models);
 
-			bool instantiateWorkspace();
-			bool convertModelDataStructure(sdf::ElementPtr modelElements, nddlgen::types::ModelList* models);
-			bool instantiateModels(nddlgen::types::ModelList models);
-			bool calculateDependencies(nddlgen::types::ModelList models);
+			static nddlgen::models::NddlGeneratable* instanceFactory(sdf::ElementPtr element);
 
-			nddlgen::models::NddlGeneratable* instanceFactory(sdf::ElementPtr element);
+			DomainDescriptionFactory();
+			virtual ~DomainDescriptionFactory();
 
 		public:
 
-			SdfParser(nddlgen::models::Arm* armModel);
-			virtual ~SdfParser();
-
-			bool parseDataStructure(sdf::ElementPtr sdfRoot);
+			static nddlgen::models::DomainDescription* getDomainDescription(sdf::ElementPtr sdfRoot);
 
 	};
 

@@ -30,8 +30,8 @@ namespace nddlgen { namespace utilities
 		private:
 
 			std::string _adapter;
-			std::string _inputSdfFile;
-			std::string _inputIsdFile;
+			std::string _sdfInputFile;
+			std::string _isdInputFile;
 			std::string _outputFilesPath;
 			bool _readOnly;
 
@@ -53,20 +53,20 @@ namespace nddlgen { namespace utilities
 			virtual ~ControllerConfig();
 
 			void setAdapter(std::string adapter);
-			void setInputSdfFile(std::string inputSdfFile);
-			void setInputIsdFile(std::string inputIsdFile);
+			void setSdfInputFile(std::string sdfInputFile);
+			void setIsdInputFile(std::string isdInputFile);
 			void setOutputFilesPath(std::string outputFilesPath);
 			void setReadOnly();
 
 			std::string getAdapter();
-			std::string getInputSdfFile();
-			std::string getInputSdfFileExt();
-			std::string getInputSdfFileName();
-			std::string getInputSdfFilePath();
-			std::string getInputIsdFile();
-			std::string getInputIsdFileExt();
-			std::string getInputIsdFileName();
-			std::string getInputIsdFilePath();
+			std::string getSdfInputFile();
+			std::string getSdfInputFileExt();
+			std::string getSdfInputFileName();
+			std::string getSdfInputFilePath();
+			std::string getIsdInputFile();
+			std::string getIsdInputFileExt();
+			std::string getIsdInputFileName();
+			std::string getIsdInputFilePath();
 			std::string getOutputFilesPath();
 			std::string getOutputModelFile();
 			std::string getOutputModelFileName();

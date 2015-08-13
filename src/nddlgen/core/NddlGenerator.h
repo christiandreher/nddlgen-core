@@ -24,7 +24,7 @@
 #include <boost/algorithm/string.hpp>
 #include <boost/date_time/posix_time/posix_time.hpp>
 
-#include <nddlgen/models/Arm.h>
+#include <nddlgen/models/DomainDescription.h>
 #include <nddlgen/utilities/ControllerConfig.h>
 #include <nddlgen/utilities/Meta.h>
 
@@ -36,19 +36,15 @@ namespace nddlgen { namespace core
 
 		private:
 
-			nddlgen::utilities::ControllerConfig* _controllerConfig;
+			static std::string getPrettifiedDate();
 
-			nddlgen::models::Arm* _armModel;
-
-			std::string getPrettifiedDate();
+			NddlGenerator();
+			virtual ~NddlGenerator();
 
 		public:
 
-			NddlGenerator(nddlgen::models::Arm* armModel, nddlgen::utilities::ControllerConfig* controllerConfig);
-			virtual ~NddlGenerator();
-
-			bool generateModels(std::string fileName);
-			bool generateInitialState(std::string fileName);
+			static void generateModels(nddlgen::models::DomainDescription* domainDescription, nddlgen::utilities::ControllerConfig* controllerConfig);
+			static void generateInitialState(nddlgen::models::DomainDescription* domainDescription, nddlgen::utilities::ControllerConfig* controllerConfig);
 
 	};
 

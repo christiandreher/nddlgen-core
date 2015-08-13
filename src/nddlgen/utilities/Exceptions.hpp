@@ -17,26 +17,18 @@
 #ifndef NDDLGEN_UTILITIES_EXCEPTIONS_HPP_
 #define NDDLGEN_UTILITIES_EXCEPTIONS_HPP_
 
-#include <nddlgen/exceptions/CheckIsdFirstException.hpp>
-#include <nddlgen/exceptions/CheckSdfFirstException.hpp>
-#include <nddlgen/exceptions/FileAlreadyExists.hpp>
+#include <nddlgen/exceptions/ControllerConfigIsReadOnlyException.hpp>
+#include <nddlgen/exceptions/FileAlreadyExistsException.hpp>
 #include <nddlgen/exceptions/FileDoesNotExistException.hpp>
 #include <nddlgen/exceptions/FileMustBeIsdException.hpp>
 #include <nddlgen/exceptions/FileMustBeSdfException.hpp>
 #include <nddlgen/exceptions/GeneratingInitialStateException.hpp>
 #include <nddlgen/exceptions/GeneratingModelsException.hpp>
 #include <nddlgen/exceptions/InitializingSdfException.hpp>
-#include <nddlgen/exceptions/InputIsdFileNotSetException.hpp>
-#include <nddlgen/exceptions/InputSdfFileNotSetException.hpp>
-#include <nddlgen/exceptions/IsdAlreadyCheckedException.hpp>
-#include <nddlgen/exceptions/IsdAlreadyParsedException.hpp>
-#include <nddlgen/exceptions/NddlInitialStateAlreadyGeneratedException.hpp>
-#include <nddlgen/exceptions/NddlModelAlreadyGeneratedException.hpp>
+#include <nddlgen/exceptions/IsdInputFileNotSetException.hpp>
 #include <nddlgen/exceptions/ParseDataStructureException.hpp>
-#include <nddlgen/exceptions/ParseIsdFirstException.hpp>
-#include <nddlgen/exceptions/ParseSdfFirstException.hpp>
 #include <nddlgen/exceptions/ReadingSdfFileException.hpp>
-#include <nddlgen/exceptions/SdfAlreadyCheckedException.hpp>
-#include <nddlgen/exceptions/SdfAlreadyParsedException.hpp>
+#include <nddlgen/exceptions/SdfInputFileNotSetException.hpp>
+#include <nddlgen/exceptions/WorkflowException.hpp>
 
 #endif

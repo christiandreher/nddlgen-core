@@ -14,25 +14,30 @@
  * limitations under the License.
  */
 
-#ifndef NDDLGEN_EXCEPTIONS_INPUTSDFFILENOTSETEXCEPTION_HPP_
-#define NDDLGEN_EXCEPTIONS_INPUTSDFFILENOTSETEXCEPTION_HPP_
+#ifndef NDDLGEN_EXCEPTIONS_FILEALREADYEXISTSEXCEPTION_HPP_
+#define NDDLGEN_EXCEPTIONS_FILEALREADYEXISTSEXCEPTION_HPP_
 
 #include <exception>
 
 namespace nddlgen { namespace exceptions
 {
 
-	class InputSdfFileNotSetException : public std::exception
+	class FileAlreadyExistsException : public std::exception
 	{
+
+		protected:
+
+			std::string _fileName;
 
 		public:
 
-			InputSdfFileNotSetException() {}
-			virtual ~InputSdfFileNotSetException() throw (){}
+			explicit FileAlreadyExistsException(const std::string& fileName): _fileName(fileName) {}
+			virtual ~FileAlreadyExistsException() throw (){}
 
 			virtual const char* what() const throw()
 			{
-				return "Input SDF file has not been set.";
+				std::string output = "The file \"" + this->_fileName + "\" already exists.";
+				return output.c_str();
 			}
 
 	};
