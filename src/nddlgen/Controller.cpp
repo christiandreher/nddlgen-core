@@ -178,12 +178,6 @@ namespace nddlgen
 
 	void Controller::assertParseIsdInputFilePreconditions()
 	{
-		// Assert that the SDF input file has been parsed
-		if (!this->_isSdfInputFileParsed)
-		{
-			throw nddlgen::exceptions::WorkflowException("SDF input file must be parsed before the ISD input file.");
-		}
-
 		// Assert that the ISD input file has not been parsed yet
 		if (this->_isIsdInputFileParsed)
 		{
@@ -247,6 +241,13 @@ namespace nddlgen
 
 	void Controller::assertWriteNddlInitialStateFilePreconditions(bool forceOverwrite)
 	{
+		// Assert that an ISD input file has been set and parsed
+		if (!this->_isIsdInputFileParsed)
+		{
+			throw nddlgen::exceptions::WorkflowException("An NDDL initial state file cannot be generated"
+					" without an ISD input file being set and parsed.");
+		}
+
 		// Assert that the domain description was built
 		if (!this->_isDomainDescriptionBuilt)
 		{
