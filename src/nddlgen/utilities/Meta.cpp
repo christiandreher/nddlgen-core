@@ -19,7 +19,7 @@
 namespace nddlgen { namespace utilities
 {
 
-	const std::string Meta::NDDLGEN_VERSION = "0.5.0";
+	const std::string Meta::NDDLGEN_VERSION = "0.5.1";
 	const std::string Meta::NDDLGEN_PROJECT_HOMEPAGE = "nddlgen.charlydelta.org";
 	const std::string Meta::NDDLGEN_SUPPORT_EMAIL = "nddlgen-support@charlydelta.org";
 	const std::string Meta::AUTHOR_CHR_DREHER_EMAIL = "dreher@charlydelta.org";
