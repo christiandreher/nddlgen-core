@@ -14,24 +14,20 @@
  * limitations under the License.
  */
 
-#ifndef CORE_SDFPARSER_H_
-#define CORE_SDFPARSER_H_
+#ifndef NDDLGEN_CONTROLLER_DOMAINDESCRIPTIONFACTORY_H_
+#define NDDLGEN_CONTROLLER_DOMAINDESCRIPTIONFACTORY_H_
 
 #include <sdf/sdf.hh>
 
-#include <boost/algorithm/string.hpp>
-
-#include <nddlgen/models/Arm.h>
-#include <nddlgen/models/Box.h>
-#include <nddlgen/models/DomainDescription.h>
-#include <nddlgen/models/LidBox.h>
+#include <nddlgen/controller/NddlGeneratableFactory.h>
+#include <nddlgen/models/ArmModel.h>
+#include <nddlgen/models/DomainDescriptionModel.h>
 #include <nddlgen/models/NddlGeneratable.h>
-#include <nddlgen/models/ObjectSlide.h>
-#include <nddlgen/models/ObjectSlideContainer.h>
-#include <nddlgen/types/Types.hpp>
+#include <nddlgen/models/WorkspaceModel.h>
+#include <nddlgen/utilities/Types.hpp>
 #include <nddlgen/utilities/Foreach.hpp>
 
-namespace nddlgen { namespace core
+namespace nddlgen { namespace controller
 {
 
 	class DomainDescriptionFactory
@@ -39,19 +35,22 @@ namespace nddlgen { namespace core
 
 		private:
 
-			static void instantiateWorkspace(nddlgen::models::DomainDescription* ddm);
-			static void populateModelListFromSdf(sdf::ElementPtr modelElements, nddlgen::types::ModelList* models);
-			static void addRelevantModelsToWorkspace(nddlgen::models::DomainDescription* ddm, nddlgen::types::ModelList models);
-			static void calculateDependencies(nddlgen::models::DomainDescription* ddm, nddlgen::types::ModelList models);
-
-			static nddlgen::models::NddlGeneratable* instanceFactory(sdf::ElementPtr element);
-
 			DomainDescriptionFactory();
 			virtual ~DomainDescriptionFactory();
 
+			static void instantiateWorkspace(nddlgen::models::DomainDescriptionModel* domainDescription);
+			static void populateModelListFromSdf(sdf::ElementPtr modelElements, nddlgen::types::ModelList* models);
+			static void addRelevantModelsToWorkspace(nddlgen::models::DomainDescriptionModel* domainDescription,
+					nddlgen::types::ModelList models);
+			static void calculateDependencies(nddlgen::models::DomainDescriptionModel* domainDescription,
+					nddlgen::types::ModelList models);
+
+			static nddlgen::models::NddlGeneratable* instanceFactory(sdf::ElementPtr element);
+
 		public:
 
-			static nddlgen::models::DomainDescription* getDomainDescription(sdf::ElementPtr sdfRoot);
+			static nddlgen::models::DomainDescriptionModel* build(nddlgen::types::SdfRoot sdfRoot,
+					nddlgen::types::IsdRoot isdRoot);
 
 	};
 

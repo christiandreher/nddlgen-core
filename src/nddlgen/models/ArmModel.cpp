@@ -14,25 +14,25 @@
  * limitations under the License.
  */
 
-#include <nddlgen/models/Arm.h>
+#include <nddlgen/models/ArmModel.h>
 
 namespace nddlgen { namespace models
 {
 
-	Arm::Arm()
+	ArmModel::ArmModel()
 	{
 		this->setClassName("Arm");
 
 		this->_workspace = nullptr;
 	}
 
-	Arm::~Arm()
+	ArmModel::~ArmModel()
 	{
 		boost::checked_delete(this->_workspace);
 	}
 
 
-	void Arm::generateModel(std::ofstream& ofStream)
+	void ArmModel::generateModel(std::ofstream& ofStream)
 	{
 		std::string armClass = this->getClassName();
 		std::string workspaceClass = this->getWorkspace()->getClassName();
@@ -86,18 +86,18 @@ namespace nddlgen { namespace models
 		// End Arm member functions
 	}
 
-	void Arm::generateInitialState(std::ofstream& ofStream)
+	void ArmModel::generateInitialState(std::ofstream& ofStream)
 	{
 		//ofStream << this->_workspace->generateInitialStateAsString(ofStream);
 	}
 
 
-	void Arm::setWorkspace(nddlgen::models::Workspace* workspace)
+	void ArmModel::setWorkspace(nddlgen::models::WorkspaceModel* workspace)
 	{
 		this->_workspace = workspace;
 	}
 
-	nddlgen::models::Workspace* Arm::getWorkspace()
+	nddlgen::models::WorkspaceModel* ArmModel::getWorkspace()
 	{
 		return this->_workspace;
 	}

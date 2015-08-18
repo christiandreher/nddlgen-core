@@ -14,23 +14,23 @@
  * limitations under the License.
  */
 
-#include <nddlgen/models/Workspace.h>
+#include <nddlgen/models/WorkspaceModel.h>
 
 namespace nddlgen { namespace models
 {
 
-	Workspace::Workspace()
+	WorkspaceModel::WorkspaceModel()
 	{
 		this->setClassName("Workspace");
 	}
 
-	Workspace::~Workspace()
+	WorkspaceModel::~WorkspaceModel()
 	{
 
 	}
 
 
-	void Workspace::postInitProcessing()
+	void WorkspaceModel::postInitProcessing()
 	{
 		foreach (nddlgen::models::NddlGeneratable& generatableModelObject, this->_models)
 		{
@@ -41,7 +41,7 @@ namespace nddlgen { namespace models
 	}
 
 
-	void Workspace::generateModel(std::ofstream& ofStream)
+	void WorkspaceModel::generateModel(std::ofstream& ofStream)
 	{
 		std::list<std::string> alreadyDefinedClasses;
 
@@ -68,18 +68,18 @@ namespace nddlgen { namespace models
 		wrln(0, "}",								2);
 	}
 
-	void Workspace::generateInitialState(std::ofstream& ofStream)
+	void WorkspaceModel::generateInitialState(std::ofstream& ofStream)
 	{
 
 	}
 
 
-	void Workspace::addModelToWorkspace(nddlgen::models::NddlGeneratable* model)
+	void WorkspaceModel::addModelToWorkspace(nddlgen::models::NddlGeneratable* model)
 	{
 		this->_models.push_back(model);
 	}
 
-	nddlgen::models::NddlGeneratable* Workspace::getModelByName(std::string name)
+	nddlgen::models::NddlGeneratable* WorkspaceModel::getModelByName(std::string name)
 	{
 		foreach (nddlgen::models::NddlGeneratable& generatableModelObject, this->_models)
 		{
@@ -94,7 +94,7 @@ namespace nddlgen { namespace models
 		return nullptr;
 	}
 
-	nddlgen::types::ActionList Workspace::getActions()
+	nddlgen::types::ActionList WorkspaceModel::getActions()
 	{
 		nddlgen::types::ActionList actionList;
 
@@ -110,7 +110,7 @@ namespace nddlgen { namespace models
 		return actionList;
 	}
 
-	void Workspace::generateWorkspaceMembers(std::ofstream& ofStream)
+	void WorkspaceModel::generateWorkspaceMembers(std::ofstream& ofStream)
 	{
 		foreach (nddlgen::models::NddlGeneratable& generatableModelObject, this->_models)
 		{
@@ -125,7 +125,7 @@ namespace nddlgen { namespace models
 		wrel(1);
 	}
 
-	void Workspace::generateWorkspaceConstructor(std::ofstream& ofStream)
+	void WorkspaceModel::generateWorkspaceConstructor(std::ofstream& ofStream)
 	{
 		std::string constructorHeader = this->getClassName() + "(";
 

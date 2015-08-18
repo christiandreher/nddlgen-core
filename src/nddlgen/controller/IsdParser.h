@@ -14,30 +14,29 @@
  * limitations under the License.
  */
 
-#ifndef NDDLGEN_MODELS_DOMAINDESCRIPTION_H_
-#define NDDLGEN_MODELS_DOMAINDESCRIPTION_H_
+#ifndef NDDLGEN_CONTROLLER_ISDPARSER_H_
+#define NDDLGEN_CONTROLLER_ISDPARSER_H_
 
 #include <cstddef>
 
-#include <nddlgen/models/Arm.h>
+#include <tinyxml.h>
 
-namespace nddlgen { namespace models
+#include <nddlgen/utilities/Types.hpp>
+
+namespace nddlgen { namespace controller
 {
 
-	class DomainDescription
+	class IsdParser
 	{
 
 		private:
 
-			nddlgen::models::Arm* _arm;
+			IsdParser();
+			virtual ~IsdParser();
 
 		public:
 
-			DomainDescription();
-			virtual ~DomainDescription();
-
-			void setArm(nddlgen::models::Arm* arm);
-			nddlgen::models::Arm* getArm();
+			static nddlgen::types::IsdRoot parseIsd(std::string filename);
 
 	};
 

@@ -14,14 +14,29 @@
  * limitations under the License.
  */
 
-#include <nddlgen/utilities/Meta.h>
+#ifndef NDDLGEN_MODELS_BOXMODEL_H_
+#define NDDLGEN_MODELS_BOXMODEL_H_
 
-namespace nddlgen { namespace utilities
+#include <iostream>
+#include <fstream>
+
+#include <nddlgen/models/NddlGeneratable.h>
+
+namespace nddlgen { namespace models
 {
 
-	const std::string Meta::NDDLGEN_VERSION = "0.5.0";
-	const std::string Meta::NDDLGEN_PROJECT_HOMEPAGE = "nddlgen.charlydelta.org";
-	const std::string Meta::NDDLGEN_SUPPORT_EMAIL = "nddlgen-support@charlydelta.org";
-	const std::string Meta::AUTHOR_CHR_DREHER_EMAIL = "dreher@charlydelta.org";
+	class BoxModel : public nddlgen::models::NddlGeneratable
+	{
+
+		public:
+
+			BoxModel();
+			virtual ~BoxModel();
+
+			virtual void generateInitialState(std::ofstream& ofStream);
+
+	};
 
 }}
+
+#endif

@@ -14,32 +14,32 @@
  * limitations under the License.
  */
 
-#include <nddlgen/models/LidBox.h>
+#include <nddlgen/models/LidBoxModel.h>
 
 namespace nddlgen { namespace models
 {
 
-	LidBox::LidBox()
+	LidBoxModel::LidBoxModel()
 	{
 		this->setClassName("LidBox");
 
 		this->_isOpened = false;
 	}
 
-	LidBox::LidBox(bool isOpened)
+	LidBoxModel::LidBoxModel(bool isOpened)
 	{
 		this->setClassName("LidBox");
 
 		this->_isOpened = isOpened;
 	}
 
-	LidBox::~LidBox()
+	LidBoxModel::~LidBoxModel()
 	{
 
 	}
 
 
-	void LidBox::postInitProcessing()
+	void LidBoxModel::postInitProcessing()
 	{
 		std::string openedPredicate = "opened";
 		std::string closedPredicate = "closed";
@@ -78,13 +78,13 @@ namespace nddlgen { namespace models
 	}
 
 
-	void LidBox::generateInitialState(std::ofstream& ofStream)
+	void LidBoxModel::generateInitialState(std::ofstream& ofStream)
 	{
 
 	}
 
 
-	bool LidBox::isOpened()
+	bool LidBoxModel::isOpened()
 	{
 		return this->_isOpened;
 	}

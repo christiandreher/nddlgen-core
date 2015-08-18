@@ -14,12 +14,12 @@
  * limitations under the License.
  */
 
-#include <nddlgen/utilities/ControllerConfig.h>
+#include <nddlgen/utilities/WorkflowControllerConfig.h>
 
 namespace nddlgen { namespace utilities
 {
 
-	ControllerConfig::ControllerConfig()
+	WorkflowControllerConfig::WorkflowControllerConfig()
 	{
 		this->_adapter = "a custom adapter";
 
@@ -30,20 +30,20 @@ namespace nddlgen { namespace utilities
 		this->_readOnly = false;
 	}
 
-	ControllerConfig::~ControllerConfig()
+	WorkflowControllerConfig::~WorkflowControllerConfig()
 	{
 
 	}
 
 
-	void ControllerConfig::setAdapter(std::string adapter)
+	void WorkflowControllerConfig::setAdapter(std::string adapter)
 	{
 		this->trySet();
 
 		this->_adapter = adapter;
 	}
 
-	void ControllerConfig::setSdfInputFile(std::string sdfInputFile)
+	void WorkflowControllerConfig::setSdfInputFile(std::string sdfInputFile)
 	{
 		this->trySet();
 
@@ -53,7 +53,7 @@ namespace nddlgen { namespace utilities
 		}
 	}
 
-	void ControllerConfig::setIsdInputFile(std::string isdInputFile)
+	void WorkflowControllerConfig::setIsdInputFile(std::string isdInputFile)
 	{
 		this->trySet();
 
@@ -63,7 +63,7 @@ namespace nddlgen { namespace utilities
 		}
 	}
 
-	void ControllerConfig::setOutputFilesPath(std::string outputFilesPath)
+	void WorkflowControllerConfig::setOutputFilesPath(std::string outputFilesPath)
 	{
 		this->trySet();
 
@@ -73,62 +73,62 @@ namespace nddlgen { namespace utilities
 		}
 	}
 
-	void ControllerConfig::setReadOnly()
+	void WorkflowControllerConfig::setReadOnly()
 	{
 		this->_readOnly = true;
 	}
 
 
-	std::string ControllerConfig::getAdapter()
+	std::string WorkflowControllerConfig::getAdapter()
 	{
 		return this->_adapter;
 	}
 
-	std::string ControllerConfig::getSdfInputFile()
+	std::string WorkflowControllerConfig::getSdfInputFile()
 	{
 		return this->_sdfInputFile;
 	}
 
-	std::string ControllerConfig::getSdfInputFileExt()
+	std::string WorkflowControllerConfig::getSdfInputFileExt()
 	{
 		return boost::filesystem::path(this->_sdfInputFile).extension().string();
 	}
 
-	std::string ControllerConfig::getSdfInputFileName()
+	std::string WorkflowControllerConfig::getSdfInputFileName()
 	{
 		std::string fileName = boost::filesystem::path(this->_sdfInputFile).filename().string();
 		return fileName;
 	}
 
-	std::string ControllerConfig::getSdfInputFilePath()
+	std::string WorkflowControllerConfig::getSdfInputFilePath()
 	{
 		std::string filePath = boost::filesystem::path(this->_sdfInputFile).parent_path().string();
 		return filePath;
 	}
 
-	std::string ControllerConfig::getIsdInputFile()
+	std::string WorkflowControllerConfig::getIsdInputFile()
 	{
 		return this->_isdInputFile;
 	}
 
-	std::string ControllerConfig::getIsdInputFileExt()
+	std::string WorkflowControllerConfig::getIsdInputFileExt()
 	{
 		return boost::filesystem::path(this->_isdInputFile).extension().string();
 	}
 
-	std::string ControllerConfig::getIsdInputFileName()
+	std::string WorkflowControllerConfig::getIsdInputFileName()
 	{
 		std::string fileName = boost::filesystem::path(this->_isdInputFile).filename().string();
 		return fileName;
 	}
 
-	std::string ControllerConfig::getIsdInputFilePath()
+	std::string WorkflowControllerConfig::getIsdInputFilePath()
 	{
 		std::string filePath = boost::filesystem::path(this->_isdInputFile).parent_path().string();
 		return filePath;
 	}
 
-	std::string ControllerConfig::getOutputFilesPath()
+	std::string WorkflowControllerConfig::getOutputFilesPath()
 	{
 		// Standard output path is the path of the input file
 		std::string outputFilesPath = this->getSdfInputFilePath();
@@ -142,12 +142,12 @@ namespace nddlgen { namespace utilities
 		return outputFilesPath;
 	}
 
-	std::string ControllerConfig::getOutputModelFile()
+	std::string WorkflowControllerConfig::getOutputModelFile()
 	{
 		return this->getOutputFilesPath() + "/" + this->getOutputModelFileName();
 	}
 
-	std::string ControllerConfig::getOutputModelFileName()
+	std::string WorkflowControllerConfig::getOutputModelFileName()
 	{
 		std::string fileStem = boost::filesystem::path(this->_sdfInputFile).stem().string();
 		fileStem += "-model";
@@ -155,12 +155,12 @@ namespace nddlgen { namespace utilities
 		return fileStem + ".nddl";
 	}
 
-	std::string ControllerConfig::getOutputInitialStateFile()
+	std::string WorkflowControllerConfig::getOutputInitialStateFile()
 	{
 		return this->getOutputFilesPath() + "/" + this->getOutputInitialStateFileName();
 	}
 
-	std::string ControllerConfig::getOutputInitialStateFileName()
+	std::string WorkflowControllerConfig::getOutputInitialStateFileName()
 	{
 		std::string fileStem = boost::filesystem::path(this->_isdInputFile).stem().string();
 		fileStem += "-initial-state";
@@ -169,13 +169,13 @@ namespace nddlgen { namespace utilities
 	}
 
 
-	bool ControllerConfig::isReadOnly()
+	bool WorkflowControllerConfig::isReadOnly()
 	{
 		return this->_readOnly;
 	}
 
 
-	void ControllerConfig::trySet()
+	void WorkflowControllerConfig::trySet()
 	{
 		if (this->_readOnly)
 		{
@@ -183,7 +183,7 @@ namespace nddlgen { namespace utilities
 		}
 	}
 
-	std::string ControllerConfig::normalizePath(const boost::filesystem::path &path)
+	std::string WorkflowControllerConfig::normalizePath(const boost::filesystem::path &path)
 	{
 		// Implementation of this function by jarzec (stackoverflow community member)
 

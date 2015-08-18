@@ -14,29 +14,16 @@
  * limitations under the License.
  */
 
-#ifndef NDDLGEN_MODELS_BOX_H_
-#define NDDLGEN_MODELS_BOX_H_
+#ifndef NDDLGEN_UTILITIES_MODELS_HPP_
+#define NDDLGEN_UTILITIES_MODELS_HPP_
 
-#include <iostream>
-#include <fstream>
-
+#include <nddlgen/models/ArmModel.h>
+#include <nddlgen/models/BoxModel.h>
+#include <nddlgen/models/DomainDescriptionModel.h>
+#include <nddlgen/models/LidBoxModel.h>
 #include <nddlgen/models/NddlGeneratable.h>
-
-namespace nddlgen { namespace models
-{
-
-	class Box : public nddlgen::models::NddlGeneratable
-	{
-
-		public:
-
-			Box();
-			virtual ~Box();
-
-			virtual void generateInitialState(std::ofstream& ofStream);
-
-	};
-
-}}
+#include <nddlgen/models/ObjectSlideModel.h>
+#include <nddlgen/models/ObjectSlideContainerModel.h>
+#include <nddlgen/models/WorkspaceModel.h>
 
 #endif

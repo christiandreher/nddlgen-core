@@ -14,27 +14,27 @@
  * limitations under the License.
  */
 
-#include <nddlgen/models/DomainDescription.h>
+#include <nddlgen/models/DomainDescriptionModel.h>
 
 namespace nddlgen { namespace models
 {
 
-	DomainDescription::DomainDescription()
+	DomainDescriptionModel::DomainDescriptionModel()
 	{
 		this->_arm = nullptr;
 	}
 
-	DomainDescription::~DomainDescription()
+	DomainDescriptionModel::~DomainDescriptionModel()
 	{
-
+		boost::checked_delete(this->_arm);
 	}
 
-	void DomainDescription::setArm(nddlgen::models::Arm* arm)
+	void DomainDescriptionModel::setArm(nddlgen::models::ArmModel* arm)
 	{
 		this->_arm = arm;
 	}
 
-	nddlgen::models::Arm* DomainDescription::getArm()
+	nddlgen::models::ArmModel* DomainDescriptionModel::getArm()
 	{
 		return this->_arm;
 	}

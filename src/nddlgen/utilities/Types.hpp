@@ -14,34 +14,42 @@
  * limitations under the License.
  */
 
-#include <nddlgen/models/ObjectSlideContainer.h>
+#ifndef NDDLGEN_TYPES_TYPES_HPP_
+#define NDDLGEN_TYPES_TYPES_HPP_
 
-namespace nddlgen { namespace models
+#include <boost/ptr_container/ptr_list.hpp>
+
+#include <sdf/sdf.hh>
+
+#include <tinyxml.h>
+
+// Forward declaration
+namespace nddlgen
+{
+	namespace models
+	{
+		class NddlGeneratable;
+	}
+
+	namespace utilities
+	{
+		class ModelAction;
+	}
+}
+
+namespace nddlgen { namespace types
 {
 
-	ObjectSlideContainer::ObjectSlideContainer()
-	{
-		this->setClassName("ObjectSlideContainer");
+	typedef std::list<sdf::ElementPtr> ModelList;
 
-		this->_capacity = 36;
-	}
+	typedef boost::ptr_list<nddlgen::models::NddlGeneratable> NddlGeneratableList;
 
-	ObjectSlideContainer::ObjectSlideContainer(int capacity)
-	{
-		this->setClassName("ObjectSlideContainer");
+	typedef boost::ptr_list<nddlgen::utilities::ModelAction> ActionList;
 
-		this->_capacity = capacity;
-	}
+	typedef sdf::ElementPtr SdfRoot;
 
-	ObjectSlideContainer::~ObjectSlideContainer()
-	{
-		// TODO Auto-generated destructor stub
-	}
-
-
-	void ObjectSlideContainer::generateInitialState(std::ofstream& ofStream)
-	{
-
-	}
+	typedef TiXmlElement* IsdRoot;
 
 }}
+
+#endif

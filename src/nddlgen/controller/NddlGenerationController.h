@@ -14,8 +14,8 @@
  * limitations under the License.
  */
 
-#ifndef CORE_NDDLGENERATOR_H_
-#define CORE_NDDLGENERATOR_H_
+#ifndef NDDLGEN_CONTROLLER_NDDLGENERATIONCONTROLLER_H_
+#define NDDLGEN_CONTROLLER_NDDLGENERATIONCONTROLLER_H_
 
 #include <iostream>
 #include <fstream>
@@ -24,27 +24,29 @@
 #include <boost/algorithm/string.hpp>
 #include <boost/date_time/posix_time/posix_time.hpp>
 
-#include <nddlgen/models/DomainDescription.h>
-#include <nddlgen/utilities/ControllerConfig.h>
+#include <nddlgen/models/DomainDescriptionModel.h>
+#include <nddlgen/utilities/WorkflowControllerConfig.h>
 #include <nddlgen/utilities/Meta.h>
 
-namespace nddlgen { namespace core
+namespace nddlgen { namespace controller
 {
 
-	class NddlGenerator
+	class NddlGenerationController
 	{
 
 		private:
 
 			static std::string getPrettifiedDate();
 
-			NddlGenerator();
-			virtual ~NddlGenerator();
+			NddlGenerationController();
+			virtual ~NddlGenerationController();
 
 		public:
 
-			static void generateModels(nddlgen::models::DomainDescription* domainDescription, nddlgen::utilities::ControllerConfig* controllerConfig);
-			static void generateInitialState(nddlgen::models::DomainDescription* domainDescription, nddlgen::utilities::ControllerConfig* controllerConfig);
+			static void writeModelFile(nddlgen::models::DomainDescriptionModel* domainDescription,
+					nddlgen::utilities::WorkflowControllerConfig* controllerConfig);
+			static void writeInitialStateFile(nddlgen::models::DomainDescriptionModel* domainDescription,
+					nddlgen::utilities::WorkflowControllerConfig* controllerConfig);
 
 	};
 

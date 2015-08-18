@@ -14,14 +14,33 @@
  * limitations under the License.
  */
 
-#include <nddlgen/utilities/Meta.h>
+#ifndef NDDLGEN_MODELS_DOMAINDESCRIPTIONMODEL_H_
+#define NDDLGEN_MODELS_DOMAINDESCRIPTIONMODEL_H_
 
-namespace nddlgen { namespace utilities
+#include <cstddef>
+
+#include <nddlgen/models/ArmModel.h>
+
+namespace nddlgen { namespace models
 {
 
-	const std::string Meta::NDDLGEN_VERSION = "0.5.0";
-	const std::string Meta::NDDLGEN_PROJECT_HOMEPAGE = "nddlgen.charlydelta.org";
-	const std::string Meta::NDDLGEN_SUPPORT_EMAIL = "nddlgen-support@charlydelta.org";
-	const std::string Meta::AUTHOR_CHR_DREHER_EMAIL = "dreher@charlydelta.org";
+	class DomainDescriptionModel
+	{
+
+		private:
+
+			nddlgen::models::ArmModel* _arm;
+
+		public:
+
+			DomainDescriptionModel();
+			virtual ~DomainDescriptionModel();
+
+			void setArm(nddlgen::models::ArmModel* arm);
+			nddlgen::models::ArmModel* getArm();
+
+	};
 
 }}
+
+#endif

@@ -14,38 +14,38 @@
  * limitations under the License.
  */
 
-#ifndef NDDLGEN_MODELS_LIDBOX_H_
-#define NDDLGEN_MODELS_LIDBOX_H_
+#include <nddlgen/controller/IsdParser.h>
 
-#include <iostream>
-#include <fstream>
-
-#include <nddlgen/models/Box.h>
-
-namespace nddlgen { namespace models
+namespace nddlgen { namespace controller
 {
 
-	class LidBox : public nddlgen::models::Box
+	IsdParser::IsdParser()
 	{
 
-		private:
+	}
 
-			bool _isOpened;
+	IsdParser::~IsdParser()
+	{
 
-		public:
+	}
 
-			LidBox();
-			LidBox(bool isOpened);
-			virtual ~LidBox();
+	nddlgen::types::IsdRoot IsdParser::parseIsd(std::string filename)
+	{
+		TiXmlDocument isd(filename);
 
-			virtual void postInitProcessing();
+		if (!isd.LoadFile())
+		{
+			return nullptr;
+		}
 
-			virtual void generateInitialState(std::ofstream& ofStream);
+		nddlgen::types::IsdRoot root = isd.FirstChildElement("isd");
 
-			bool isOpened();
+		if (!root)
+		{
+			return nullptr;
+		}
 
-	};
+		return root;
+	}
 
 }}
-
-#endif

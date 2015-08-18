@@ -14,26 +14,27 @@
  * limitations under the License.
  */
 
-#ifndef NDDLGEN_MODELS_OBJECTSLIDE_H_
-#define NDDLGEN_MODELS_OBJECTSLIDE_H_
+#ifndef NDDLGEN_CONTROLLER_NDDLGENERATABLEFACTORY_H_
+#define NDDLGEN_CONTROLLER_NDDLGENERATABLEFACTORY_H_
 
-#include <iostream>
-#include <fstream>
+#include <boost/algorithm/string.hpp>
 
-#include <nddlgen/models/NddlGeneratable.h>
+#include <nddlgen/utilities/Models.hpp>
 
-namespace nddlgen { namespace models
+namespace nddlgen { namespace controller
 {
 
-	class ObjectSlide : public nddlgen::models::NddlGeneratable
+	class NddlGeneratableFactory
 	{
+
+		private:
+
+			NddlGeneratableFactory();
+			virtual ~NddlGeneratableFactory();
 
 		public:
 
-			ObjectSlide();
-			virtual ~ObjectSlide();
-
-			virtual void generateInitialState(std::ofstream& ofStream);
+			static nddlgen::models::NddlGeneratable* fromString(std::string modelName);
 
 	};
 

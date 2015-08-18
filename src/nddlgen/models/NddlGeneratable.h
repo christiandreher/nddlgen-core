@@ -21,7 +21,7 @@
 #include <fstream>
 #include <string>
 
-#include <nddlgen/types/Types.hpp>
+#include <nddlgen/utilities/Types.hpp>
 #include <nddlgen/utilities/WriteStream.hpp>
 #include <nddlgen/utilities/Foreach.hpp>
 #include <nddlgen/utilities/ModelAction.hpp>

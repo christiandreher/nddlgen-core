@@ -14,8 +14,8 @@
  * limitations under the License.
  */
 
-#ifndef NDDLGEN_MODELS_OBJECTSLIDECONTAINER_H_
-#define NDDLGEN_MODELS_OBJECTSLIDECONTAINER_H_
+#ifndef NDDLGEN_MODELS_OBJECTSLIDEMODEL_H_
+#define NDDLGEN_MODELS_OBJECTSLIDEMODEL_H_
 
 #include <iostream>
 #include <fstream>
@@ -25,23 +25,15 @@
 namespace nddlgen { namespace models
 {
 
-	class ObjectSlideContainer : public nddlgen::models::NddlGeneratable
+	class ObjectSlideModel : public nddlgen::models::NddlGeneratable
 	{
-
-		private:
-
-			int _capacity;
 
 		public:
 
-			ObjectSlideContainer();
-			ObjectSlideContainer(int capacity);
-			virtual ~ObjectSlideContainer();
+			ObjectSlideModel();
+			virtual ~ObjectSlideModel();
 
 			virtual void generateInitialState(std::ofstream& ofStream);
-
-			void setCapacity(int capacity);
-			int getCapacity();
 
 	};
 

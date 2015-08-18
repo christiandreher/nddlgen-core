@@ -14,35 +14,37 @@
  * limitations under the License.
  */
 
-#ifndef NDDLGEN_TYPES_TYPES_HPP_
-#define NDDLGEN_TYPES_TYPES_HPP_
+#ifndef NDDLGEN_MODELS_LIDBOXMODEL_H_
+#define NDDLGEN_MODELS_LIDBOXMODEL_H_
 
-#include <boost/ptr_container/ptr_list.hpp>
+#include <iostream>
+#include <fstream>
 
-#include <sdf/sdf.hh>
+#include <nddlgen/models/BoxModel.h>
 
-// Forward declaration
-namespace nddlgen
-{
-	namespace models
-	{
-		class NddlGeneratable;
-	}
-
-	namespace utilities
-	{
-		class ModelAction;
-	}
-}
-
-namespace nddlgen { namespace types
+namespace nddlgen { namespace models
 {
 
-	typedef std::list<sdf::ElementPtr> ModelList;
+	class LidBoxModel : public nddlgen::models::BoxModel
+	{
 
-	typedef boost::ptr_list<nddlgen::models::NddlGeneratable> NddlGeneratableList;
+		private:
 
-	typedef boost::ptr_list<nddlgen::utilities::ModelAction> ActionList;
+			bool _isOpened;
+
+		public:
+
+			LidBoxModel();
+			LidBoxModel(bool isOpened);
+			virtual ~LidBoxModel();
+
+			virtual void postInitProcessing();
+
+			virtual void generateInitialState(std::ofstream& ofStream);
+
+			bool isOpened();
+
+	};
 
 }}
 

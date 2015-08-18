@@ -14,47 +14,36 @@
  * limitations under the License.
  */
 
-#ifndef NDDLGEN_MODELS_WORKSPACE_H_
-#define NDDLGEN_MODELS_WORKSPACE_H_
+#ifndef NDDLGEN_MODELS_ARMMODEL_H_
+#define NDDLGEN_MODELS_ARMMODEL_H_
 
+#include <string>
 #include <iostream>
 #include <fstream>
 
 #include <nddlgen/models/NddlGeneratable.h>
-#include <nddlgen/models/Box.h>
-#include <nddlgen/models/LidBox.h>
-#include <nddlgen/models/ObjectSlide.h>
-#include <nddlgen/models/ObjectSlideContainer.h>
-#include <nddlgen/types/Types.hpp>
-#include <nddlgen/utilities/Foreach.hpp>
+#include <nddlgen/models/WorkspaceModel.h>
 
 namespace nddlgen { namespace models
 {
 
-	class Workspace : public nddlgen::models::NddlGeneratable
+	class ArmModel : public nddlgen::models::NddlGeneratable
 	{
 
 		private:
 
-			nddlgen::types::NddlGeneratableList _models;
-
-			void generateWorkspaceMembers(std::ofstream& ofStream);
-			void generateWorkspaceConstructor(std::ofstream& ofStream);
+			nddlgen::models::WorkspaceModel* _workspace;
 
 		public:
 
-			Workspace();
-			virtual ~Workspace();
-
-			virtual void postInitProcessing();
+			ArmModel();
+			virtual ~ArmModel();
 
 			virtual void generateModel(std::ofstream& ofStream);
 			virtual void generateInitialState(std::ofstream& ofStream);
 
-			void addModelToWorkspace(nddlgen::models::NddlGeneratable* model);
-			nddlgen::models::NddlGeneratable* getModelByName(std::string name);
-
-			virtual nddlgen::types::ActionList getActions();
+			void setWorkspace(nddlgen::models::WorkspaceModel* workspace);
+			nddlgen::models::WorkspaceModel* getWorkspace();
 
 	};
 

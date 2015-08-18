@@ -14,23 +14,32 @@
  * limitations under the License.
  */
 
-#include <nddlgen/models/Box.h>
+#include <nddlgen/models/ObjectSlideContainerModel.h>
 
 namespace nddlgen { namespace models
 {
 
-	Box::Box()
+	ObjectSlideContainerModel::ObjectSlideContainerModel()
 	{
-		this->setClassName("Box");
+		this->setClassName("ObjectSlideContainer");
+
+		this->_capacity = 36;
 	}
 
-	Box::~Box()
+	ObjectSlideContainerModel::ObjectSlideContainerModel(int capacity)
+	{
+		this->setClassName("ObjectSlideContainer");
+
+		this->_capacity = capacity;
+	}
+
+	ObjectSlideContainerModel::~ObjectSlideContainerModel()
 	{
 		// TODO Auto-generated destructor stub
 	}
 
 
-	void Box::generateInitialState(std::ofstream& ofStream)
+	void ObjectSlideContainerModel::generateInitialState(std::ofstream& ofStream)
 	{
 
 	}

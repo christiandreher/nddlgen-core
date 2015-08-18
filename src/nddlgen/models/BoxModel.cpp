@@ -14,14 +14,25 @@
  * limitations under the License.
  */
 
-#include <nddlgen/utilities/Meta.h>
+#include <nddlgen/models/BoxModel.h>
 
-namespace nddlgen { namespace utilities
+namespace nddlgen { namespace models
 {
 
-	const std::string Meta::NDDLGEN_VERSION = "0.5.0";
-	const std::string Meta::NDDLGEN_PROJECT_HOMEPAGE = "nddlgen.charlydelta.org";
-	const std::string Meta::NDDLGEN_SUPPORT_EMAIL = "nddlgen-support@charlydelta.org";
-	const std::string Meta::AUTHOR_CHR_DREHER_EMAIL = "dreher@charlydelta.org";
+	BoxModel::BoxModel()
+	{
+		this->setClassName("Box");
+	}
+
+	BoxModel::~BoxModel()
+	{
+		// TODO Auto-generated destructor stub
+	}
+
+
+	void BoxModel::generateInitialState(std::ofstream& ofStream)
+	{
+
+	}
 
 }}

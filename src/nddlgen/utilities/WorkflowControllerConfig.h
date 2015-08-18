@@ -14,8 +14,8 @@
  * limitations under the License.
  */
 
-#ifndef NDDLGEN_UTILITIES_CONTROLLERCONFIG_H_
-#define NDDLGEN_UTILITIES_CONTROLLERCONFIG_H_
+#ifndef NDDLGEN_UTILITIES_WORKFLOWCONTROLLERCONFIG_H_
+#define NDDLGEN_UTILITIES_WORKFLOWCONTROLLERCONFIG_H_
 
 #include <boost/filesystem.hpp>
 
@@ -24,7 +24,7 @@
 namespace nddlgen { namespace utilities
 {
 
-	class ControllerConfig
+	class WorkflowControllerConfig
 	{
 
 		private:
@@ -49,8 +49,8 @@ namespace nddlgen { namespace utilities
 
 		public:
 
-			ControllerConfig();
-			virtual ~ControllerConfig();
+			WorkflowControllerConfig();
+			virtual ~WorkflowControllerConfig();
 
 			void setAdapter(std::string adapter);
 			void setSdfInputFile(std::string sdfInputFile);

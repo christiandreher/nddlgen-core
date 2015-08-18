@@ -14,12 +14,12 @@
  * limitations under the License.
  */
 
-#include <nddlgen/Controller.h>
+#include <nddlgen/controller/WorkflowController.h>
 
-namespace nddlgen
+namespace nddlgen { namespace controller
 {
 
-	Controller::Controller(nddlgen::utilities::ControllerConfig* config)
+	WorkflowController::WorkflowController(nddlgen::utilities::WorkflowControllerConfig* config)
 	{
 		// Mark config object as read only and write to member
 		config->setReadOnly();
@@ -37,9 +37,12 @@ namespace nddlgen
 
 		// Domain description object will be initialized later
 		this->_domainDescription = nullptr;
+
+		// ISD root will be initialized later if an ISD file was set to be parsed
+		this->_isdRoot = nullptr;
 	}
 
-	Controller::~Controller()
+	WorkflowController::~WorkflowController()
 	{
 		// Delete domain description object
 		boost::checked_delete(this->_domainDescription);
@@ -52,7 +55,7 @@ namespace nddlgen
 	}
 
 
-	void Controller::parseSdfInputFile()
+	void WorkflowController::parseSdfInputFile()
 	{
 		// Assert that all preconditions are met. Throw exception if not
 		this->assertParseSdfInputFilePreconditions();
@@ -71,7 +74,7 @@ namespace nddlgen
 			throw nddlgen::exceptions::InitializingSdfException(this->getBufferedCerrOutput());
 		}
 
-		// Try to read the file and generate SDF
+		// Try to read the file and parse SDF
 		if (!sdf::readFile(this->_config->getSdfInputFile(), sdf))
 		{
 			// Re-enable cerr
@@ -89,67 +92,68 @@ namespace nddlgen
 		this->_isSdfInputFileParsed = true;
 	}
 
-	void Controller::parseIsdInputFile()
+	void WorkflowController::parseIsdInputFile()
 	{
 		// Assert that all preconditions are met. Throw exception if not
 		this->assertParseIsdInputFilePreconditions();
 
-		// todo: Read xml with tinyxml or xerces
+		// Parse ISD and write root to member
+		this->_isdRoot = nddlgen::controller::IsdParser::parseIsd(this->_config->getIsdInputFile());
 
 		// Set workflow control flag
 		this->_isIsdInputFileParsed = true;
 	}
 
-	void Controller::buildDomainDescription()
+	void WorkflowController::buildDomainDescription()
 	{
 		// Assert that all preconditions are met. Throw exception if not
 		this->assertBuildDomainDescriptionPreconditions();
 
 		// Build the domain description model
-		this->_domainDescription = nddlgen::core::DomainDescriptionFactory::getDomainDescription(this->_sdfRoot);
+		this->_domainDescription = nddlgen::controller::DomainDescriptionFactory::build(this->_sdfRoot, this->_isdRoot);
 
 		// Set workflow control flag
 		this->_isDomainDescriptionBuilt = true;
 	}
 
-	void Controller::writeNddlModelFile(bool forceOverwrite)
+	void WorkflowController::writeNddlModelFile(bool forceOverwrite)
 	{
 		// Assert that all preconditions are met. Throw exception if not
 		this->assertWriteNddlModelFilePreconditions(forceOverwrite);
 
 		// Write model file
-		nddlgen::core::NddlGenerator::generateModels(this->_domainDescription, this->_config);
+		nddlgen::controller::NddlGenerationController::writeModelFile(this->_domainDescription, this->_config);
 
 		// Set workflow control flag
 		this->_isNddlModelFileWritten = true;
 	}
 
-	void Controller::writeNddlInitialStateFile(bool forceOverwrite)
+	void WorkflowController::writeNddlInitialStateFile(bool forceOverwrite)
 	{
 		// Assert that all preconditions are met. Throw exception if not
 		this->assertWriteNddlInitialStateFilePreconditions(forceOverwrite);
 
 		// Write initial state file
-		nddlgen::core::NddlGenerator::generateInitialState(this->_domainDescription, this->_config);
+		nddlgen::controller::NddlGenerationController::writeInitialStateFile(this->_domainDescription, this->_config);
 
 		// Set workflow control flag
 		this->_isNddlInitialStateFileWritten = true;
 	}
 
-	void Controller::writeNddlModelFile()
+	void WorkflowController::writeNddlModelFile()
 	{
 		// Call overloaded function with forceOverwrite set to false
 		this->writeNddlModelFile(false);
 	}
 
-	void Controller::writeNddlInitialStateFile()
+	void WorkflowController::writeNddlInitialStateFile()
 	{
 		// Call overloaded function with forceOverwrite set to false
 		this->writeNddlInitialStateFile(false);
 	}
 
 
-	void Controller::assertParseSdfInputFilePreconditions()
+	void WorkflowController::assertParseSdfInputFilePreconditions()
 	{
 		// Assert that the SDF input file has not been parsed yet
 		if (this->_isSdfInputFileParsed)
@@ -176,7 +180,7 @@ namespace nddlgen
 		}
 	}
 
-	void Controller::assertParseIsdInputFilePreconditions()
+	void WorkflowController::assertParseIsdInputFilePreconditions()
 	{
 		// Assert that the ISD input file has not been parsed yet
 		if (this->_isIsdInputFileParsed)
@@ -203,7 +207,7 @@ namespace nddlgen
 		}
 	}
 
-	void Controller::assertBuildDomainDescriptionPreconditions()
+	void WorkflowController::assertBuildDomainDescriptionPreconditions()
 	{
 		// Assert that at least the SDF input file has been parsed
 		if (!this->_isSdfInputFileParsed)
@@ -218,7 +222,7 @@ namespace nddlgen
 		}
 	}
 
-	void Controller::assertWriteNddlModelFilePreconditions(bool forceOverwrite)
+	void WorkflowController::assertWriteNddlModelFilePreconditions(bool forceOverwrite)
 	{
 		// Assert that the domain description was built
 		if (!this->_isDomainDescriptionBuilt)
@@ -239,7 +243,7 @@ namespace nddlgen
 		}
 	}
 
-	void Controller::assertWriteNddlInitialStateFilePreconditions(bool forceOverwrite)
+	void WorkflowController::assertWriteNddlInitialStateFilePreconditions(bool forceOverwrite)
 	{
 		// Assert that an ISD input file has been set and parsed
 		if (!this->_isIsdInputFileParsed)
@@ -268,19 +272,22 @@ namespace nddlgen
 	}
 
 
-	void Controller::disableCerr()
+	void WorkflowController::disableCerr()
 	{
+		// Disable std::cerr by setting custom read buffer
 		std::cerr.rdbuf(this->_cerrOvRdBuf.rdbuf());
 	}
 
-	void Controller::enableCerr()
+	void WorkflowController::enableCerr()
 	{
+		// Re-enabling std::cerr by restoring initial value
 		std::cerr.rdbuf(this->_cerrStdRdBuf);
 	}
 
-	std::string Controller::getBufferedCerrOutput()
+	std::string WorkflowController::getBufferedCerrOutput()
 	{
+		// Return contents of custom read buffer
 		return this->_cerrOvRdBuf.str();
 	}
 
-}
+}}

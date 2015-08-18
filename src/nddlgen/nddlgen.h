@@ -14,39 +14,21 @@
  * limitations under the License.
  */
 
-#ifndef NDDLGEN_MODELS_ARM_H_
-#define NDDLGEN_MODELS_ARM_H_
+#ifndef NDDLGEN_H_
+#define NDDLGEN_H_
 
-#include <string>
-#include <iostream>
-#include <fstream>
+#include <nddlgen/controller/WorkflowController.h>
+#include <nddlgen/utilities/WorkflowControllerConfig.h>
 
-#include <nddlgen/models/NddlGeneratable.h>
-#include <nddlgen/models/Workspace.h>
-
-namespace nddlgen { namespace models
+namespace nddlgen
 {
 
-	class Arm : public nddlgen::models::NddlGeneratable
-	{
+	static const std::string VERSION = nddlgen::utilities::Meta::NDDLGEN_VERSION;
 
-		private:
+	typedef nddlgen::controller::WorkflowController Controller;
 
-			nddlgen::models::Workspace* _workspace;
+	typedef nddlgen::utilities::WorkflowControllerConfig ControllerConfig;
 
-		public:
-
-			Arm();
-			virtual ~Arm();
-
-			virtual void generateModel(std::ofstream& ofStream);
-			virtual void generateInitialState(std::ofstream& ofStream);
-
-			void setWorkspace(nddlgen::models::Workspace* workspace);
-			nddlgen::models::Workspace* getWorkspace();
-
-	};
-
-}}
+}
 
 #endif
