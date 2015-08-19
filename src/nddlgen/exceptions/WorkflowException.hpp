@@ -19,28 +19,25 @@
 
 #include <exception>
 
-namespace nddlgen { namespace exceptions
+namespace nddlgen { namespace exceptions { class WorkflowException; }}
+
+class nddlgen::exceptions::WorkflowException : public std::exception
 {
 
-	class WorkflowException : public std::exception
-	{
+	protected:
 
-		protected:
+		std::string _workflowError;
 
-			std::string _workflowError;
+	public:
 
-		public:
+		explicit WorkflowException(const std::string& workflowError): _workflowError(workflowError) {}
+		virtual ~WorkflowException() throw (){}
 
-			explicit WorkflowException(const std::string& workflowError): _workflowError(workflowError) {}
-			virtual ~WorkflowException() throw (){}
+		virtual const char* what() const throw()
+		{
+			return this->_workflowError.c_str();
+		}
 
-			virtual const char* what() const throw()
-			{
-				return this->_workflowError.c_str();
-			}
-
-	};
-
-}}
+};
 
 #endif

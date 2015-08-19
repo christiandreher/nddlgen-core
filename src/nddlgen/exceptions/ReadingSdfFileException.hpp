@@ -19,29 +19,26 @@
 
 #include <exception>
 
-namespace nddlgen { namespace exceptions
+namespace nddlgen { namespace exceptions { class ReadingSdfFileException; }}
+
+class nddlgen::exceptions::ReadingSdfFileException : public std::exception
 {
 
-	class ReadingSdfFileException : public std::exception
-	{
+	protected:
 
-		protected:
+		std::string _cerrOutput;
 
-    		std::string _cerrOutput;
+	public:
 
-		public:
+		explicit ReadingSdfFileException(const std::string& message): _cerrOutput(message) {}
+		virtual ~ReadingSdfFileException() throw (){}
 
-			explicit ReadingSdfFileException(const std::string& message): _cerrOutput(message) {}
-			virtual ~ReadingSdfFileException() throw (){}
+		virtual const char* what() const throw()
+		{
+			std::string errorMsg = "Unable to read .sdf file.\n" + this->_cerrOutput;
+			return errorMsg.c_str();
+		}
 
-			virtual const char* what() const throw()
-			{
-				std::string errorMsg = "Unable to read .sdf file.\n" + this->_cerrOutput;
-				return errorMsg.c_str();
-			}
-
-	};
-
-}}
+};
 
 #endif

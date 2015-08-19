@@ -19,24 +19,21 @@
 
 #include <exception>
 
-namespace nddlgen { namespace exceptions
+namespace nddlgen { namespace exceptions { class ControllerConfigIsReadOnlyException; }}
+
+class nddlgen::exceptions::ControllerConfigIsReadOnlyException : public std::exception
 {
 
-	class ControllerConfigIsReadOnlyException : public std::exception
-	{
+	public:
 
-		public:
+		ControllerConfigIsReadOnlyException() {}
+		virtual ~ControllerConfigIsReadOnlyException() throw (){}
 
-			ControllerConfigIsReadOnlyException() {}
-			virtual ~ControllerConfigIsReadOnlyException() throw (){}
+		virtual const char* what() const throw()
+		{
+			return "This ControllerConfig object was marked read-only.";
+		}
 
-			virtual const char* what() const throw()
-			{
-				return "This ControllerConfig object was marked read-only.";
-			}
-
-	};
-
-}}
+};
 
 #endif

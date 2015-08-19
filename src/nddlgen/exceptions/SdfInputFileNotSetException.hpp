@@ -19,24 +19,21 @@
 
 #include <exception>
 
-namespace nddlgen { namespace exceptions
+namespace nddlgen { namespace exceptions { class SdfInputFileNotSetException; }}
+
+class nddlgen::exceptions::SdfInputFileNotSetException : public std::exception
 {
 
-	class SdfInputFileNotSetException : public std::exception
-	{
+	public:
 
-		public:
+		SdfInputFileNotSetException() {}
+		virtual ~SdfInputFileNotSetException() throw (){}
 
-			SdfInputFileNotSetException() {}
-			virtual ~SdfInputFileNotSetException() throw (){}
+		virtual const char* what() const throw()
+		{
+			return "SDF input file has not been set.";
+		}
 
-			virtual const char* what() const throw()
-			{
-				return "SDF input file has not been set.";
-			}
-
-	};
-
-}}
+};
 
 #endif

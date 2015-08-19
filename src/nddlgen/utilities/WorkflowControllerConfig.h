@@ -21,61 +21,58 @@
 
 #include <nddlgen/exceptions/ControllerConfigIsReadOnlyException.hpp>
 
-namespace nddlgen { namespace utilities
+namespace nddlgen { namespace utilities { class WorkflowControllerConfig; }}
+
+class nddlgen::utilities::WorkflowControllerConfig
 {
 
-	class WorkflowControllerConfig
-	{
+	private:
 
-		private:
+		std::string _adapter;
+		std::string _sdfInputFile;
+		std::string _isdInputFile;
+		std::string _outputFilesPath;
+		bool _readOnly;
 
-			std::string _adapter;
-			std::string _sdfInputFile;
-			std::string _isdInputFile;
-			std::string _outputFilesPath;
-			bool _readOnly;
+		void trySet();
 
-			void trySet();
+		/**
+		 * Normalizes existing and non-existing paths. From: http://stackoverflow.com/a/12797413/2938082
+		 * Courtesy of jarzec (stackoverflow community member)
+		 *
+		 * @param path Path to be normalized
+		 *
+		 * @return Normalized path as string
+		 */
+		std::string normalizePath(const boost::filesystem::path &path);
 
-			/**
-			 * Normalizes existing and non-existing paths. From: http://stackoverflow.com/a/12797413/2938082
-			 * Courtesy of jarzec (stackoverflow community member)
-			 *
-			 * @param path Path to be normalized
-			 *
-			 * @return Normalized path as string
-			 */
-			std::string normalizePath(const boost::filesystem::path &path);
+	public:
 
-		public:
+		WorkflowControllerConfig();
+		virtual ~WorkflowControllerConfig();
 
-			WorkflowControllerConfig();
-			virtual ~WorkflowControllerConfig();
+		void setAdapter(std::string adapter);
+		void setSdfInputFile(std::string sdfInputFile);
+		void setIsdInputFile(std::string isdInputFile);
+		void setOutputFilesPath(std::string outputFilesPath);
+		void setReadOnly();
 
-			void setAdapter(std::string adapter);
-			void setSdfInputFile(std::string sdfInputFile);
-			void setIsdInputFile(std::string isdInputFile);
-			void setOutputFilesPath(std::string outputFilesPath);
-			void setReadOnly();
+		std::string getAdapter();
+		std::string getSdfInputFile();
+		std::string getSdfInputFileExt();
+		std::string getSdfInputFileName();
+		std::string getSdfInputFilePath();
+		std::string getIsdInputFile();
+		std::string getIsdInputFileExt();
+		std::string getIsdInputFileName();
+		std::string getIsdInputFilePath();
+		std::string getOutputFilesPath();
+		std::string getOutputModelFile();
+		std::string getOutputModelFileName();
+		std::string getOutputInitialStateFile();
+		std::string getOutputInitialStateFileName();
 
-			std::string getAdapter();
-			std::string getSdfInputFile();
-			std::string getSdfInputFileExt();
-			std::string getSdfInputFileName();
-			std::string getSdfInputFilePath();
-			std::string getIsdInputFile();
-			std::string getIsdInputFileExt();
-			std::string getIsdInputFileName();
-			std::string getIsdInputFilePath();
-			std::string getOutputFilesPath();
-			std::string getOutputModelFile();
-			std::string getOutputModelFileName();
-			std::string getOutputInitialStateFile();
-			std::string getOutputInitialStateFileName();
-
-			bool isReadOnly();
-	};
-
-}}
+		bool isReadOnly();
+};
 
 #endif

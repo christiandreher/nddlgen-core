@@ -19,24 +19,21 @@
 
 #include <exception>
 
-namespace nddlgen { namespace exceptions
+namespace nddlgen { namespace exceptions { class IsdInputFileNotSetException; }}
+
+class nddlgen::exceptions::IsdInputFileNotSetException : public std::exception
 {
 
-	class IsdInputFileNotSetException : public std::exception
-	{
+	public:
 
-		public:
+		IsdInputFileNotSetException() {}
+		virtual ~IsdInputFileNotSetException() throw (){}
 
-			IsdInputFileNotSetException() {}
-			virtual ~IsdInputFileNotSetException() throw (){}
+		virtual const char* what() const throw()
+		{
+			return "ISD input file has not been set.";
+		}
 
-			virtual const char* what() const throw()
-			{
-				return "ISD input file has not been set.";
-			}
-
-	};
-
-}}
+};
 
 #endif

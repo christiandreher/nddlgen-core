@@ -19,24 +19,21 @@
 
 #include <exception>
 
-namespace nddlgen { namespace exceptions
+namespace nddlgen { namespace exceptions { class FileMustBeSdfException; }}
+
+class nddlgen::exceptions::FileMustBeSdfException : public std::exception
 {
 
-	class FileMustBeSdfException : public std::exception
-	{
+	public:
 
-		public:
+		FileMustBeSdfException() {}
+		virtual ~FileMustBeSdfException() throw (){}
 
-			FileMustBeSdfException() {}
-			virtual ~FileMustBeSdfException() throw (){}
+		virtual const char* what() const throw()
+		{
+			return "File must be an .sdf file.";
+		}
 
-			virtual const char* what() const throw()
-			{
-				return "File must be an .sdf file.";
-			}
-
-	};
-
-}}
+};
 
 #endif

@@ -19,24 +19,21 @@
 
 #include <exception>
 
-namespace nddlgen { namespace exceptions
+namespace nddlgen { namespace exceptions { class ParseDataStructureException; }}
+
+class nddlgen::exceptions::ParseDataStructureException : public std::exception
 {
 
-	class ParseDataStructureException : public std::exception
-	{
+	public:
 
-		public:
+		ParseDataStructureException() {}
+		virtual ~ParseDataStructureException() throw (){}
 
-			ParseDataStructureException() {}
-			virtual ~ParseDataStructureException() throw (){}
+		virtual const char* what() const throw()
+		{
+			return "Data structure could not be parsed.";
+		}
 
-			virtual const char* what() const throw()
-			{
-				return "Data structure could not be parsed.";
-			}
-
-	};
-
-}}
+};
 
 #endif

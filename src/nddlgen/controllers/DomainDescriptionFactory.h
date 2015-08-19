@@ -19,7 +19,7 @@
 
 #include <sdf/sdf.hh>
 
-#include <nddlgen/controller/NddlGeneratableFactory.h>
+#include <nddlgen/controllers/NddlGeneratableFactory.h>
 #include <nddlgen/models/ArmModel.h>
 #include <nddlgen/models/DomainDescriptionModel.h>
 #include <nddlgen/models/NddlGeneratable.h>
@@ -27,33 +27,30 @@
 #include <nddlgen/utilities/Types.hpp>
 #include <nddlgen/utilities/Foreach.hpp>
 
-namespace nddlgen { namespace controller
+namespace nddlgen { namespace controllers { class DomainDescriptionFactory; }}
+
+class nddlgen::controllers::DomainDescriptionFactory
 {
 
-	class DomainDescriptionFactory
-	{
+	private:
 
-		private:
+		DomainDescriptionFactory();
+		virtual ~DomainDescriptionFactory();
 
-			DomainDescriptionFactory();
-			virtual ~DomainDescriptionFactory();
+		static void instantiateWorkspace(nddlgen::models::DomainDescriptionModel* domainDescription);
+		static void populateModelListFromSdf(sdf::ElementPtr modelElements, nddlgen::types::ModelList* models);
+		static void addRelevantModelsToWorkspace(nddlgen::models::DomainDescriptionModel* domainDescription,
+				nddlgen::types::ModelList models);
+		static void calculateDependencies(nddlgen::models::DomainDescriptionModel* domainDescription,
+				nddlgen::types::ModelList models);
 
-			static void instantiateWorkspace(nddlgen::models::DomainDescriptionModel* domainDescription);
-			static void populateModelListFromSdf(sdf::ElementPtr modelElements, nddlgen::types::ModelList* models);
-			static void addRelevantModelsToWorkspace(nddlgen::models::DomainDescriptionModel* domainDescription,
-					nddlgen::types::ModelList models);
-			static void calculateDependencies(nddlgen::models::DomainDescriptionModel* domainDescription,
-					nddlgen::types::ModelList models);
+		static nddlgen::models::NddlGeneratable* instanceFactory(sdf::ElementPtr element);
 
-			static nddlgen::models::NddlGeneratable* instanceFactory(sdf::ElementPtr element);
+	public:
 
-		public:
+		static nddlgen::models::DomainDescriptionModel* build(nddlgen::types::SdfRoot sdfRoot,
+				nddlgen::types::IsdRoot isdRoot);
 
-			static nddlgen::models::DomainDescriptionModel* build(nddlgen::types::SdfRoot sdfRoot,
-					nddlgen::types::IsdRoot isdRoot);
-
-	};
-
-}}
+};
 
 #endif

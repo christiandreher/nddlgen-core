@@ -23,23 +23,20 @@
 
 #include <nddlgen/utilities/Types.hpp>
 
-namespace nddlgen { namespace controller
+namespace nddlgen { namespace controllers { class IsdParser; }}
+
+class nddlgen::controllers::IsdParser
 {
 
-	class IsdParser
-	{
+	private:
 
-		private:
+		IsdParser();
+		virtual ~IsdParser();
 
-			IsdParser();
-			virtual ~IsdParser();
+	public:
 
-		public:
+		static nddlgen::types::IsdRoot parseIsd(std::string filename);
 
-			static nddlgen::types::IsdRoot parseIsd(std::string filename);
-
-	};
-
-}}
+};
 
 #endif

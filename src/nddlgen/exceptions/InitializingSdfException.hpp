@@ -19,29 +19,26 @@
 
 #include <exception>
 
-namespace nddlgen { namespace exceptions
+namespace nddlgen { namespace exceptions { class InitializingSdfException; }}
+
+class nddlgen::exceptions::InitializingSdfException : public std::exception
 {
 
-	class InitializingSdfException : public std::exception
-	{
+	protected:
 
-		protected:
+		std::string _cerrOutput;
 
-	    	std::string _cerrOutput;
+	public:
 
-		public:
+		explicit InitializingSdfException(const std::string& message): _cerrOutput(message) {}
+		virtual ~InitializingSdfException() throw (){}
 
-			explicit InitializingSdfException(const std::string& message): _cerrOutput(message) {}
-			virtual ~InitializingSdfException() throw (){}
+		virtual const char* what() const throw()
+		{
+			std:: string errorMsg = "Unable to initialize .sdf file.\n" + this->_cerrOutput;
+			return errorMsg.c_str();
+		}
 
-			virtual const char* what() const throw()
-			{
-				std:: string errorMsg = "Unable to initialize .sdf file.\n" + this->_cerrOutput;
-				return errorMsg.c_str();
-			}
-
-	};
-
-}}
+};
 
 #endif

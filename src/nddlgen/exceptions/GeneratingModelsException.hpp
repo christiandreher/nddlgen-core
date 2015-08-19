@@ -19,24 +19,21 @@
 
 #include <exception>
 
-namespace nddlgen { namespace exceptions
+namespace nddlgen { namespace exceptions { class GeneratingModelsException; }}
+
+class nddlgen::exceptions::GeneratingModelsException : public std::exception
 {
 
-	class GeneratingModelsException : public std::exception
-	{
+	public:
 
-		public:
+		GeneratingModelsException() {}
+		virtual ~GeneratingModelsException() throw (){}
 
-			GeneratingModelsException() {}
-			virtual ~GeneratingModelsException() throw (){}
+		virtual const char* what() const throw()
+		{
+			return "Models NDDL file could not be generated.";
+		}
 
-			virtual const char* what() const throw()
-			{
-				return "Models NDDL file could not be generated.";
-			}
-
-	};
-
-}}
+};
 
 #endif

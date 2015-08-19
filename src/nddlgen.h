@@ -17,16 +17,65 @@
 #ifndef NDDLGEN_H_
 #define NDDLGEN_H_
 
-#include <nddlgen/controller/WorkflowController.h>
+#include <nddlgen/controllers/WorkflowController.h>
 #include <nddlgen/utilities/WorkflowControllerConfig.h>
+#include <nddlgen/utilities/Meta.h>
 
+/**
+ * Root namespace of nddlgen. Also a convenient-namespace with short-hand typedefs to use the
+ * rudimentary functionality of this library as known from other libraries. Internally, the
+ * library is structured using nested namespaces which can also be used explicitly if needed.
+ *
+ * @author Christian Dreher
+ */
 namespace nddlgen
 {
 
+	/**
+	 * Groups all controller, factories and parsers
+	 */
+	namespace controllers
+	{
+
+	}
+
+	/**
+	 * Groups all exceptions that may be thrown using nddlgen
+	 */
+	namespace exceptions
+	{
+
+	}
+
+	/**
+	 * Groups all models used by nddlgen
+	 */
+	namespace models
+	{
+
+	}
+
+	/**
+	 * Groups utilities like meta information, include-all-headers, macros and types
+	 */
+	namespace utilities
+	{
+
+	}
+
+	/**
+	 * @see nddlgen::utilities::Meta::NDDLGEN_VERSION
+	 */
 	static const std::string VERSION = nddlgen::utilities::Meta::NDDLGEN_VERSION;
 
-	typedef nddlgen::controller::WorkflowController Controller;
+	/**
+	 * @see nddlgen::controller::WorkflowController
+	 */
+	typedef nddlgen::controllers::WorkflowController Controller;
 
+	/**
+	 * @see nddlgen::controller::WorkflowControllerConfig
+	 */
 	typedef nddlgen::utilities::WorkflowControllerConfig ControllerConfig;
 
 }

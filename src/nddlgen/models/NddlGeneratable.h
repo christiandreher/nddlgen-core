@@ -24,7 +24,7 @@
 #include <nddlgen/utilities/Types.hpp>
 #include <nddlgen/utilities/WriteStream.hpp>
 #include <nddlgen/utilities/Foreach.hpp>
-#include <nddlgen/utilities/ModelAction.hpp>
+#include <nddlgen/utilities/ModelAction.h>
 
 namespace nddlgen { namespace models
 {

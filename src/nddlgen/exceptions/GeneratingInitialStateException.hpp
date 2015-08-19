@@ -19,24 +19,21 @@
 
 #include <exception>
 
-namespace nddlgen { namespace exceptions
+namespace nddlgen { namespace exceptions { class GeneratingInitialStateException; }}
+
+class nddlgen::exceptions::GeneratingInitialStateException : public std::exception
 {
 
-	class GeneratingInitialStateException : public std::exception
-	{
+	public:
 
-		public:
+		GeneratingInitialStateException() {}
+		virtual ~GeneratingInitialStateException() throw (){}
 
-			GeneratingInitialStateException() {}
-			virtual ~GeneratingInitialStateException() throw (){}
+		virtual const char* what() const throw()
+		{
+			return "Initial state NDDL file could not be generated.";
+		}
 
-			virtual const char* what() const throw()
-			{
-				return "Initial state NDDL file could not be generated.";
-			}
-
-	};
-
-}}
+};
 
 #endif

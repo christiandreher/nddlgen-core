@@ -19,24 +19,21 @@
 
 #include <exception>
 
-namespace nddlgen { namespace exceptions
+namespace nddlgen { namespace exceptions { class FileMustBeIsdException; }}
+
+class nddlgen::exceptions::FileMustBeIsdException : public std::exception
 {
 
-	class FileMustBeIsdException : public std::exception
-	{
+	public:
 
-		public:
+		FileMustBeIsdException() {}
+		virtual ~FileMustBeIsdException() throw (){}
 
-			FileMustBeIsdException() {}
-			virtual ~FileMustBeIsdException() throw (){}
+		virtual const char* what() const throw()
+		{
+			return "File must be an .isd file.";
+		}
 
-			virtual const char* what() const throw()
-			{
-				return "File must be an .isd file.";
-			}
-
-	};
-
-}}
+};
 
 #endif

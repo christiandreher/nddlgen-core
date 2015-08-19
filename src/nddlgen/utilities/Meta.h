@@ -19,23 +19,20 @@
 
 #include <string>
 
-namespace nddlgen { namespace utilities
+namespace nddlgen { namespace utilities { class Meta; }}
+
+class nddlgen::utilities::Meta
 {
+	public:
 
-	class Meta
-	{
-		public:
+		static const std::string NDDLGEN_VERSION;
+		static const std::string NDDLGEN_PROJECT_HOMEPAGE;
+		static const std::string NDDLGEN_SUPPORT_EMAIL;
+		static const std::string AUTHOR_CHR_DREHER_EMAIL;
 
-			static const std::string NDDLGEN_VERSION;
-			static const std::string NDDLGEN_PROJECT_HOMEPAGE;
-			static const std::string NDDLGEN_SUPPORT_EMAIL;
-			static const std::string AUTHOR_CHR_DREHER_EMAIL;
-
-		private:
-			Meta();
-			~Meta();
-	};
-
-}}
+	private:
+		Meta();
+		~Meta();
+};
 
 #endif

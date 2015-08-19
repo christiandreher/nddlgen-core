@@ -19,29 +19,26 @@
 
 #include <exception>
 
-namespace nddlgen { namespace exceptions
+namespace nddlgen { namespace exceptions { class FileAlreadyExistsException; }}
+
+class nddlgen::exceptions::FileAlreadyExistsException : public std::exception
 {
 
-	class FileAlreadyExistsException : public std::exception
-	{
+	protected:
 
-		protected:
+		std::string _fileName;
 
-			std::string _fileName;
+	public:
 
-		public:
+		explicit FileAlreadyExistsException(const std::string& fileName): _fileName(fileName) {}
+		virtual ~FileAlreadyExistsException() throw (){}
 
-			explicit FileAlreadyExistsException(const std::string& fileName): _fileName(fileName) {}
-			virtual ~FileAlreadyExistsException() throw (){}
+		virtual const char* what() const throw()
+		{
+			std::string output = "The file \"" + this->_fileName + "\" already exists.";
+			return output.c_str();
+		}
 
-			virtual const char* what() const throw()
-			{
-				std::string output = "The file \"" + this->_fileName + "\" already exists.";
-				return output.c_str();
-			}
-
-	};
-
-}}
+};
 
 #endif

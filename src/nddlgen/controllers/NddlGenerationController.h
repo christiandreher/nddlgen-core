@@ -28,28 +28,25 @@
 #include <nddlgen/utilities/WorkflowControllerConfig.h>
 #include <nddlgen/utilities/Meta.h>
 
-namespace nddlgen { namespace controller
+namespace nddlgen { namespace controllers { class NddlGenerationController; }}
+
+class nddlgen::controllers::NddlGenerationController
 {
 
-	class NddlGenerationController
-	{
+	private:
 
-		private:
+		static std::string getPrettifiedDate();
 
-			static std::string getPrettifiedDate();
+		NddlGenerationController();
+		virtual ~NddlGenerationController();
 
-			NddlGenerationController();
-			virtual ~NddlGenerationController();
+	public:
 
-		public:
+		static void writeModelFile(nddlgen::models::DomainDescriptionModel* domainDescription,
+				nddlgen::utilities::WorkflowControllerConfig* controllerConfig);
+		static void writeInitialStateFile(nddlgen::models::DomainDescriptionModel* domainDescription,
+				nddlgen::utilities::WorkflowControllerConfig* controllerConfig);
 
-			static void writeModelFile(nddlgen::models::DomainDescriptionModel* domainDescription,
-					nddlgen::utilities::WorkflowControllerConfig* controllerConfig);
-			static void writeInitialStateFile(nddlgen::models::DomainDescriptionModel* domainDescription,
-					nddlgen::utilities::WorkflowControllerConfig* controllerConfig);
-
-	};
-
-}}
+};
 
 #endif

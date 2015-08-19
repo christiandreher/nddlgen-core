@@ -19,29 +19,26 @@
 
 #include <exception>
 
-namespace nddlgen { namespace exceptions
+namespace nddlgen { namespace exceptions { class FileDoesNotExistException; }}
+
+class nddlgen::exceptions::FileDoesNotExistException : public std::exception
 {
 
-	class FileDoesNotExistException : public std::exception
-	{
+	protected:
 
-		protected:
+		std::string _fileName;
 
-			std::string _fileName;
+	public:
 
-		public:
+		explicit FileDoesNotExistException(const std::string& fileName): _fileName(fileName) {}
+		virtual ~FileDoesNotExistException() throw (){}
 
-			explicit FileDoesNotExistException(const std::string& fileName): _fileName(fileName) {}
-			virtual ~FileDoesNotExistException() throw (){}
+		virtual const char* what() const throw()
+		{
+			std::string output = "The file \"" + this->_fileName + "\" does not exist.";
+			return output.c_str();
+		}
 
-			virtual const char* what() const throw()
-			{
-				std::string output = "The file \"" + this->_fileName + "\" does not exist.";
-				return output.c_str();
-			}
-
-	};
-
-}}
+};
 
 #endif

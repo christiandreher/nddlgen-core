@@ -14,30 +14,33 @@
  * limitations under the License.
  */
 
-#ifndef NDDLGEN_CONTROLLER_NDDLGENERATABLEFACTORY_H_
-#define NDDLGEN_CONTROLLER_NDDLGENERATABLEFACTORY_H_
+#include <nddlgen/controllers/IsdParser.h>
 
-#include <boost/algorithm/string.hpp>
-
-#include <nddlgen/utilities/Models.hpp>
-
-namespace nddlgen { namespace controller
+nddlgen::controllers::IsdParser::IsdParser()
 {
 
-	class NddlGeneratableFactory
+}
+
+nddlgen::controllers::IsdParser::~IsdParser()
+{
+
+}
+
+nddlgen::types::IsdRoot nddlgen::controllers::IsdParser::parseIsd(std::string filename)
+{
+	TiXmlDocument isd(filename);
+
+	if (!isd.LoadFile())
 	{
+		return nullptr;
+	}
 
-		private:
+	nddlgen::types::IsdRoot root = isd.FirstChildElement("isd");
 
-			NddlGeneratableFactory();
-			virtual ~NddlGeneratableFactory();
+	if (!root)
+	{
+		return nullptr;
+	}
 
-		public:
-
-			static nddlgen::models::NddlGeneratable* fromString(std::string modelName);
-
-	};
-
-}}
-
-#endif
+	return root;
+}
