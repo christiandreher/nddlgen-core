@@ -42,7 +42,7 @@ void nddlgen::controllers::NddlGenerationController::writeModelFile(
 	std::string adapter = controllerConfig->getAdapter();
 	std::string outputFile = controllerConfig->getOutputModelFileName();
 	std::string sdfInputFile = controllerConfig->getSdfInputFileName();
-	std::string sdfInputFilePath = controllerConfig->getIsdInputFileName();
+	std::string sdfInputFilePath = controllerConfig->getSdfInputFilePath();
 	std::string now = NddlGenerationController::getPrettifiedDate();
 
 	// Disclaimer / Meta

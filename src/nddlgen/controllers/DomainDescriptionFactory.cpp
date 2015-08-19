@@ -16,6 +16,17 @@
 
 #include <nddlgen/controllers/DomainDescriptionFactory.h>
 
+nddlgen::controllers::DomainDescriptionFactory::DomainDescriptionFactory()
+{
+	this->_modelFactory = nullptr;
+}
+
+nddlgen::controllers::DomainDescriptionFactory::~DomainDescriptionFactory()
+{
+
+}
+
+
 nddlgen::models::DomainDescriptionModel* nddlgen::controllers::DomainDescriptionFactory::build(
 		nddlgen::types::SdfRoot sdfRoot,
 		nddlgen::types::IsdRoot isdRoot)
@@ -27,23 +38,19 @@ nddlgen::models::DomainDescriptionModel* nddlgen::controllers::DomainDescription
 	arm->setName("arm");
 	domainDescription->setArm(arm);
 
-	DomainDescriptionFactory::instantiateWorkspace(domainDescription);
-	DomainDescriptionFactory::populateModelListFromSdf(sdfRoot->GetElement("world")->GetElement("model"), &models);
-	DomainDescriptionFactory::addRelevantModelsToWorkspace(domainDescription, models);
-	DomainDescriptionFactory::calculateDependencies(domainDescription, models);
+	this->instantiateWorkspace(domainDescription);
+	this->populateModelListFromSdf(sdfRoot->GetElement("world")->GetElement("model"), &models);
+	this->addRelevantModelsToWorkspace(domainDescription, models);
+	this->calculateDependencies(domainDescription, models);
 
 	return domainDescription;
 }
 
 
-nddlgen::controllers::DomainDescriptionFactory::DomainDescriptionFactory()
+void nddlgen::controllers::DomainDescriptionFactory::setModelFactory(
+		nddlgen::controllers::NddlGeneratableFactory* modelFactory)
 {
-
-}
-
-nddlgen::controllers::DomainDescriptionFactory::~DomainDescriptionFactory()
-{
-
+	this->_modelFactory = modelFactory;
 }
 
 
@@ -81,7 +88,7 @@ void nddlgen::controllers::DomainDescriptionFactory::addRelevantModelsToWorkspac
 
 	foreach (sdf::ElementPtr model, models)
 	{
-		nddlgen::models::NddlGeneratable* generatableModel = DomainDescriptionFactory::instanceFactory(model);
+		nddlgen::models::NddlGeneratable* generatableModel = this->instanceFactory(model);
 
 		if (generatableModel != nullptr)
 		{
@@ -102,6 +109,12 @@ nddlgen::models::NddlGeneratable* nddlgen::controllers::DomainDescriptionFactory
 		sdf::ElementPtr element)
 {
 	std::string elementName = element->GetAttribute("name")->GetAsString();
+	nddlgen::models::NddlGeneratable* instance = this->_modelFactory->fromString(elementName);
 
-	return nddlgen::controllers::NddlGeneratableFactory::fromString(elementName);
+	if (instance != nullptr)
+	{
+		instance->setName(elementName);
+	}
+
+	return instance;
 }

@@ -129,14 +129,19 @@ namespace nddlgen { namespace models
 	{
 		std::string constructorHeader = this->getClassName() + "(";
 
-		foreach (nddlgen::models::NddlGeneratable& generatableModelObject, this->_models)
+		if (this->_models.size() > 0)
 		{
-			nddlgen::models::NddlGeneratable* generatableModel = &generatableModelObject;
-			std::string parameter = generatableModel->getClassName() + " " + generatableModel->getNamePrefSuff() + ", ";
-			constructorHeader += parameter;
+			foreach (nddlgen::models::NddlGeneratable& generatableModelObject, this->_models)
+			{
+				nddlgen::models::NddlGeneratable* generatableModel = &generatableModelObject;
+				std::string parameter = generatableModel->getClassName() + " " + generatableModel->getNamePrefSuff() + ", ";
+				constructorHeader += parameter;
+			}
+
+			constructorHeader = constructorHeader.substr(0, constructorHeader.length() - 2);
 		}
 
-		constructorHeader = constructorHeader.substr(0, constructorHeader.length() - 2) + ")";
+		constructorHeader += ")";
 
 		wrln(1, constructorHeader,								1);
 		wrln(1, "{",											1);

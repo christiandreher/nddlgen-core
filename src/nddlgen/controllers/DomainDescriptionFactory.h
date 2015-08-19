@@ -17,6 +17,7 @@
 #ifndef NDDLGEN_CONTROLLER_DOMAINDESCRIPTIONFACTORY_H_
 #define NDDLGEN_CONTROLLER_DOMAINDESCRIPTIONFACTORY_H_
 
+#include <cstddef>
 #include <sdf/sdf.hh>
 
 #include <nddlgen/controllers/NddlGeneratableFactory.h>
@@ -34,22 +35,27 @@ class nddlgen::controllers::DomainDescriptionFactory
 
 	private:
 
-		DomainDescriptionFactory();
-		virtual ~DomainDescriptionFactory();
-
-		static void instantiateWorkspace(nddlgen::models::DomainDescriptionModel* domainDescription);
-		static void populateModelListFromSdf(sdf::ElementPtr modelElements, nddlgen::types::ModelList* models);
-		static void addRelevantModelsToWorkspace(nddlgen::models::DomainDescriptionModel* domainDescription,
+		void instantiateWorkspace(nddlgen::models::DomainDescriptionModel* domainDescription);
+		void populateModelListFromSdf(sdf::ElementPtr modelElements, nddlgen::types::ModelList* models);
+		void addRelevantModelsToWorkspace(nddlgen::models::DomainDescriptionModel* domainDescription,
 				nddlgen::types::ModelList models);
-		static void calculateDependencies(nddlgen::models::DomainDescriptionModel* domainDescription,
+		void calculateDependencies(nddlgen::models::DomainDescriptionModel* domainDescription,
 				nddlgen::types::ModelList models);
 
-		static nddlgen::models::NddlGeneratable* instanceFactory(sdf::ElementPtr element);
+		nddlgen::models::NddlGeneratable* instanceFactory(sdf::ElementPtr element);
+
+		nddlgen::controllers::NddlGeneratableFactory* _modelFactory;
 
 	public:
 
-		static nddlgen::models::DomainDescriptionModel* build(nddlgen::types::SdfRoot sdfRoot,
+		DomainDescriptionFactory();
+		virtual ~DomainDescriptionFactory();
+
+		nddlgen::models::DomainDescriptionModel* build(nddlgen::types::SdfRoot sdfRoot,
 				nddlgen::types::IsdRoot isdRoot);
+
+		void setModelFactory(nddlgen::controllers::NddlGeneratableFactory* modelFactory);
+
 
 };
 

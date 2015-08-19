@@ -17,23 +17,32 @@
 #ifndef NDDLGEN_CONTROLLER_NDDLGENERATABLEFACTORY_H_
 #define NDDLGEN_CONTROLLER_NDDLGENERATABLEFACTORY_H_
 
+#include <map>
+
 #include <boost/algorithm/string.hpp>
 
 #include <nddlgen/utilities/Models.hpp>
 
 namespace nddlgen { namespace controllers { class NddlGeneratableFactory; }}
 
+typedef nddlgen::models::NddlGeneratable* (*CreateNddlGeneratable)(void);
+typedef std::map<std::string, CreateNddlGeneratable> NddlGeneratableMap;
+
 class nddlgen::controllers::NddlGeneratableFactory
 {
 
-	private:
+	protected:
+
+		NddlGeneratableMap _registeredNddlGeneratables;
+		void registerNddlGeneratable(std::string modelName, CreateNddlGeneratable createFunction);
+
+	public:
 
 		NddlGeneratableFactory();
 		virtual ~NddlGeneratableFactory();
 
-	public:
-
-		static nddlgen::models::NddlGeneratable* fromString(std::string modelName);
+		nddlgen::models::NddlGeneratable* fromString(std::string modelName);
+		virtual void registerNddlGeneratables() = 0;
 
 };
 

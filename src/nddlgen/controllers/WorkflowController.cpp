@@ -106,8 +106,15 @@ void nddlgen::controllers::WorkflowController::buildDomainDescription()
 	// Assert that all preconditions are met. Throw exception if not
 	this->assertBuildDomainDescriptionPreconditions();
 
+	// Instantiate and initialize DomainDescriptionFactory
+	nddlgen::controllers::DomainDescriptionFactory* ddf = new nddlgen::controllers::DomainDescriptionFactory();
+	ddf->setModelFactory(this->_config->getModelFactory());
+
 	// Build the domain description model
-	this->_domainDescription = nddlgen::controllers::DomainDescriptionFactory::build(this->_sdfRoot, this->_isdRoot);
+	this->_domainDescription = ddf->build(this->_sdfRoot, this->_isdRoot);
+
+	// Delete DomainDescriptionFactory object
+	boost::checked_delete(ddf);
 
 	// Set workflow control flag
 	this->_isDomainDescriptionBuilt = true;

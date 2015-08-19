@@ -17,8 +17,11 @@
 #ifndef NDDLGEN_UTILITIES_WORKFLOWCONTROLLERCONFIG_H_
 #define NDDLGEN_UTILITIES_WORKFLOWCONTROLLERCONFIG_H_
 
+#include <cstddef>
+
 #include <boost/filesystem.hpp>
 
+#include <nddlgen/controllers/NddlGeneratableFactory.h>
 #include <nddlgen/exceptions/ControllerConfigIsReadOnlyException.hpp>
 
 namespace nddlgen { namespace utilities { class WorkflowControllerConfig; }}
@@ -33,6 +36,7 @@ class nddlgen::utilities::WorkflowControllerConfig
 		std::string _isdInputFile;
 		std::string _outputFilesPath;
 		bool _readOnly;
+		nddlgen::controllers::NddlGeneratableFactory* _modelFactory;
 
 		void trySet();
 
@@ -56,6 +60,7 @@ class nddlgen::utilities::WorkflowControllerConfig
 		void setIsdInputFile(std::string isdInputFile);
 		void setOutputFilesPath(std::string outputFilesPath);
 		void setReadOnly();
+		void setModelFactory(nddlgen::controllers::NddlGeneratableFactory* modelFactory);
 
 		std::string getAdapter();
 		std::string getSdfInputFile();
@@ -71,6 +76,7 @@ class nddlgen::utilities::WorkflowControllerConfig
 		std::string getOutputModelFileName();
 		std::string getOutputInitialStateFile();
 		std::string getOutputInitialStateFileName();
+		nddlgen::controllers::NddlGeneratableFactory* getModelFactory();
 
 		bool isReadOnly();
 };

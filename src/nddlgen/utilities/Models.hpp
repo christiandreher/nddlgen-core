@@ -18,12 +18,8 @@
 #define NDDLGEN_UTILITIES_MODELS_HPP_
 
 #include <nddlgen/models/ArmModel.h>
-#include <nddlgen/models/BoxModel.h>
 #include <nddlgen/models/DomainDescriptionModel.h>
-#include <nddlgen/models/LidBoxModel.h>
 #include <nddlgen/models/NddlGeneratable.h>
-#include <nddlgen/models/ObjectSlideModel.h>
-#include <nddlgen/models/ObjectSlideContainerModel.h>
 #include <nddlgen/models/WorkspaceModel.h>
 
 #endif

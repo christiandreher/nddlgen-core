@@ -29,34 +29,25 @@ nddlgen::controllers::NddlGeneratableFactory::~NddlGeneratableFactory()
 nddlgen::models::NddlGeneratable* nddlgen::controllers::NddlGeneratableFactory::fromString(std::string modelName)
 {
 	std::string modelNameLc = boost::algorithm::to_lower_copy(modelName);
+	NddlGeneratableMap::reverse_iterator i;
 
-	nddlgen::models::NddlGeneratable* instance;
-
-	if (boost::algorithm::contains(modelNameLc, "lidbox"))
+	// Using reverse iterator, so that non-prefix-free keys are not matched wrong.
+	for (i = this->_registeredNddlGeneratables.rbegin(); i != this->_registeredNddlGeneratables.rend(); i++)
 	{
-		instance = new nddlgen::models::LidBoxModel();
-	}
-	else if (boost::algorithm::contains(modelNameLc, "box"))
-	{
-		instance = new nddlgen::models::BoxModel();
-	}
-	else if (boost::algorithm::contains(modelNameLc, "objectslidecontainer"))
-	{
-		instance = new nddlgen::models::ObjectSlideContainerModel();
-	}
-	else if (boost::algorithm::contains(modelNameLc, "objectslide"))
-	{
-		instance = new nddlgen::models::ObjectSlideModel();
-	}
-	else
-	{
-		instance = nullptr;
+		if (boost::algorithm::contains(modelName, i->first))
+		{
+			return i->second();
+		}
 	}
 
-	if (instance != nullptr)
-	{
-		instance->setName(modelName);
-	}
+	return nullptr;
+}
 
-	return instance;
+void nddlgen::controllers::NddlGeneratableFactory::registerNddlGeneratable(
+		std::string modelName,
+		CreateNddlGeneratable createFunction)
+{
+	std::string modelNameLc = boost::algorithm::to_lower_copy(modelName);
+
+	this->_registeredNddlGeneratables[modelNameLc] = createFunction;
 }
