@@ -29,10 +29,10 @@ nddlgen::controllers::NddlGeneratableFactory::~NddlGeneratableFactory()
 nddlgen::models::NddlGeneratable* nddlgen::controllers::NddlGeneratableFactory::fromString(std::string modelName)
 {
 	std::string modelNameLc = boost::algorithm::to_lower_copy(modelName);
-	NddlGeneratableMap::reverse_iterator i;
 
 	// Using reverse iterator, so that non-prefix-free keys are not matched wrong.
-	for (i = this->_registeredNddlGeneratables.rbegin(); i != this->_registeredNddlGeneratables.rend(); i++)
+	for (NddlGeneratableMap::reverse_iterator i = this->_registeredNddlGeneratables.rbegin();
+			i != this->_registeredNddlGeneratables.rend(); i++)
 	{
 		if (boost::algorithm::contains(modelName, i->first))
 		{
