@@ -2,7 +2,7 @@
 
 ## General
 
-This package is the core of the nddl-generator. It is compiled as a static library and should then be included in the corresponding application (for example nddl-generator-cli, nddl-generator-gui or nddl-generator-core-test)
+This package is the core of the nddl-generator. It is compiled as a shared library and should then be included in the corresponding application (for example nddl-generator-cli, nddl-generator-gui or nddl-generator-core-test)
 
 ## Dependencies
 
