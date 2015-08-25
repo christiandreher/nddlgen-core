@@ -21,6 +21,7 @@
 #include <sdf/sdf.hh>
 
 #include <nddlgen/controllers/NddlGeneratableFactory.h>
+#include <nddlgen/exceptions/ModelFactoryNotSetException.hpp>
 #include <nddlgen/models/ArmModel.h>
 #include <nddlgen/models/DomainDescriptionModel.h>
 #include <nddlgen/models/NddlGeneratable.h>

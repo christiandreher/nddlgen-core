@@ -31,6 +31,11 @@ nddlgen::models::DomainDescriptionModel* nddlgen::controllers::DomainDescription
 		nddlgen::types::SdfRoot sdfRoot,
 		nddlgen::types::IsdRoot isdRoot)
 {
+	if (this->_modelFactory == nullptr)
+	{
+		throw nddlgen::exceptions::ModelFactoryNotSetException();
+	}
+
 	nddlgen::models::DomainDescriptionModel* domainDescription = new nddlgen::models::DomainDescriptionModel();
 	nddlgen::models::ArmModel* arm = new nddlgen::models::ArmModel();
 	nddlgen::types::ModelList models;
