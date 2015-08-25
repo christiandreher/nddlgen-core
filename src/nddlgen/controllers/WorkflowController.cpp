@@ -22,9 +22,6 @@ nddlgen::controllers::WorkflowController::WorkflowController(nddlgen::utilities:
 	config->setReadOnly();
 	this->_config = config;
 
-	// Save standard cerr buffer to be able to restore it when it must be changed
-	this->_cerrStdRdBuf = std::cerr.rdbuf();
-
 	// Workflow control flags
 	this->_isSdfInputFileParsed = false;
 	this->_isIsdInputFileParsed = false;
@@ -61,29 +58,29 @@ void nddlgen::controllers::WorkflowController::parseSdfInputFile()
 	sdf::SDFPtr sdf(new sdf::SDF);
 
 	// Disable standard cerr output, since the output of the SDF library can't be suppressed otherwise
-	this->disableCerr();
+	nddlgen::utilities::StdCerrHandler::disableCerr();
 
 	// Init .sdf based on installed sdf_format.xml file
 	if (!sdf::init(sdf))
 	{
 		// Re-enable standard cerr
-		this->enableCerr();
-		throw nddlgen::exceptions::InitializingSdfException(this->getBufferedCerrOutput());
+		nddlgen::utilities::StdCerrHandler::enableCerr();
+		throw nddlgen::exceptions::InitializingSdfException(nddlgen::utilities::StdCerrHandler::getBufferedCerrOutput());
 	}
 
 	// Try to read the file and parse SDF
 	if (!sdf::readFile(this->_config->getSdfInputFile(), sdf))
 	{
 		// Re-enable cerr
-		this->enableCerr();
-		throw nddlgen::exceptions::ReadingSdfFileException(this->getBufferedCerrOutput());
+		nddlgen::utilities::StdCerrHandler::enableCerr();
+		throw nddlgen::exceptions::ReadingSdfFileException(nddlgen::utilities::StdCerrHandler::getBufferedCerrOutput());
 	}
 
 	// Write SDF document root to member
 	this->_sdfRoot = sdf->root;
 
 	// Re-enable cerr
-	this->enableCerr();
+	nddlgen::utilities::StdCerrHandler::enableCerr();
 
 	// Set workflow control flag
 	this->_isSdfInputFileParsed = true;
@@ -273,23 +270,4 @@ void nddlgen::controllers::WorkflowController::assertWriteNddlInitialStateFilePr
 	{
 		throw nddlgen::exceptions::FileAlreadyExistsException(this->_config->getOutputInitialStateFile());
 	}
-}
-
-
-void nddlgen::controllers::WorkflowController::disableCerr()
-{
-	// Disable std::cerr by setting custom read buffer
-	std::cerr.rdbuf(this->_cerrOvRdBuf.rdbuf());
-}
-
-void nddlgen::controllers::WorkflowController::enableCerr()
-{
-	// Re-enabling std::cerr by restoring initial value
-	std::cerr.rdbuf(this->_cerrStdRdBuf);
-}
-
-std::string nddlgen::controllers::WorkflowController::getBufferedCerrOutput()
-{
-	// Return contents of custom read buffer
-	return this->_cerrOvRdBuf.str();
 }
