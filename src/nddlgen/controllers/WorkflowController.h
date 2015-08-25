@@ -19,7 +19,6 @@
 
 #include <cstdlib>
 #include <string>
-#include <sys/stat.h>
 
 #include <sdf/sdf.hh>
 
@@ -29,6 +28,7 @@
 #include <nddlgen/utilities/WorkflowControllerConfig.h>
 #include <nddlgen/utilities/Exceptions.hpp>
 #include <nddlgen/utilities/Types.hpp>
+#include <nddlgen/utilities/StdCerrHandler.h>
 
 namespace nddlgen { namespace controllers { class WorkflowController; }}
 
@@ -91,17 +91,6 @@ class nddlgen::controllers::WorkflowController
 
 
 		/**
-		 * Stringstream to override the default cerr buffer.
-		 */
-		std::stringstream _cerrOvRdBuf;
-
-		/**
-		 * Default cerr buffer.
-		 */
-		std::streambuf* _cerrStdRdBuf;
-
-
-		/**
 		 * Helper function to assure that all preconditions are met to execute the
 		 * parseSdfInputFile function.
 		 */
@@ -136,25 +125,6 @@ class nddlgen::controllers::WorkflowController
 		 * 		same name already exists
 		 */
 		void assertWriteNddlInitialStateFilePreconditions(bool forceOverwrite);
-
-
-		/**
-		 * Helper to disable the cerr output to the console.
-		 */
-		void disableCerr();
-
-		/**
-		 * Helper to enable the standard cerr output to the console.
-		 */
-		void enableCerr();
-
-		/**
-		 * Helper to get the cerr output which has been buffered while the
-		 * standard cerr output was disabled.
-		 *
-		 * @return Buffered cerr output
-		 */
-		std::string getBufferedCerrOutput();
 
 	public:
 
