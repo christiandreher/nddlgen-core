@@ -21,6 +21,10 @@
 
 #include <tinyxml.h>
 
+#include <nddlgen/exceptions/IsdInputFileNotSetException.hpp>
+#include <nddlgen/exceptions/FileMustBeIsdException.hpp>
+#include <nddlgen/exceptions/FileDoesNotExistException.hpp>
+#include <nddlgen/utilities/WorkflowControllerConfig.h>
 #include <nddlgen/utilities/Types.hpp>
 
 namespace nddlgen { namespace controllers { class IsdParser; }}
@@ -30,12 +34,16 @@ class nddlgen::controllers::IsdParser
 
 	private:
 
-		IsdParser();
-		virtual ~IsdParser();
+		nddlgen::utilities::WorkflowControllerConfig* _config;
+
+		void checkAssertions();
 
 	public:
 
-		static nddlgen::types::IsdRoot parseIsd(std::string filename);
+		IsdParser(nddlgen::utilities::WorkflowControllerConfig* config);
+		virtual ~IsdParser();
+
+		nddlgen::types::IsdRoot parseIsd();
 
 };
 

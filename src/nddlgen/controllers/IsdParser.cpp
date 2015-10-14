@@ -16,9 +16,9 @@
 
 #include <nddlgen/controllers/IsdParser.h>
 
-nddlgen::controllers::IsdParser::IsdParser()
+nddlgen::controllers::IsdParser::IsdParser(nddlgen::utilities::WorkflowControllerConfig* config)
 {
-
+	this->_config = config;
 }
 
 nddlgen::controllers::IsdParser::~IsdParser()
@@ -26,9 +26,12 @@ nddlgen::controllers::IsdParser::~IsdParser()
 
 }
 
-nddlgen::types::IsdRoot nddlgen::controllers::IsdParser::parseIsd(std::string filename)
+nddlgen::types::IsdRoot nddlgen::controllers::IsdParser::parseIsd()
 {
-	TiXmlDocument isd(filename);
+	// Assert that all preconditions are met. Throw exception if not
+	this->checkAssertions();
+
+	TiXmlDocument isd(this->_config->getIsdInputFile());
 
 	if (!isd.LoadFile())
 	{
@@ -43,4 +46,25 @@ nddlgen::types::IsdRoot nddlgen::controllers::IsdParser::parseIsd(std::string fi
 	}
 
 	return root;
+}
+
+void nddlgen::controllers::IsdParser::checkAssertions()
+{
+	// Assert that an ISD input file has been set
+	if (this->_config->getIsdInputFile() == "")
+	{
+		throw nddlgen::exceptions::IsdInputFileNotSetException();
+	}
+
+	// Assert that the ISD input file has a .isd extention
+	if (this->_config->getIsdInputFileExt() != ".isd")
+	{
+		throw nddlgen::exceptions::FileMustBeIsdException();
+	}
+
+	// Assert that the ISD input file exists
+	if (!boost::filesystem::exists(this->_config->getIsdInputFile()))
+	{
+		throw nddlgen::exceptions::FileDoesNotExistException(this->_config->getIsdInputFile());
+	}
 }
