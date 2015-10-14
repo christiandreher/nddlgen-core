@@ -36,6 +36,8 @@ class nddlgen::controllers::DomainDescriptionFactory
 
 	private:
 
+		nddlgen::controllers::NddlGeneratableFactory* _modelFactory;
+
 		void instantiateWorkspace(nddlgen::models::DomainDescriptionModel* domainDescription);
 		void populateModelListFromSdf(sdf::ElementPtr modelElements, nddlgen::types::ModelList* models);
 		void addRelevantModelsToWorkspace(nddlgen::models::DomainDescriptionModel* domainDescription,
@@ -43,9 +45,10 @@ class nddlgen::controllers::DomainDescriptionFactory
 		void calculateDependencies(nddlgen::models::DomainDescriptionModel* domainDescription,
 				nddlgen::types::ModelList models);
 
-		nddlgen::models::NddlGeneratable* instanceFactory(sdf::ElementPtr element);
+		void populateInitialStateFromIsd(nddlgen::models::DomainDescriptionModel* domainDescription,
+				nddlgen::types::IsdRoot isdRoot);
 
-		nddlgen::controllers::NddlGeneratableFactory* _modelFactory;
+		nddlgen::models::NddlGeneratable* instanceFactory(sdf::ElementPtr element);
 
 	public:
 

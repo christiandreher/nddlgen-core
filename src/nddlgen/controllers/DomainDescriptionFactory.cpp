@@ -48,6 +48,8 @@ nddlgen::models::DomainDescriptionModel* nddlgen::controllers::DomainDescription
 	this->addRelevantModelsToWorkspace(domainDescription, models);
 	this->calculateDependencies(domainDescription, models);
 
+	this->populateInitialStateFromIsd(domainDescription, isdRoot);
+
 	return domainDescription;
 }
 
@@ -107,6 +109,13 @@ void nddlgen::controllers::DomainDescriptionFactory::calculateDependencies(
 		nddlgen::types::ModelList models)
 {
 	domainDescription->getArm()->getWorkspace()->postInitProcessing();
+}
+
+void nddlgen::controllers::DomainDescriptionFactory::populateInitialStateFromIsd(
+		nddlgen::models::DomainDescriptionModel* domainDescription,
+		nddlgen::types::IsdRoot isdRoot)
+{
+	nddlgen::models::InitialStateModel* initialState = new nddlgen::models::InitialStateModel();
 }
 
 
