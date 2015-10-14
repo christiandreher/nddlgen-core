@@ -20,6 +20,7 @@
 #include <cstddef>
 
 #include <nddlgen/models/ArmModel.h>
+#include <nddlgen/models/InitialStateModel.h>
 
 namespace nddlgen { namespace models
 {
@@ -30,6 +31,7 @@ namespace nddlgen { namespace models
 		private:
 
 			nddlgen::models::ArmModel* _arm;
+			nddlgen::models::InitialStateModel* _initialState;
 
 		public:
 
@@ -38,6 +40,9 @@ namespace nddlgen { namespace models
 
 			void setArm(nddlgen::models::ArmModel* arm);
 			nddlgen::models::ArmModel* getArm();
+
+			void setInitialState(nddlgen::models::InitialStateModel* initialState);
+			nddlgen::models::InitialStateModel* getInitialState();
 
 	};
 

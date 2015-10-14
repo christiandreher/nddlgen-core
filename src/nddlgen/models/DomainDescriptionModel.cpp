@@ -22,11 +22,13 @@ namespace nddlgen { namespace models
 	DomainDescriptionModel::DomainDescriptionModel()
 	{
 		this->_arm = nullptr;
+		this->_initialState = nullptr;
 	}
 
 	DomainDescriptionModel::~DomainDescriptionModel()
 	{
 		boost::checked_delete(this->_arm);
+		boost::checked_delete(this->_initialState);
 	}
 
 	void DomainDescriptionModel::setArm(nddlgen::models::ArmModel* arm)
@@ -37,6 +39,16 @@ namespace nddlgen { namespace models
 	nddlgen::models::ArmModel* DomainDescriptionModel::getArm()
 	{
 		return this->_arm;
+	}
+
+	void DomainDescriptionModel::setInitialState(nddlgen::models::InitialStateModel* initialState)
+	{
+		this->_initialState = initialState;
+	}
+
+	nddlgen::models::InitialStateModel* DomainDescriptionModel::getInitialState()
+	{
+		return this->_initialState;
 	}
 
 }}
