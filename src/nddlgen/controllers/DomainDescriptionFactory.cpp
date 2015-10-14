@@ -116,6 +116,8 @@ void nddlgen::controllers::DomainDescriptionFactory::populateInitialStateFromIsd
 		nddlgen::types::IsdRoot isdRoot)
 {
 	nddlgen::models::InitialStateModel* initialState = new nddlgen::models::InitialStateModel();
+
+	// todo: read data and populate facts and goals
 }
 
 
