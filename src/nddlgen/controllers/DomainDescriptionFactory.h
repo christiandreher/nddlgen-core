@@ -57,7 +57,6 @@ class nddlgen::controllers::DomainDescriptionFactory
 
 		void setModelFactory(nddlgen::controllers::NddlGeneratableFactory* modelFactory);
 
-
 };
 
 #endif
