@@ -29,8 +29,15 @@ nddlgen::controllers::NddlGenerationController::~NddlGenerationController()
 
 void nddlgen::controllers::NddlGenerationController::writeModelFile(
 		nddlgen::models::DomainDescriptionModel* domainDescription,
-		nddlgen::utilities::WorkflowControllerConfig* controllerConfig)
+		nddlgen::utilities::WorkflowControllerConfig* controllerConfig,
+		bool forceOverwrite)
 {
+	// Assert that the file does not exist yet, unless an overwrite is forced
+	if (!forceOverwrite && boost::filesystem::exists(controllerConfig->getOutputModelFile()))
+	{
+		throw nddlgen::exceptions::FileAlreadyExistsException(controllerConfig->getOutputModelFile());
+	}
+
 	// Open output file stream
 	std::ofstream ofStream(controllerConfig->getOutputModelFile());
 
@@ -64,8 +71,15 @@ void nddlgen::controllers::NddlGenerationController::writeModelFile(
 
 void nddlgen::controllers::NddlGenerationController::writeInitialStateFile(
 		nddlgen::models::DomainDescriptionModel* domainDescription,
-		nddlgen::utilities::WorkflowControllerConfig* controllerConfig)
+		nddlgen::utilities::WorkflowControllerConfig* controllerConfig,
+		bool forceOverwrite)
 {
+	// Assert that the file does not exist yet, unless an overwrite is forced
+	if (!forceOverwrite && boost::filesystem::exists(controllerConfig->getOutputInitialStateFile()))
+	{
+		throw nddlgen::exceptions::FileAlreadyExistsException(controllerConfig->getOutputInitialStateFile());
+	}
+
 	// Open output file stream
 	std::ofstream ofStream(controllerConfig->getOutputInitialStateFile());
 

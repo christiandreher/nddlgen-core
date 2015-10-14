@@ -24,6 +24,7 @@
 #include <boost/algorithm/string.hpp>
 #include <boost/date_time/posix_time/posix_time.hpp>
 
+#include <nddlgen/exceptions/FileAlreadyExistsException.hpp>
 #include <nddlgen/models/DomainDescriptionModel.h>
 #include <nddlgen/utilities/WorkflowControllerConfig.h>
 #include <nddlgen/utilities/Meta.h>
@@ -43,9 +44,11 @@ class nddlgen::controllers::NddlGenerationController
 	public:
 
 		static void writeModelFile(nddlgen::models::DomainDescriptionModel* domainDescription,
-				nddlgen::utilities::WorkflowControllerConfig* controllerConfig);
+				nddlgen::utilities::WorkflowControllerConfig* controllerConfig,
+				bool forceOverwrite);
 		static void writeInitialStateFile(nddlgen::models::DomainDescriptionModel* domainDescription,
-				nddlgen::utilities::WorkflowControllerConfig* controllerConfig);
+				nddlgen::utilities::WorkflowControllerConfig* controllerConfig,
+				bool forceOverwrite);
 
 };
 

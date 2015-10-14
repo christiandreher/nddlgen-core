@@ -20,13 +20,12 @@
 #include <cstdlib>
 #include <string>
 
-#include <sdf/sdf.hh>
-
 #include <nddlgen/controllers/DomainDescriptionFactory.h>
+#include <nddlgen/controllers/SdfParser.h>
 #include <nddlgen/controllers/IsdParser.h>
 #include <nddlgen/controllers/NddlGenerationController.h>
+#include <nddlgen/exceptions/WorkflowException.hpp>
 #include <nddlgen/utilities/WorkflowControllerConfig.h>
-#include <nddlgen/utilities/Exceptions.hpp>
 #include <nddlgen/utilities/Types.hpp>
 #include <nddlgen/utilities/StdCerrHandler.h>
 
@@ -88,43 +87,6 @@ class nddlgen::controllers::WorkflowController
 		 * Domain description model.
 		 */
 		nddlgen::models::DomainDescriptionModel* _domainDescription;
-
-
-		/**
-		 * Helper function to assure that all preconditions are met to execute the
-		 * parseSdfInputFile function.
-		 */
-		void assertParseSdfInputFilePreconditions();
-
-		/**
-		 * Helper function to assure that all preconditions are met to execute the
-		 * parseIsdInputFile function.
-		 */
-		void assertParseIsdInputFilePreconditions();
-
-		/**
-		 * Helper function to assure that all preconditions are met to execute the
-		 * buildDomainDescription function.
-		 */
-		void assertBuildDomainDescriptionPreconditions();
-
-		/**
-		 * Helper function to assure that all preconditions are met to execute the
-		 * writeNddlModelFile function.
-		 *
-		 * @param forceOverwrite If set to true, no exception will be thrown if a file with the
-		 * 		same name already exists
-		 */
-		void assertWriteNddlModelFilePreconditions(bool forceOverwrite);
-
-		/**
-		 * Helper function to assure that all preconditions are met to execute the
-		 * writeNddlInitialStateFile function.
-		 *
-		 * @param forceOverwrite If set to true, no exception will be thrown if a file with the
-		 * 		same name already exists
-		 */
-		void assertWriteNddlInitialStateFilePreconditions(bool forceOverwrite);
 
 	public:
 

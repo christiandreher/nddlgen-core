@@ -51,36 +51,20 @@ nddlgen::controllers::WorkflowController::~WorkflowController()
 
 void nddlgen::controllers::WorkflowController::parseSdfInputFile()
 {
-	// Assert that all preconditions are met. Throw exception if not
-	this->assertParseSdfInputFilePreconditions();
-
-	// Local variable initializations
-	sdf::SDFPtr sdf(new sdf::SDF);
-
-	// Disable standard cerr output, since the output of the SDF library can't be suppressed otherwise
-	nddlgen::utilities::StdCerrHandler::disableCerr();
-
-	// Init .sdf based on installed sdf_format.xml file
-	if (!sdf::init(sdf))
+	// Assert that the SDF input file has not been parsed yet
+	if (this->_isSdfInputFileParsed)
 	{
-		// Re-enable standard cerr
-		nddlgen::utilities::StdCerrHandler::enableCerr();
-		throw nddlgen::exceptions::InitializingSdfException(nddlgen::utilities::StdCerrHandler::getBufferedCerrOutput());
+		throw nddlgen::exceptions::WorkflowException("SDF input file has already been parsed.");
 	}
 
-	// Try to read the file and parse SDF
-	if (!sdf::readFile(this->_config->getSdfInputFile(), sdf))
-	{
-		// Re-enable cerr
-		nddlgen::utilities::StdCerrHandler::enableCerr();
-		throw nddlgen::exceptions::ReadingSdfFileException(nddlgen::utilities::StdCerrHandler::getBufferedCerrOutput());
-	}
+	// Instantiate SdfParser and pass WorkflowControllerConfig object
+	nddlgen::controllers::SdfParser* sp = new nddlgen::controllers::SdfParser(this->_config);
 
-	// Write SDF document root to member
-	this->_sdfRoot = sdf->root;
+	// Parse SDF and write root to member
+	this->_sdfRoot = sp->parseSdf();
 
-	// Re-enable cerr
-	nddlgen::utilities::StdCerrHandler::enableCerr();
+	// Delete SdfParser object
+	boost::checked_delete(sp);
 
 	// Set workflow control flag
 	this->_isSdfInputFileParsed = true;
@@ -88,11 +72,20 @@ void nddlgen::controllers::WorkflowController::parseSdfInputFile()
 
 void nddlgen::controllers::WorkflowController::parseIsdInputFile()
 {
-	// Assert that all preconditions are met. Throw exception if not
-	this->assertParseIsdInputFilePreconditions();
+	// Assert that the ISD input file has not been parsed yet
+	if (this->_isIsdInputFileParsed)
+	{
+		throw nddlgen::exceptions::WorkflowException("ISD input file has already been parsed.");
+	}
+
+	// Instatiate IsdParser and pass WorkflowControllerConfig object
+	nddlgen::controllers::IsdParser* ip = new nddlgen::controllers::IsdParser(this->_config);
 
 	// Parse ISD and write root to member
-	this->_isdRoot = nddlgen::controllers::IsdParser::parseIsd(this->_config->getIsdInputFile());
+	this->_isdRoot = ip->parseIsd();
+
+	// Delete IsdParser object
+	boost::checked_delete(ip);
 
 	// Set workflow control flag
 	this->_isIsdInputFileParsed = true;
@@ -100,8 +93,17 @@ void nddlgen::controllers::WorkflowController::parseIsdInputFile()
 
 void nddlgen::controllers::WorkflowController::buildDomainDescription()
 {
-	// Assert that all preconditions are met. Throw exception if not
-	this->assertBuildDomainDescriptionPreconditions();
+	// Assert that at least the SDF input file has been parsed
+	if (!this->_isSdfInputFileParsed)
+	{
+		throw nddlgen::exceptions::WorkflowException("Neither an SDF nor an ISD input file has been parsed.");
+	}
+
+	// Assert that domain description was not built yet
+	if (this->_isDomainDescriptionBuilt)
+	{
+		throw nddlgen::exceptions::WorkflowException("Domain description already built.");
+	}
 
 	// Instantiate and initialize DomainDescriptionFactory
 	nddlgen::controllers::DomainDescriptionFactory* ddf = new nddlgen::controllers::DomainDescriptionFactory();
@@ -119,112 +121,6 @@ void nddlgen::controllers::WorkflowController::buildDomainDescription()
 
 void nddlgen::controllers::WorkflowController::writeNddlModelFile(bool forceOverwrite)
 {
-	// Assert that all preconditions are met. Throw exception if not
-	this->assertWriteNddlModelFilePreconditions(forceOverwrite);
-
-	// Write model file
-	nddlgen::controllers::NddlGenerationController::writeModelFile(this->_domainDescription, this->_config);
-
-	// Set workflow control flag
-	this->_isNddlModelFileWritten = true;
-}
-
-void nddlgen::controllers::WorkflowController::writeNddlInitialStateFile(bool forceOverwrite)
-{
-	// Assert that all preconditions are met. Throw exception if not
-	this->assertWriteNddlInitialStateFilePreconditions(forceOverwrite);
-
-	// Write initial state file
-	nddlgen::controllers::NddlGenerationController::writeInitialStateFile(this->_domainDescription, this->_config);
-
-	// Set workflow control flag
-	this->_isNddlInitialStateFileWritten = true;
-}
-
-void nddlgen::controllers::WorkflowController::writeNddlModelFile()
-{
-	// Call overloaded function with forceOverwrite set to false
-	this->writeNddlModelFile(false);
-}
-
-void nddlgen::controllers::WorkflowController::writeNddlInitialStateFile()
-{
-	// Call overloaded function with forceOverwrite set to false
-	this->writeNddlInitialStateFile(false);
-}
-
-
-void nddlgen::controllers::WorkflowController::assertParseSdfInputFilePreconditions()
-{
-	// Assert that the SDF input file has not been parsed yet
-	if (this->_isSdfInputFileParsed)
-	{
-		throw nddlgen::exceptions::WorkflowException("SDF input file has already been parsed.");
-	}
-
-	// Assert that an SDF input file has been set
-	if (this->_config->getSdfInputFile() == "")
-	{
-		throw nddlgen::exceptions::SdfInputFileNotSetException();
-	}
-
-	// Assert that the SDF input file has a .sdf extention
-	if (this->_config->getSdfInputFileExt() != ".sdf")
-	{
-		throw nddlgen::exceptions::FileMustBeSdfException();
-	}
-
-	// Assert that the SDF input file exists
-	if (!boost::filesystem::exists(this->_config->getSdfInputFile()))
-	{
-		throw nddlgen::exceptions::FileDoesNotExistException(this->_config->getSdfInputFile());
-	}
-}
-
-void nddlgen::controllers::WorkflowController::assertParseIsdInputFilePreconditions()
-{
-	// Assert that the ISD input file has not been parsed yet
-	if (this->_isIsdInputFileParsed)
-	{
-		throw nddlgen::exceptions::WorkflowException("ISD input file has already been parsed.");
-	}
-
-	// Assert that an ISD input file has been set
-	if (this->_config->getIsdInputFile() == "")
-	{
-		throw nddlgen::exceptions::IsdInputFileNotSetException();
-	}
-
-	// Assert that the ISD input file has a .isd extention
-	if (this->_config->getIsdInputFileExt() != ".isd")
-	{
-		throw nddlgen::exceptions::FileMustBeIsdException();
-	}
-
-	// Assert that the ISD input file exists
-	if (!boost::filesystem::exists(this->_config->getIsdInputFile()))
-	{
-		throw nddlgen::exceptions::FileDoesNotExistException(this->_config->getIsdInputFile());
-	}
-}
-
-void nddlgen::controllers::WorkflowController::assertBuildDomainDescriptionPreconditions()
-{
-	// Assert that at least the SDF input file has been parsed
-	if (!this->_isSdfInputFileParsed)
-	{
-		throw nddlgen::exceptions::WorkflowException("Neither an SDF nor an ISD input file has been parsed.");
-	}
-
-	// Assert that domain description was not built yet
-	if (this->_isDomainDescriptionBuilt)
-	{
-		throw nddlgen::exceptions::WorkflowException("Domain description already built.");
-	}
-}
-
-void nddlgen::controllers::WorkflowController::assertWriteNddlModelFilePreconditions(bool forceOverwrite)
-{
 	// Assert that the domain description was built
 	if (!this->_isDomainDescriptionBuilt)
 	{
@@ -237,14 +133,14 @@ void nddlgen::controllers::WorkflowController::assertWriteNddlModelFilePrecondit
 		throw nddlgen::exceptions::WorkflowException("NDDL model output file was already written.");
 	}
 
-	// Assert that the file does not exist yet, unless an overwrite is forced
-	if (!forceOverwrite && boost::filesystem::exists(this->_config->getOutputModelFile()))
-	{
-		throw nddlgen::exceptions::FileAlreadyExistsException(this->_config->getOutputModelFile());
-	}
+	// Write model file
+	nddlgen::controllers::NddlGenerationController::writeModelFile(this->_domainDescription, this->_config, forceOverwrite);
+
+	// Set workflow control flag
+	this->_isNddlModelFileWritten = true;
 }
 
-void nddlgen::controllers::WorkflowController::assertWriteNddlInitialStateFilePreconditions(bool forceOverwrite)
+void nddlgen::controllers::WorkflowController::writeNddlInitialStateFile(bool forceOverwrite)
 {
 	// Assert that an ISD input file has been set and parsed
 	if (!this->_isIsdInputFileParsed)
@@ -265,9 +161,21 @@ void nddlgen::controllers::WorkflowController::assertWriteNddlInitialStateFilePr
 		throw nddlgen::exceptions::WorkflowException("NDDL initial state output file was already written.");
 	}
 
-	// Assert that the file does not exist yet, unless an overwrite is forced
-	if (!forceOverwrite && boost::filesystem::exists(this->_config->getOutputInitialStateFile()))
-	{
-		throw nddlgen::exceptions::FileAlreadyExistsException(this->_config->getOutputInitialStateFile());
-	}
+	// Write initial state file
+	nddlgen::controllers::NddlGenerationController::writeInitialStateFile(this->_domainDescription, this->_config, forceOverwrite);
+
+	// Set workflow control flag
+	this->_isNddlInitialStateFileWritten = true;
+}
+
+void nddlgen::controllers::WorkflowController::writeNddlModelFile()
+{
+	// Call overloaded function with forceOverwrite set to false
+	this->writeNddlModelFile(false);
+}
+
+void nddlgen::controllers::WorkflowController::writeNddlInitialStateFile()
+{
+	// Call overloaded function with forceOverwrite set to false
+	this->writeNddlInitialStateFile(false);
 }
