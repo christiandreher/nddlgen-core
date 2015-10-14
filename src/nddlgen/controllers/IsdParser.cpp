@@ -35,6 +35,7 @@ nddlgen::types::IsdRoot nddlgen::controllers::IsdParser::parseIsd()
 
 	if (!isd.LoadFile())
 	{
+		// todo: throw exception instead
 		return nullptr;
 	}
 
@@ -42,6 +43,7 @@ nddlgen::types::IsdRoot nddlgen::controllers::IsdParser::parseIsd()
 
 	if (!root)
 	{
+		// todo: throw exception instead
 		return nullptr;
 	}
 
