@@ -38,17 +38,17 @@ class nddlgen::controllers::DomainDescriptionFactory
 
 		nddlgen::controllers::NddlGeneratableFactory* _modelFactory;
 
-		void instantiateWorkspace(nddlgen::models::DomainDescriptionModel* domainDescription);
-		void populateModelListFromSdf(sdf::ElementPtr modelElements, nddlgen::types::ModelList* models);
-		void addRelevantModelsToWorkspace(nddlgen::models::DomainDescriptionModel* domainDescription,
-				nddlgen::types::ModelList models);
-		void calculateDependencies(nddlgen::models::DomainDescriptionModel* domainDescription,
-				nddlgen::types::ModelList models);
+		void populateModelsFromSdf(nddlgen::models::DomainDescriptionModel* domainDescription,
+				nddlgen::types::SdfRoot sdfRoot);
 
 		void populateInitialStateFromIsd(nddlgen::models::DomainDescriptionModel* domainDescription,
 				nddlgen::types::IsdRoot isdRoot);
 
-		nddlgen::models::NddlGeneratable* instanceFactory(sdf::ElementPtr element);
+		nddlgen::models::NddlGeneratable* modelFactory(sdf::ElementPtr element);
+
+		nddlgen::utilities::InitialStateFact* factFactory(TiXmlElement* factElement);
+
+		nddlgen::utilities::InitialStateGoal* goalFactory(TiXmlElement* goalElement);
 
 	public:
 
