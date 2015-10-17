@@ -132,10 +132,21 @@ nddlgen::models::NddlGeneratable* nddlgen::controllers::DomainDescriptionFactory
 
 nddlgen::utilities::InitialStateFact* nddlgen::controllers::DomainDescriptionFactory::factFactory(TiXmlElement* factElement)
 {
+	nddlgen::utilities::InitialStateFact* fact = new nddlgen::utilities::InitialStateFact();
 
+	fact->setModelName(factElement->Value());
+	fact->setPredicate(factElement->Attribute("for"));
+
+	return fact;
 }
 
 nddlgen::utilities::InitialStateGoal* nddlgen::controllers::DomainDescriptionFactory::goalFactory(TiXmlElement* goalElement)
 {
+	nddlgen::utilities::InitialStateGoal* goal = new nddlgen::utilities::InitialStateGoal();
 
+	goal->setModelName(goalElement->Value());
+	goal->setPredicate(goalElement->Attribute("for"));
+	goal->setMaxTicks(goalElement->Attribute("max-ticks"));
+
+	return goal;
 }
