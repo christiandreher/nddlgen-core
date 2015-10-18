@@ -20,6 +20,9 @@
 #include <cstdlib>
 #include <string>
 
+#include <boost/checked_delete.hpp>
+#include <boost/shared_ptr.hpp>
+
 #include <nddlgen/controllers/DomainDescriptionFactory.h>
 #include <nddlgen/controllers/SdfParser.h>
 #include <nddlgen/controllers/IsdParser.h>
@@ -27,7 +30,6 @@
 #include <nddlgen/exceptions/WorkflowException.hpp>
 #include <nddlgen/utilities/WorkflowControllerConfig.h>
 #include <nddlgen/utilities/Types.hpp>
-#include <nddlgen/utilities/StdCerrHandler.h>
 
 namespace nddlgen { namespace controllers { class WorkflowController; }}
 
@@ -69,7 +71,7 @@ class nddlgen::controllers::WorkflowController
 
 
 		/**
-		 * Object holding controller meta data to make it accessible for other classes.
+		 * Object holding controller config to make it accessible for other controllers.
 		 */
 		nddlgen::utilities::WorkflowControllerConfig* _config;
 

@@ -39,7 +39,6 @@ nddlgen::models::DomainDescriptionModel* nddlgen::controllers::DomainDescription
 	nddlgen::models::DomainDescriptionModel* domainDescription = new nddlgen::models::DomainDescriptionModel();
 	nddlgen::models::ArmModel* arm = new nddlgen::models::ArmModel();
 	nddlgen::models::WorkspaceModel* workspace = new nddlgen::models::WorkspaceModel();
-	nddlgen::types::ModelList models;
 
 	// Set names for arm and workspace
 	arm->setName("arm");
@@ -97,22 +96,29 @@ void nddlgen::controllers::DomainDescriptionFactory::populateInitialStateFromIsd
 		nddlgen::types::IsdRoot isdRoot)
 {
 	nddlgen::models::InitialStateModel* initialState = new nddlgen::models::InitialStateModel();
-
-	TiXmlElement* facts = isdRoot->FirstChildElement("facts")->FirstChildElement("fact");
-	TiXmlElement* goals = isdRoot->FirstChildElement("goals")->FirstChildElement("goal");
-
-	for (; facts; facts = facts->NextSiblingElement())
-	{
-		nddlgen::utilities::InitialStateFact* fact = this->factFactory(facts);
-		initialState->addFact(fact);
-	}
-
-	for (; goals; goals = goals->NextSiblingElement())
-	{
-		nddlgen::utilities::InitialStateGoal* goal = this->goalFactory(goals);
-		initialState->addGoal(goal);
-	}
-
+//
+//	TiXmlHandle isdRootHandle(isdRoot.RootElement());
+//
+//	std::cout << isdRootHandle.ToElement()->Attribute("version") << std::endl;
+//
+//
+//	TiXmlElement* facts = isdRootHandle.FirstChild("facts").FirstChild("fact").ToElement();
+//	TiXmlElement* goals = isdRootHandle.FirstChild("goals").FirstChild("goal").ToElement();
+//
+//	for (; facts; facts = facts->NextSiblingElement())
+//	{
+//		nddlgen::utilities::InitialStateFact* fact = this->factFactory(facts);
+//		std::cout << "fact " << std::endl;
+//		initialState->addFact(fact);
+//	}
+//
+//	for (; goals; goals = goals->NextSiblingElement())
+//	{
+//		nddlgen::utilities::InitialStateGoal* goal = this->goalFactory(goals);
+//		std::cout << "goal " << std::endl;
+//		initialState->addGoal(goal);
+//	}
+//
 	domainDescription->setInitialState(initialState);
 }
 
@@ -134,8 +140,8 @@ nddlgen::utilities::InitialStateFact* nddlgen::controllers::DomainDescriptionFac
 {
 	nddlgen::utilities::InitialStateFact* fact = new nddlgen::utilities::InitialStateFact();
 
-	fact->setModelName(factElement->Value());
-	fact->setPredicate(factElement->Attribute("for"));
+	fact->setModelName(factElement->Attribute("for"));
+	fact->setPredicate(factElement->Attribute("predicate"));
 
 	return fact;
 }
@@ -144,8 +150,8 @@ nddlgen::utilities::InitialStateGoal* nddlgen::controllers::DomainDescriptionFac
 {
 	nddlgen::utilities::InitialStateGoal* goal = new nddlgen::utilities::InitialStateGoal();
 
-	goal->setModelName(goalElement->Value());
-	goal->setPredicate(goalElement->Attribute("for"));
+	goal->setModelName(goalElement->Attribute("for"));
+	goal->setPredicate(goalElement->Attribute("predicate"));
 	goal->setMaxTicks(goalElement->Attribute("max-ticks"));
 
 	return goal;

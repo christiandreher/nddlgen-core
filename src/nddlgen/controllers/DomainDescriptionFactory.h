@@ -18,7 +18,9 @@
 #define NDDLGEN_CONTROLLER_DOMAINDESCRIPTIONFACTORY_H_
 
 #include <cstddef>
+
 #include <sdf/sdf.hh>
+#include <tinyxml.h>
 
 #include <nddlgen/controllers/NddlGeneratableFactory.h>
 #include <nddlgen/exceptions/ModelFactoryNotSetException.hpp>
@@ -26,6 +28,8 @@
 #include <nddlgen/models/DomainDescriptionModel.h>
 #include <nddlgen/models/NddlGeneratable.h>
 #include <nddlgen/models/WorkspaceModel.h>
+#include <nddlgen/utilities/InitialStateFact.h>
+#include <nddlgen/utilities/InitialStateGoal.h>
 #include <nddlgen/utilities/Types.hpp>
 #include <nddlgen/utilities/Foreach.hpp>
 

@@ -17,8 +17,6 @@
 #ifndef NDDLGEN_CONTROLLER_ISDPARSER_H_
 #define NDDLGEN_CONTROLLER_ISDPARSER_H_
 
-#include <cstddef>
-
 #include <tinyxml.h>
 
 #include <nddlgen/exceptions/IsdInputFileNotSetException.hpp>

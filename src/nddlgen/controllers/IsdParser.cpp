@@ -28,26 +28,20 @@ nddlgen::controllers::IsdParser::~IsdParser()
 
 nddlgen::types::IsdRoot nddlgen::controllers::IsdParser::parseIsd()
 {
-	// Assert that all preconditions are met. Throw exception if not
-	this->checkAssertions();
+	return "";
 
-	TiXmlDocument isd(this->_config->getIsdInputFile());
-
-	if (!isd.LoadFile())
-	{
-		// todo: throw exception instead
-		return nullptr;
-	}
-
-	nddlgen::types::IsdRoot root = isd.FirstChildElement("isd");
-
-	if (!root)
-	{
-		// todo: throw exception instead
-		return nullptr;
-	}
-
-	return root;
+//	// Assert that all preconditions are met. Throw exception if not
+//	this->checkAssertions();
+//
+//	nddlgen::types::IsdRoot doc(new TiXmlDocument());
+//
+//	if (!doc->LoadFile(this->_config->getIsdInputFile()))
+//	{
+//		// todo: throw exception instead
+//		return 0;
+//	}
+//
+//	return doc;
 }
 
 void nddlgen::controllers::IsdParser::checkAssertions()

@@ -15,6 +15,9 @@
  */
 
 #include <nddlgen/models/InitialStateModel.h>
+#include <nddlgen/utilities/InitialStateFact.h>
+#include <nddlgen/utilities/InitialStateGoal.h>
+#include <nddlgen/utilities/Types.hpp>
 
 nddlgen::models::InitialStateModel::InitialStateModel()
 {
@@ -34,7 +37,7 @@ void nddlgen::models::InitialStateModel::addFact(nddlgen::utilities::InitialStat
 	this->_facts.push_back(fact);
 }
 
-boost::ptr_list<nddlgen::utilities::InitialStateFact> nddlgen::models::InitialStateModel::getFacts()
+nddlgen::types::FactList nddlgen::models::InitialStateModel::getFacts()
 {
 	return this->_facts;
 }
@@ -47,7 +50,7 @@ void nddlgen::models::InitialStateModel::addGoal(nddlgen::utilities::InitialStat
 	this->_goals.push_back(goal);
 }
 
-boost::ptr_list<nddlgen::utilities::InitialStateGoal> nddlgen::models::InitialStateModel::getGoals()
+nddlgen::types::GoalList nddlgen::models::InitialStateModel::getGoals()
 {
 	return this->_goals;
 }

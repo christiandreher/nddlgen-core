@@ -17,6 +17,9 @@
 #ifndef NDDLGEN_UTILITIES_INITIALSTATEGOAL_H_
 #define NDDLGEN_UTILITIES_INITIALSTATEGOAL_H_
 
+#include <string>
+#include <list>
+
 namespace nddlgen { namespace utilities { class InitialStateGoal; }}
 
 class nddlgen::utilities::InitialStateGoal

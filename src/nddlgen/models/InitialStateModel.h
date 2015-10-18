@@ -19,7 +19,7 @@
 
 #include <string>
 
-#include <boost/ptr_container/ptr_list.hpp>
+#include <nddlgen/utilities/Types.hpp>
 
 namespace nddlgen { namespace models { class InitialStateModel; }}
 
@@ -28,8 +28,8 @@ class nddlgen::models::InitialStateModel
 
 	private:
 
-		boost::ptr_list<nddlgen::utilities::InitialStateFact> _facts;
-		boost::ptr_list<nddlgen::utilities::InitialStateGoal> _goals;
+		nddlgen::types::FactList _facts;
+		nddlgen::types::GoalList _goals;
 
 	public:
 
@@ -37,10 +37,10 @@ class nddlgen::models::InitialStateModel
 		virtual ~InitialStateModel();
 
 		void addFact(nddlgen::utilities::InitialStateFact* fact);
-		boost::ptr_list<nddlgen::utilities::InitialStateFact> getFacts();
+		nddlgen::types::FactList getFacts();
 
 		void addGoal(nddlgen::utilities::InitialStateGoal* goal);
-		boost::ptr_list<nddlgen::utilities::InitialStateGoal> getGoals();
+		nddlgen::types::GoalList getGoals();
 
 };
 

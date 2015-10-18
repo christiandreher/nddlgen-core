@@ -18,6 +18,7 @@
 #define NDDLGEN_UTILITIES_INITIALSTATEFACT_H_
 
 #include <string>
+#include <list>
 
 namespace nddlgen { namespace utilities { class InitialStateFact; }}
 
