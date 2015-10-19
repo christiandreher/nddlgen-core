@@ -33,7 +33,7 @@ nddlgen::controllers::WorkflowController::WorkflowController(nddlgen::utilities:
 	this->_domainDescription = nullptr;
 
 	this->_sdfRoot = nddlgen::types::SdfRoot(nullptr);
-	//this->_isdRoot = nddlgen::types::IsdRoot(nullptr);
+	this->_isdRoot = nullptr;
 }
 
 nddlgen::controllers::WorkflowController::~WorkflowController()
@@ -42,9 +42,8 @@ nddlgen::controllers::WorkflowController::~WorkflowController()
 	boost::checked_delete(this->_domainDescription);
 
 	this->_sdfRoot.reset();
-	//this->_isdRoot.reset();
+	boost::checked_delete(this->_isdRoot);
 }
-
 
 void nddlgen::controllers::WorkflowController::parseSdfInputFile()
 {

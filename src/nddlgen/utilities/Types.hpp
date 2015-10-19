@@ -17,6 +17,7 @@
 #ifndef NDDLGEN_TYPES_TYPES_HPP_
 #define NDDLGEN_TYPES_TYPES_HPP_
 
+#include <boost/shared_ptr.hpp>
 #include <boost/ptr_container/ptr_list.hpp>
 #include <sdf/sdf.hh>
 #include <tinyxml.h>
@@ -48,9 +49,9 @@ namespace nddlgen { namespace types
 
 	typedef boost::ptr_list<nddlgen::utilities::InitialStateGoal> GoalList;
 
-	typedef sdf::ElementPtr SdfRoot;
+	typedef boost::shared_ptr<sdf::SDF> SdfRoot;
 
-	typedef std::string IsdRoot;
+	typedef TiXmlDocument* IsdRoot;
 
 }}
 

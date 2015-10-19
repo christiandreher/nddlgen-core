@@ -18,6 +18,7 @@
 
 nddlgen::controllers::SdfParser::SdfParser(nddlgen::utilities::WorkflowControllerConfig* config)
 {
+	// Assign config to member variable
 	this->_config = config;
 }
 
@@ -56,10 +57,9 @@ nddlgen::types::SdfRoot nddlgen::controllers::SdfParser::parseSdf()
 	// Re-enable standard cerr
 	nddlgen::utilities::StdCerrHandler::enableCerr();
 
-	// Return SdfRoot
-	return doc->root;
+	// Return document
+	return doc;
 }
-
 
 void nddlgen::controllers::SdfParser::checkAssertions()
 {

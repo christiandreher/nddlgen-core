@@ -69,7 +69,6 @@ class nddlgen::controllers::WorkflowController
 		 */
 		bool _isNddlInitialStateFileWritten;
 
-
 		/**
 		 * Object holding controller config to make it accessible for other controllers.
 		 */

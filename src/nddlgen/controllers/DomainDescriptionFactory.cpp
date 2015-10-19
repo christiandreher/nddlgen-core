@@ -26,7 +26,6 @@ nddlgen::controllers::DomainDescriptionFactory::~DomainDescriptionFactory()
 
 }
 
-
 nddlgen::models::DomainDescriptionModel* nddlgen::controllers::DomainDescriptionFactory::build(
 		nddlgen::types::SdfRoot sdfRoot,
 		nddlgen::types::IsdRoot isdRoot)
@@ -48,7 +47,7 @@ nddlgen::models::DomainDescriptionModel* nddlgen::controllers::DomainDescription
 	arm->setWorkspace(workspace);
 	domainDescription->setArm(arm);
 
-	// Populate the model with given sdf and isd roots
+	// Populate the model with given SDF and ISD roots
 	this->populateModelsFromSdf(domainDescription, sdfRoot);
 	this->populateInitialStateFromIsd(domainDescription, isdRoot);
 
@@ -56,22 +55,20 @@ nddlgen::models::DomainDescriptionModel* nddlgen::controllers::DomainDescription
 	return domainDescription;
 }
 
-
 void nddlgen::controllers::DomainDescriptionFactory::setModelFactory(
 		nddlgen::controllers::NddlGeneratableFactory* modelFactory)
 {
 	this->_modelFactory = modelFactory;
 }
 
-
 void nddlgen::controllers::DomainDescriptionFactory::populateModelsFromSdf(
 		nddlgen::models::DomainDescriptionModel* domainDescription,
 		nddlgen::types::SdfRoot sdfRoot)
 {
 	nddlgen::models::WorkspaceModel* workspace = domainDescription->getArm()->getWorkspace();
-	sdf::ElementPtr currentModelElement = sdfRoot->GetElement("world")->GetElement("model");
+	sdf::ElementPtr currentModelElement = sdfRoot->root->GetElement("world")->GetElement("model");
 
-	// Iterate through elements in sdf model node
+	// Iterate through elements in SDF model node
 	while (currentModelElement != nullptr)
 	{
 		nddlgen::models::NddlGeneratable* generatableModel = this->modelFactory(currentModelElement);
@@ -121,7 +118,6 @@ void nddlgen::controllers::DomainDescriptionFactory::populateInitialStateFromIsd
 //
 	domainDescription->setInitialState(initialState);
 }
-
 
 nddlgen::models::NddlGeneratable* nddlgen::controllers::DomainDescriptionFactory::modelFactory(sdf::ElementPtr element)
 {

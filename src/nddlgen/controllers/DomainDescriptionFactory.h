@@ -57,6 +57,7 @@ class nddlgen::controllers::DomainDescriptionFactory
 	public:
 
 		DomainDescriptionFactory();
+
 		virtual ~DomainDescriptionFactory();
 
 		nddlgen::models::DomainDescriptionModel* build(nddlgen::types::SdfRoot sdfRoot,
