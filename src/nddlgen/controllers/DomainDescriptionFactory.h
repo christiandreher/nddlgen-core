@@ -19,6 +19,7 @@
 
 #include <cstddef>
 
+#include <boost/shared_ptr.hpp>
 #include <sdf/sdf.hh>
 #include <tinyxml.h>
 
@@ -33,26 +34,33 @@
 #include <nddlgen/utilities/Types.hpp>
 #include <nddlgen/utilities/Foreach.hpp>
 
-namespace nddlgen { namespace controllers { class DomainDescriptionFactory; }}
+namespace nddlgen
+{
+	namespace controllers
+	{
+		class DomainDescriptionFactory;
+		typedef boost::shared_ptr<nddlgen::controllers::DomainDescriptionFactory> DomainDescriptionFactoryPtr;
+	}
+}
 
 class nddlgen::controllers::DomainDescriptionFactory
 {
 
 	private:
 
-		nddlgen::controllers::NddlGeneratableFactory* _modelFactory;
+		nddlgen::controllers::NddlGeneratableFactoryPtr _modelFactory;
 
-		void populateModelsFromSdf(nddlgen::models::DomainDescriptionModel* domainDescription,
+		void populateModelsFromSdf(nddlgen::models::DomainDescriptionModelPtr domainDescription,
 				nddlgen::types::SdfRoot sdfRoot);
 
-		void populateInitialStateFromIsd(nddlgen::models::DomainDescriptionModel* domainDescription,
+		void populateInitialStateFromIsd(nddlgen::models::DomainDescriptionModelPtr domainDescription,
 				nddlgen::types::IsdRoot isdRoot);
 
-		nddlgen::models::NddlGeneratable* modelFactory(sdf::ElementPtr element);
+		nddlgen::models::NddlGeneratablePtr modelFactory(sdf::ElementPtr element);
 
-		nddlgen::utilities::InitialStateFact* factFactory(TiXmlElement* factElement);
+		nddlgen::utilities::InitialStateFactPtr factFactory(TiXmlElement* factElement);
 
-		nddlgen::utilities::InitialStateGoal* goalFactory(TiXmlElement* goalElement);
+		nddlgen::utilities::InitialStateGoalPtr goalFactory(TiXmlElement* goalElement);
 
 	public:
 
@@ -60,10 +68,10 @@ class nddlgen::controllers::DomainDescriptionFactory
 
 		virtual ~DomainDescriptionFactory();
 
-		nddlgen::models::DomainDescriptionModel* build(nddlgen::types::SdfRoot sdfRoot,
+		nddlgen::models::DomainDescriptionModelPtr build(nddlgen::types::SdfRoot sdfRoot,
 				nddlgen::types::IsdRoot isdRoot);
 
-		void setModelFactory(nddlgen::controllers::NddlGeneratableFactory* modelFactory);
+		void setModelFactory(nddlgen::controllers::NddlGeneratableFactoryPtr modelFactory);
 
 };
 

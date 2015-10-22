@@ -17,6 +17,7 @@
 #ifndef NDDLGEN_CONTROLLERS_SDFPARSER_H_
 #define NDDLGEN_CONTROLLERS_SDFPARSER_H_
 
+#include <boost/shared_ptr.hpp>
 #include <sdf/sdf.hh>
 
 #include <nddlgen/exceptions/InitializingSdfException.hpp>
@@ -28,20 +29,27 @@
 #include <nddlgen/utilities/Types.hpp>
 #include <nddlgen/utilities/WorkflowControllerConfig.h>
 
-namespace nddlgen { namespace controllers { class SdfParser; }}
+namespace nddlgen
+{
+	namespace controllers
+	{
+		class SdfParser;
+		typedef boost::shared_ptr<nddlgen::controllers::SdfParser> SdfParserPtr;
+	}
+}
 
 class nddlgen::controllers::SdfParser
 {
 
 	private:
 
-		nddlgen::utilities::WorkflowControllerConfig* _config;
+		nddlgen::utilities::WorkflowControllerConfigPtr _config;
 
 		void checkAssertions();
 
 	public:
 
-		SdfParser(nddlgen::utilities::WorkflowControllerConfig* config);
+		SdfParser(nddlgen::utilities::WorkflowControllerConfigPtr config);
 		virtual ~SdfParser();
 
 		nddlgen::types::SdfRoot parseSdf();

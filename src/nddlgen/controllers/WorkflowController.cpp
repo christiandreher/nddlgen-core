@@ -16,7 +16,7 @@
 
 #include <nddlgen/controllers/WorkflowController.h>
 
-nddlgen::controllers::WorkflowController::WorkflowController(nddlgen::utilities::WorkflowControllerConfig* config)
+nddlgen::controllers::WorkflowController::WorkflowController(nddlgen::utilities::WorkflowControllerConfigPtr config)
 {
 	// Mark config object as read only and write to member
 	config->setReadOnly();
@@ -28,21 +28,11 @@ nddlgen::controllers::WorkflowController::WorkflowController(nddlgen::utilities:
 	this->_isDomainDescriptionBuilt = false;
 	this->_isNddlModelFileWritten = false;
 	this->_isNddlInitialStateFileWritten = false;
-
-	// Domain description object will be initialized later
-	this->_domainDescription = nullptr;
-
-	this->_sdfRoot = nddlgen::types::SdfRoot(nullptr);
-	this->_isdRoot = nullptr;
 }
 
 nddlgen::controllers::WorkflowController::~WorkflowController()
 {
-	// Delete domain description object
-	boost::checked_delete(this->_domainDescription);
 
-	this->_sdfRoot.reset();
-	boost::checked_delete(this->_isdRoot);
 }
 
 void nddlgen::controllers::WorkflowController::parseSdfInputFile()
@@ -54,13 +44,10 @@ void nddlgen::controllers::WorkflowController::parseSdfInputFile()
 	}
 
 	// Instantiate SdfParser and pass WorkflowControllerConfig object
-	nddlgen::controllers::SdfParser* parser = new nddlgen::controllers::SdfParser(this->_config);
+	nddlgen::controllers::SdfParserPtr parser(new nddlgen::controllers::SdfParser(this->_config));
 
 	// Parse SDF and write root to member
 	this->_sdfRoot = parser->parseSdf();
-
-	// Delete SdfParser object
-	boost::checked_delete(parser);
 
 	// Set workflow control flag
 	this->_isSdfInputFileParsed = true;
@@ -74,14 +61,11 @@ void nddlgen::controllers::WorkflowController::parseIsdInputFile()
 		throw nddlgen::exceptions::WorkflowException("ISD input file has already been parsed.");
 	}
 
-	// Instatiate IsdParser and pass WorkflowControllerConfig object
-	nddlgen::controllers::IsdParser* parser = new nddlgen::controllers::IsdParser(this->_config);
+	// Instantiate IsdParser and pass WorkflowControllerConfig object
+	nddlgen::controllers::IsdParserPtr parser(new nddlgen::controllers::IsdParser(this->_config));
 
 	// Parse ISD and write root to member
 	this->_isdRoot = parser->parseIsd();
-
-	// Delete IsdParser object
-	boost::checked_delete(parser);
 
 	// Set workflow control flag
 	this->_isIsdInputFileParsed = true;
@@ -102,14 +86,11 @@ void nddlgen::controllers::WorkflowController::buildDomainDescription()
 	}
 
 	// Instantiate and initialize DomainDescriptionFactory
-	nddlgen::controllers::DomainDescriptionFactory* factory = new nddlgen::controllers::DomainDescriptionFactory();
+	nddlgen::controllers::DomainDescriptionFactoryPtr factory(new nddlgen::controllers::DomainDescriptionFactory());
 	factory->setModelFactory(this->_config->getModelFactory());
 
 	// Build the domain description model
 	this->_domainDescription = factory->build(this->_sdfRoot, this->_isdRoot);
-
-	// Delete DomainDescriptionFactory object
-	boost::checked_delete(factory);
 
 	// Set workflow control flag
 	this->_isDomainDescriptionBuilt = true;

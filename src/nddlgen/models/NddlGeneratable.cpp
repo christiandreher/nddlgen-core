@@ -16,109 +16,104 @@
 
 #include <nddlgen/models/NddlGeneratable.h>
 
-namespace nddlgen { namespace models
+nddlgen::models::NddlGeneratable::NddlGeneratable()
 {
 
-	NddlGeneratable::NddlGeneratable()
+}
+
+nddlgen::models::NddlGeneratable::~NddlGeneratable()
+{
+
+}
+
+
+void nddlgen::models::NddlGeneratable::postInitProcessing()
+{
+
+}
+
+
+void nddlgen::models::NddlGeneratable::generateModel(std::ofstream& ofStream)
+{
+	wrln(0, "class " + this->_className,	1);
+	wrln(0, "{",							1);
+
+	if (this->hasPredicates())
 	{
-
-	}
-
-	NddlGeneratable::~NddlGeneratable()
-	{
-
-	}
-
-
-	void NddlGeneratable::postInitProcessing()
-	{
-
-	}
-
-
-	void NddlGeneratable::generateModel(std::ofstream& ofStream)
-	{
-		wrln(0, "class " + this->_className,	1);
-		wrln(0, "{",							1);
-
-		if (this->hasPredicates())
+		foreach (std::string predicate, this->_predicates)
 		{
-			foreach (std::string predicate, this->_predicates)
-			{
-				wrln(1, "predicate " + predicate + " {}", 1);
-			}
+			wrln(1, "predicate " + predicate + " {}", 1);
 		}
-
-		wrln(0, "}",							2);
 	}
 
-	void NddlGeneratable::setName(std::string name)
-	{
-		this->_name = name;
-	}
+	wrln(0, "}",							2);
+}
 
-	std::string NddlGeneratable::getName()
-	{
-		return this->_name;
-	}
+void nddlgen::models::NddlGeneratable::setName(std::string name)
+{
+	this->_name = name;
+}
 
-	std::string NddlGeneratable::getNamePref()
-	{
-		return "_" + this->getName();
-	}
+std::string nddlgen::models::NddlGeneratable::getName()
+{
+	return this->_name;
+}
 
-	std::string NddlGeneratable::getNamePrefSuff()
-	{
-		return this->getNamePref() + "_param";
-	}
+std::string nddlgen::models::NddlGeneratable::getNamePref()
+{
+	return "_" + this->getName();
+}
 
-
-	void NddlGeneratable::setClassName(std::string className)
-	{
-		this->_className = className;
-	}
-
-	std::string NddlGeneratable::getClassName()
-	{
-		return this->_className;
-	}
+std::string nddlgen::models::NddlGeneratable::getNamePrefSuff()
+{
+	return this->getNamePref() + "_param";
+}
 
 
-	void NddlGeneratable::addBlockingObject(nddlgen::models::NddlGeneratable* blockingObject)
-	{
-		this->_blockedBy.push_back(blockingObject);
-	}
+void nddlgen::models::NddlGeneratable::setClassName(std::string className)
+{
+	this->_className = className;
+}
 
-	bool NddlGeneratable::isBlocked()
-	{
-		return (this->_blockedBy.size() != 0);
-	}
-
-
-	void NddlGeneratable::addPredicate(std::string predicate)
-	{
-		this->_predicates.push_back(predicate);
-	}
-
-	bool NddlGeneratable::hasPredicates()
-	{
-		return (this->_predicates.size() != 0);
-	}
+std::string nddlgen::models::NddlGeneratable::getClassName()
+{
+	return this->_className;
+}
 
 
-	void NddlGeneratable::addAction(nddlgen::utilities::ModelAction* action)
-	{
-		this->_actions.push_back(action);
-	}
+void nddlgen::models::NddlGeneratable::addBlockingObject(nddlgen::models::NddlGeneratablePtr blockingObject)
+{
+	this->_blockedBy.push_back(blockingObject);
+}
 
-	bool NddlGeneratable::hasActions()
-	{
-		return (this->_actions.size() != 0);
-	}
+bool nddlgen::models::NddlGeneratable::isBlocked()
+{
+	return (this->_blockedBy.size() != 0);
+}
 
-	nddlgen::types::ActionList NddlGeneratable::getActions()
-	{
-		return this->_actions;
-	}
 
-}}
+void nddlgen::models::NddlGeneratable::addPredicate(std::string predicate)
+{
+	this->_predicates.push_back(predicate);
+}
+
+bool nddlgen::models::NddlGeneratable::hasPredicates()
+{
+	return (this->_predicates.size() != 0);
+}
+
+
+void nddlgen::models::NddlGeneratable::addAction(nddlgen::utilities::ModelActionPtr action)
+{
+	this->_actions.push_back(action);
+}
+
+bool nddlgen::models::NddlGeneratable::hasActions()
+{
+	return (this->_actions.size() != 0);
+}
+
+nddlgen::types::ActionList nddlgen::models::NddlGeneratable::getActions()
+{
+	return this->_actions;
+}

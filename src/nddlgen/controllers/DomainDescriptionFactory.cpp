@@ -18,7 +18,7 @@
 
 nddlgen::controllers::DomainDescriptionFactory::DomainDescriptionFactory()
 {
-	this->_modelFactory = nullptr;
+
 }
 
 nddlgen::controllers::DomainDescriptionFactory::~DomainDescriptionFactory()
@@ -26,18 +26,18 @@ nddlgen::controllers::DomainDescriptionFactory::~DomainDescriptionFactory()
 
 }
 
-nddlgen::models::DomainDescriptionModel* nddlgen::controllers::DomainDescriptionFactory::build(
+nddlgen::models::DomainDescriptionModelPtr nddlgen::controllers::DomainDescriptionFactory::build(
 		nddlgen::types::SdfRoot sdfRoot,
 		nddlgen::types::IsdRoot isdRoot)
 {
-	if (this->_modelFactory == nullptr)
+	if (!this->_modelFactory)
 	{
 		throw nddlgen::exceptions::ModelFactoryNotSetException();
 	}
 
-	nddlgen::models::DomainDescriptionModel* domainDescription = new nddlgen::models::DomainDescriptionModel();
-	nddlgen::models::ArmModel* arm = new nddlgen::models::ArmModel();
-	nddlgen::models::WorkspaceModel* workspace = new nddlgen::models::WorkspaceModel();
+	nddlgen::models::DomainDescriptionModelPtr domainDescription(new nddlgen::models::DomainDescriptionModel());
+	nddlgen::models::ArmModelPtr arm(new nddlgen::models::ArmModel());
+	nddlgen::models::WorkspaceModelPtr workspace(new nddlgen::models::WorkspaceModel());
 
 	// Set names for arm and workspace
 	arm->setName("arm");
@@ -56,26 +56,26 @@ nddlgen::models::DomainDescriptionModel* nddlgen::controllers::DomainDescription
 }
 
 void nddlgen::controllers::DomainDescriptionFactory::setModelFactory(
-		nddlgen::controllers::NddlGeneratableFactory* modelFactory)
+		nddlgen::controllers::NddlGeneratableFactoryPtr modelFactory)
 {
 	this->_modelFactory = modelFactory;
 }
 
 void nddlgen::controllers::DomainDescriptionFactory::populateModelsFromSdf(
-		nddlgen::models::DomainDescriptionModel* domainDescription,
+		nddlgen::models::DomainDescriptionModelPtr domainDescription,
 		nddlgen::types::SdfRoot sdfRoot)
 {
-	nddlgen::models::WorkspaceModel* workspace = domainDescription->getArm()->getWorkspace();
+	nddlgen::models::WorkspaceModelPtr workspace = domainDescription->getArm()->getWorkspace();
 	sdf::ElementPtr currentModelElement = sdfRoot->root->GetElement("world")->GetElement("model");
 
 	// Iterate through elements in SDF model node
-	while (currentModelElement != nullptr)
+	while (currentModelElement)
 	{
-		nddlgen::models::NddlGeneratable* generatableModel = this->modelFactory(currentModelElement);
+		nddlgen::models::NddlGeneratablePtr generatableModel = this->modelFactory(currentModelElement);
 
-		// If generatableModel is a nullptr, it is not supported by the given model factory
+		// If generatableModel is null, it is not supported by the given model factory
 		// and will not be added to the workspace
-		if (generatableModel != nullptr)
+		if (generatableModel)
 		{
 			workspace->addModelToWorkspace(generatableModel);
 		}
@@ -89,10 +89,10 @@ void nddlgen::controllers::DomainDescriptionFactory::populateModelsFromSdf(
 }
 
 void nddlgen::controllers::DomainDescriptionFactory::populateInitialStateFromIsd(
-		nddlgen::models::DomainDescriptionModel* domainDescription,
+		nddlgen::models::DomainDescriptionModelPtr domainDescription,
 		nddlgen::types::IsdRoot isdRoot)
 {
-	nddlgen::models::InitialStateModel* initialState = new nddlgen::models::InitialStateModel();
+	nddlgen::models::InitialStateModelPtr initialState(new nddlgen::models::InitialStateModel());
 //
 //	TiXmlHandle isdRootHandle(isdRoot.RootElement());
 //
@@ -119,12 +119,12 @@ void nddlgen::controllers::DomainDescriptionFactory::populateInitialStateFromIsd
 	domainDescription->setInitialState(initialState);
 }
 
-nddlgen::models::NddlGeneratable* nddlgen::controllers::DomainDescriptionFactory::modelFactory(sdf::ElementPtr element)
+nddlgen::models::NddlGeneratablePtr nddlgen::controllers::DomainDescriptionFactory::modelFactory(sdf::ElementPtr element)
 {
 	std::string elementName = element->GetAttribute("name")->GetAsString();
-	nddlgen::models::NddlGeneratable* instance = this->_modelFactory->fromString(elementName);
+	nddlgen::models::NddlGeneratablePtr instance = this->_modelFactory->fromString(elementName);
 
-	if (instance != nullptr)
+	if (instance)
 	{
 		instance->setName(elementName);
 	}
@@ -132,9 +132,9 @@ nddlgen::models::NddlGeneratable* nddlgen::controllers::DomainDescriptionFactory
 	return instance;
 }
 
-nddlgen::utilities::InitialStateFact* nddlgen::controllers::DomainDescriptionFactory::factFactory(TiXmlElement* factElement)
+nddlgen::utilities::InitialStateFactPtr nddlgen::controllers::DomainDescriptionFactory::factFactory(TiXmlElement* factElement)
 {
-	nddlgen::utilities::InitialStateFact* fact = new nddlgen::utilities::InitialStateFact();
+	nddlgen::utilities::InitialStateFactPtr fact(new nddlgen::utilities::InitialStateFact());
 
 	fact->setModelName(factElement->Attribute("for"));
 	fact->setPredicate(factElement->Attribute("predicate"));
@@ -142,9 +142,9 @@ nddlgen::utilities::InitialStateFact* nddlgen::controllers::DomainDescriptionFac
 	return fact;
 }
 
-nddlgen::utilities::InitialStateGoal* nddlgen::controllers::DomainDescriptionFactory::goalFactory(TiXmlElement* goalElement)
+nddlgen::utilities::InitialStateGoalPtr nddlgen::controllers::DomainDescriptionFactory::goalFactory(TiXmlElement* goalElement)
 {
-	nddlgen::utilities::InitialStateGoal* goal = new nddlgen::utilities::InitialStateGoal();
+	nddlgen::utilities::InitialStateGoalPtr goal(new nddlgen::utilities::InitialStateGoal());
 
 	goal->setModelName(goalElement->Attribute("for"));
 	goal->setPredicate(goalElement->Attribute("predicate"));

@@ -23,13 +23,21 @@
 
 #include <boost/algorithm/string.hpp>
 #include <boost/date_time/posix_time/posix_time.hpp>
+#include <boost/shared_ptr.hpp>
 
 #include <nddlgen/exceptions/FileAlreadyExistsException.hpp>
 #include <nddlgen/models/DomainDescriptionModel.h>
 #include <nddlgen/utilities/WorkflowControllerConfig.h>
 #include <nddlgen/utilities/Meta.h>
 
-namespace nddlgen { namespace controllers { class NddlGenerationController; }}
+namespace nddlgen
+{
+	namespace controllers
+	{
+		class NddlGenerationController;
+		typedef boost::shared_ptr<nddlgen::controllers::NddlGenerationController> NddlGenerationControllerPtr;
+	}
+}
 
 class nddlgen::controllers::NddlGenerationController
 {
@@ -43,11 +51,11 @@ class nddlgen::controllers::NddlGenerationController
 
 	public:
 
-		static void writeModelFile(nddlgen::models::DomainDescriptionModel* domainDescription,
-				nddlgen::utilities::WorkflowControllerConfig* controllerConfig,
+		static void writeModelFile(nddlgen::models::DomainDescriptionModelPtr domainDescription,
+				nddlgen::utilities::WorkflowControllerConfigPtr controllerConfig,
 				bool forceOverwrite);
-		static void writeInitialStateFile(nddlgen::models::DomainDescriptionModel* domainDescription,
-				nddlgen::utilities::WorkflowControllerConfig* controllerConfig,
+		static void writeInitialStateFile(nddlgen::models::DomainDescriptionModelPtr domainDescription,
+				nddlgen::utilities::WorkflowControllerConfigPtr controllerConfig,
 				bool forceOverwrite);
 
 };

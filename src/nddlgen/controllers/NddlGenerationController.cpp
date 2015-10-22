@@ -26,10 +26,9 @@ nddlgen::controllers::NddlGenerationController::~NddlGenerationController()
 
 }
 
-
 void nddlgen::controllers::NddlGenerationController::writeModelFile(
-		nddlgen::models::DomainDescriptionModel* domainDescription,
-		nddlgen::utilities::WorkflowControllerConfig* controllerConfig,
+		nddlgen::models::DomainDescriptionModelPtr domainDescription,
+		nddlgen::utilities::WorkflowControllerConfigPtr controllerConfig,
 		bool forceOverwrite)
 {
 	// Assert that the file does not exist yet, unless an overwrite is forced
@@ -70,8 +69,8 @@ void nddlgen::controllers::NddlGenerationController::writeModelFile(
 }
 
 void nddlgen::controllers::NddlGenerationController::writeInitialStateFile(
-		nddlgen::models::DomainDescriptionModel* domainDescription,
-		nddlgen::utilities::WorkflowControllerConfig* controllerConfig,
+		nddlgen::models::DomainDescriptionModelPtr domainDescription,
+		nddlgen::utilities::WorkflowControllerConfigPtr controllerConfig,
 		bool forceOverwrite)
 {
 	// Assert that the file does not exist yet, unless an overwrite is forced

@@ -17,6 +17,7 @@
 #ifndef NDDLGEN_CONTROLLER_ISDPARSER_H_
 #define NDDLGEN_CONTROLLER_ISDPARSER_H_
 
+#include <boost/shared_ptr.hpp>
 #include <tinyxml.h>
 
 #include <nddlgen/exceptions/IsdInputFileNotSetException.hpp>
@@ -25,20 +26,28 @@
 #include <nddlgen/utilities/WorkflowControllerConfig.h>
 #include <nddlgen/utilities/Types.hpp>
 
-namespace nddlgen { namespace controllers { class IsdParser; }}
+namespace nddlgen
+{
+	namespace controllers
+	{
+		class IsdParser;
+		typedef boost::shared_ptr<nddlgen::controllers::IsdParser> IsdParserPtr;
+	}
+}
 
 class nddlgen::controllers::IsdParser
 {
 
 	private:
 
-		nddlgen::utilities::WorkflowControllerConfig* _config;
+		nddlgen::utilities::WorkflowControllerConfigPtr _config;
 
 		void checkAssertions();
 
 	public:
 
-		IsdParser(nddlgen::utilities::WorkflowControllerConfig* config);
+		IsdParser(nddlgen::utilities::WorkflowControllerConfigPtr config);
+
 		virtual ~IsdParser();
 
 		nddlgen::types::IsdRoot parseIsd();

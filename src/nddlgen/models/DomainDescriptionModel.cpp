@@ -16,39 +16,32 @@
 
 #include <nddlgen/models/DomainDescriptionModel.h>
 
-namespace nddlgen { namespace models
+nddlgen::models::DomainDescriptionModel::DomainDescriptionModel()
 {
 
-	DomainDescriptionModel::DomainDescriptionModel()
-	{
-		this->_arm = nullptr;
-		this->_initialState = nullptr;
-	}
+}
 
-	DomainDescriptionModel::~DomainDescriptionModel()
-	{
-		boost::checked_delete(this->_arm);
-		boost::checked_delete(this->_initialState);
-	}
+nddlgen::models::DomainDescriptionModel::~DomainDescriptionModel()
+{
 
-	void DomainDescriptionModel::setArm(nddlgen::models::ArmModel* arm)
-	{
-		this->_arm = arm;
-	}
+}
 
-	nddlgen::models::ArmModel* DomainDescriptionModel::getArm()
-	{
-		return this->_arm;
-	}
+void nddlgen::models::DomainDescriptionModel::setArm(nddlgen::models::ArmModelPtr arm)
+{
+	this->_arm = arm;
+}
 
-	void DomainDescriptionModel::setInitialState(nddlgen::models::InitialStateModel* initialState)
-	{
-		this->_initialState = initialState;
-	}
+nddlgen::models::ArmModelPtr nddlgen::models::DomainDescriptionModel::getArm()
+{
+	return this->_arm;
+}
 
-	nddlgen::models::InitialStateModel* DomainDescriptionModel::getInitialState()
-	{
-		return this->_initialState;
-	}
+void nddlgen::models::DomainDescriptionModel::setInitialState(nddlgen::models::InitialStateModelPtr initialState)
+{
+	this->_initialState = initialState;
+}
 
-}}
+nddlgen::models::InitialStateModelPtr nddlgen::models::DomainDescriptionModel::getInitialState()
+{
+	return this->_initialState;
+}

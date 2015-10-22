@@ -26,7 +26,7 @@ nddlgen::controllers::NddlGeneratableFactory::~NddlGeneratableFactory()
 
 }
 
-nddlgen::models::NddlGeneratable* nddlgen::controllers::NddlGeneratableFactory::fromString(std::string modelName)
+nddlgen::models::NddlGeneratablePtr nddlgen::controllers::NddlGeneratableFactory::fromString(std::string modelName)
 {
 	std::string modelNameLc = boost::algorithm::to_lower_copy(modelName);
 
@@ -40,7 +40,8 @@ nddlgen::models::NddlGeneratable* nddlgen::controllers::NddlGeneratableFactory::
 		}
 	}
 
-	return nullptr;
+	nddlgen::models::NddlGeneratablePtr null(0);
+	return null;
 }
 
 void nddlgen::controllers::NddlGeneratableFactory::registerNddlGeneratable(

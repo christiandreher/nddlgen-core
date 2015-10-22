@@ -20,12 +20,20 @@
 #include <map>
 
 #include <boost/algorithm/string.hpp>
+#include <boost/shared_ptr.hpp>
 
 #include <nddlgen/utilities/Models.hpp>
 
-namespace nddlgen { namespace controllers { class NddlGeneratableFactory; }}
+namespace nddlgen
+{
+	namespace controllers
+	{
+		class NddlGeneratableFactory;
+		typedef boost::shared_ptr<nddlgen::controllers::NddlGeneratableFactory> NddlGeneratableFactoryPtr;
+	}
+}
 
-typedef nddlgen::models::NddlGeneratable* (*CreateNddlGeneratable)(void);
+typedef nddlgen::models::NddlGeneratablePtr (*CreateNddlGeneratable)(void);
 typedef std::map<std::string, CreateNddlGeneratable> NddlGeneratableMap;
 
 class nddlgen::controllers::NddlGeneratableFactory
@@ -41,7 +49,7 @@ class nddlgen::controllers::NddlGeneratableFactory
 		NddlGeneratableFactory();
 		virtual ~NddlGeneratableFactory();
 
-		nddlgen::models::NddlGeneratable* fromString(std::string modelName);
+		nddlgen::models::NddlGeneratablePtr fromString(std::string modelName);
 		virtual void registerNddlGeneratables() = 0;
 
 };

@@ -16,7 +16,7 @@
 
 #include <nddlgen/controllers/SdfParser.h>
 
-nddlgen::controllers::SdfParser::SdfParser(nddlgen::utilities::WorkflowControllerConfig* config)
+nddlgen::controllers::SdfParser::SdfParser(nddlgen::utilities::WorkflowControllerConfigPtr config)
 {
 	// Assign config to member variable
 	this->_config = config;

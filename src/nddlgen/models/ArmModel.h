@@ -21,32 +21,38 @@
 #include <iostream>
 #include <fstream>
 
+#include <boost/shared_ptr.hpp>
+
 #include <nddlgen/models/NddlGeneratable.h>
 #include <nddlgen/models/WorkspaceModel.h>
 
-namespace nddlgen { namespace models
+namespace nddlgen
+{
+	namespace models
+	{
+		class ArmModel;
+		typedef boost::shared_ptr<ArmModel> ArmModelPtr;
+	}
+}
+
+class nddlgen::models::ArmModel : public nddlgen::models::NddlGeneratable
 {
 
-	class ArmModel : public nddlgen::models::NddlGeneratable
-	{
+	private:
 
-		private:
+		nddlgen::models::WorkspaceModelPtr _workspace;
 
-			nddlgen::models::WorkspaceModel* _workspace;
+	public:
 
-		public:
+		ArmModel();
+		virtual ~ArmModel();
 
-			ArmModel();
-			virtual ~ArmModel();
+		virtual void generateModel(std::ofstream& ofStream);
+		virtual void generateInitialState(std::ofstream& ofStream);
 
-			virtual void generateModel(std::ofstream& ofStream);
-			virtual void generateInitialState(std::ofstream& ofStream);
+		void setWorkspace(nddlgen::models::WorkspaceModelPtr workspace);
+		nddlgen::models::WorkspaceModelPtr getWorkspace();
 
-			void setWorkspace(nddlgen::models::WorkspaceModel* workspace);
-			nddlgen::models::WorkspaceModel* getWorkspace();
-
-	};
-
-}}
+};
 
 #endif

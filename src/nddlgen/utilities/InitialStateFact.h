@@ -20,7 +20,16 @@
 #include <string>
 #include <list>
 
-namespace nddlgen { namespace utilities { class InitialStateFact; }}
+#include <boost/shared_ptr.hpp>
+
+namespace nddlgen
+{
+	namespace utilities
+	{
+		class InitialStateFact;
+		typedef boost::shared_ptr<nddlgen::utilities::InitialStateFact> InitialStateFactPtr;
+	}
+}
 
 class nddlgen::utilities::InitialStateFact
 {

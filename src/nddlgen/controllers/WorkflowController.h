@@ -17,10 +17,8 @@
 #ifndef NDDLGEN_CONTROLLER_WORKFLOWCONTROLLER_H_
 #define NDDLGEN_CONTROLLER_WORKFLOWCONTROLLER_H_
 
-#include <cstdlib>
 #include <string>
 
-#include <boost/checked_delete.hpp>
 #include <boost/shared_ptr.hpp>
 
 #include <nddlgen/controllers/DomainDescriptionFactory.h>
@@ -31,7 +29,14 @@
 #include <nddlgen/utilities/WorkflowControllerConfig.h>
 #include <nddlgen/utilities/Types.hpp>
 
-namespace nddlgen { namespace controllers { class WorkflowController; }}
+namespace nddlgen
+{
+	namespace controllers
+	{
+		class WorkflowController;
+		typedef boost::shared_ptr<nddlgen::controllers::WorkflowController> WorkflowControllerPtr;
+	}
+}
 
 /**
  * An object of this class controls the workflow to successfully generate NDDL model
@@ -72,7 +77,7 @@ class nddlgen::controllers::WorkflowController
 		/**
 		 * Object holding controller config to make it accessible for other controllers.
 		 */
-		nddlgen::utilities::WorkflowControllerConfig* _config;
+		nddlgen::utilities::WorkflowControllerConfigPtr _config;
 
 		/**
 		 * Root of the parsed SDF data structure.
@@ -87,7 +92,7 @@ class nddlgen::controllers::WorkflowController
 		/**
 		 * Domain description model.
 		 */
-		nddlgen::models::DomainDescriptionModel* _domainDescription;
+		nddlgen::models::DomainDescriptionModelPtr _domainDescription;
 
 	public:
 
@@ -96,7 +101,7 @@ class nddlgen::controllers::WorkflowController
 		 *
 		 * @param config Controller configuration
 		 */
-		WorkflowController(nddlgen::utilities::WorkflowControllerConfig* config);
+		WorkflowController(nddlgen::utilities::WorkflowControllerConfigPtr config);
 
 		/**
 		 * Destructor to destroy the object and free resources.
