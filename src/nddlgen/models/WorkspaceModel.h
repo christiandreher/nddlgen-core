@@ -20,40 +20,48 @@
 #include <iostream>
 #include <fstream>
 
+#include <boost/shared_ptr.hpp>
+
 #include <nddlgen/models/NddlGeneratable.h>
 #include <nddlgen/utilities/Types.hpp>
 #include <nddlgen/utilities/Foreach.hpp>
 
-namespace nddlgen { namespace models
+namespace nddlgen
+{
+	namespace models
+	{
+		class WorkspaceModel;
+		typedef boost::shared_ptr<nddlgen::models::WorkspaceModel> WorkspaceModelPtr;
+	}
+}
+
+class nddlgen::models::WorkspaceModel : public nddlgen::models::NddlGeneratable
 {
 
-	class WorkspaceModel : public nddlgen::models::NddlGeneratable
-	{
+	private:
 
-		private:
+		nddlgen::types::NddlGeneratableList _models;
 
-			nddlgen::types::NddlGeneratableList _models;
+		void generateWorkspaceMembers(std::ofstream& ofStream);
+		void generateWorkspaceConstructor(std::ofstream& ofStream);
 
-			void generateWorkspaceMembers(std::ofstream& ofStream);
-			void generateWorkspaceConstructor(std::ofstream& ofStream);
+	public:
 
-		public:
+		WorkspaceModel();
+		virtual ~WorkspaceModel();
 
-			WorkspaceModel();
-			virtual ~WorkspaceModel();
+		virtual void postInitProcessing();
 
-			virtual void postInitProcessing();
+		virtual void generateModel(std::ofstream& ofStream);
+		virtual void generateInitialState(std::ofstream& ofStream);
 
-			virtual void generateModel(std::ofstream& ofStream);
-			virtual void generateInitialState(std::ofstream& ofStream);
+		void addModelToWorkspace(nddlgen::models::NddlGeneratablePtr model);
+		nddlgen::models::NddlGeneratablePtr getModelByName(std::string name);
 
-			void addModelToWorkspace(nddlgen::models::NddlGeneratable* model);
-			nddlgen::models::NddlGeneratable* getModelByName(std::string name);
+		nddlgen::types::NddlGeneratableList getModels();
 
-			virtual nddlgen::types::ActionList getActions();
+		virtual nddlgen::types::ActionList getActions();
 
-	};
-
-}}
+};
 
 #endif

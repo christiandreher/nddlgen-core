@@ -16,90 +16,77 @@
 
 #include <nddlgen/models/ArmModel.h>
 
-namespace nddlgen { namespace models
+nddlgen::models::ArmModel::ArmModel()
+{
+	this->setClassName("Arm");
+}
+
+nddlgen::models::ArmModel::~ArmModel()
 {
 
-	ArmModel::ArmModel()
-	{
-		this->setClassName("Arm");
+}
 
-		this->_workspace = nullptr;
+void nddlgen::models::ArmModel::generateModel(std::ofstream& ofStream)
+{
+	std::string armClass = this->getClassName();
+	std::string workspaceClass = this->getWorkspace()->getClassName();
+	std::string workspacePref = this->_workspace->getNamePref();
+	std::string workspacePrefSuff = this->_workspace->getNamePrefSuff();
+	nddlgen::types::ActionList actions = this->_workspace->getActions();
+
+	// Arm class
+	this->_workspace->generateModel(ofStream);
+
+	// #\t  text																	#endl
+	wrln(0, "class " + armClass,													1);
+	wrln(0, "{", 																	1);
+	wrln(1, 	workspaceClass + " " + workspacePref + ";",							2);
+
+	wrln(1, 	armClass + "(" + workspaceClass + " " + workspacePrefSuff + ")",	1);
+	wrln(1, 	"{",																1);
+	wrln(2,			workspacePref + " = " + workspacePrefSuff + ";",				1);
+	wrln(1, 	"}",																2);
+
+	foreach (nddlgen::utilities::ModelActionPtr action, actions)
+	{
+		wrln(1, action->getActionDefinition(), 										1);
 	}
 
-	ArmModel::~ArmModel()
+	wrln(0, "}",																	2);
+	// End Arm class
+
+	// Arm member functions
+	foreach (nddlgen::utilities::ModelActionPtr action, actions)
 	{
-		boost::checked_delete(this->_workspace);
-	}
+		std::string actionName = action->getName();
+		std::list<std::string> actionSteps = action->getActionSteps(workspacePref);
 
+		// Arm member function
+		wrln(0, armClass + "::" + actionName,										1);
+		wrln(0, "{",																1);
 
-	void ArmModel::generateModel(std::ofstream& ofStream)
-	{
-		std::string armClass = this->getClassName();
-		std::string workspaceClass = this->getWorkspace()->getClassName();
-		std::string workspacePref = this->_workspace->getNamePref();
-		std::string workspacePrefSuff = this->_workspace->getNamePrefSuff();
-		nddlgen::types::ActionList actions = this->_workspace->getActions();
-
-		// Workspace class
-		this->_workspace->generateModel(ofStream);
-
-		// #\t  text																	#endl
-		wrln(0, "class " + armClass,													1);
-		wrln(0, "{", 																	1);
-		wrln(1, 	workspaceClass + " " + workspacePref + ";",							2);
-
-		wrln(1, 	armClass + "(" + workspaceClass + " " + workspacePrefSuff + ")",	1);
-		wrln(1, 	"{",																1);
-		wrln(2,			workspacePref + " = " + workspacePrefSuff + ";",				1);
-		wrln(1, 	"}",																2);
-
-		foreach (nddlgen::utilities::ModelAction& actionObject, actions)
+		foreach (std::string actionStep, actionSteps)
 		{
-			nddlgen::utilities::ModelAction* action = &actionObject;
-
-			wrln(1, action->getActionDefinition(), 										1);
+			wrln(1, actionStep, 													1);
 		}
 
-		wrln(0, "}",																	2);
-		// End Workspace class
-
-		// Arm member functions
-		foreach (nddlgen::utilities::ModelAction& actionObject, actions)
-		{
-			nddlgen::utilities::ModelAction* action = &actionObject;
-
-			std::string actionName = action->getName();
-			std::list<std::string> actionSteps = action->getActionSteps(workspacePref);
-
-			// Arm member function
-			wrln(0, armClass + "::" + actionName,										1);
-			wrln(0, "{",																1);
-
-			foreach (std::string actionStep, actionSteps)
-			{
-				wrln(1, actionStep, 													1);
-			}
-
-			wrln(0, "}",																2);
-			// End Arm member function
-		}
-		// End Arm member functions
+		wrln(0, "}",																2);
+		// End Arm member function
 	}
+	// End Arm member functions
+}
 
-	void ArmModel::generateInitialState(std::ofstream& ofStream)
-	{
-		//ofStream << this->_workspace->generateInitialStateAsString(ofStream);
-	}
+void nddlgen::models::ArmModel::generateInitialState(std::ofstream& ofStream)
+{
+	//ofStream << this->_workspace->generateInitialStateAsString(ofStream);
+}
 
+void nddlgen::models::ArmModel::setWorkspace(nddlgen::models::WorkspaceModelPtr workspace)
+{
+	this->_workspace = workspace;
+}
 
-	void ArmModel::setWorkspace(nddlgen::models::WorkspaceModel* workspace)
-	{
-		this->_workspace = workspace;
-	}
-
-	nddlgen::models::WorkspaceModel* ArmModel::getWorkspace()
-	{
-		return this->_workspace;
-	}
-
-}}
+nddlgen::models::WorkspaceModelPtr nddlgen::models::ArmModel::getWorkspace()
+{
+	return this->_workspace;
+}

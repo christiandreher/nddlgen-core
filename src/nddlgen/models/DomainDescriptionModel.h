@@ -19,28 +19,39 @@
 
 #include <cstddef>
 
-#include <nddlgen/models/ArmModel.h>
+#include <boost/shared_ptr.hpp>
 
-namespace nddlgen { namespace models
+#include <nddlgen/models/ArmModel.h>
+#include <nddlgen/models/InitialStateModel.h>
+
+namespace nddlgen
+{
+	namespace models
+	{
+		class DomainDescriptionModel;
+		typedef boost::shared_ptr<nddlgen::models::DomainDescriptionModel> DomainDescriptionModelPtr;
+	}
+}
+
+class nddlgen::models::DomainDescriptionModel
 {
 
-	class DomainDescriptionModel
-	{
+	private:
 
-		private:
+		nddlgen::models::ArmModelPtr _arm;
+		nddlgen::models::InitialStateModelPtr _initialState;
 
-			nddlgen::models::ArmModel* _arm;
+	public:
 
-		public:
+		DomainDescriptionModel();
+		virtual ~DomainDescriptionModel();
 
-			DomainDescriptionModel();
-			virtual ~DomainDescriptionModel();
+		void setArm(nddlgen::models::ArmModelPtr arm);
+		nddlgen::models::ArmModelPtr getArm();
 
-			void setArm(nddlgen::models::ArmModel* arm);
-			nddlgen::models::ArmModel* getArm();
+		void setInitialState(nddlgen::models::InitialStateModelPtr initialState);
+		nddlgen::models::InitialStateModelPtr getInitialState();
 
-	};
-
-}}
+};
 
 #endif

@@ -18,7 +18,10 @@
 #define NDDLGEN_CONTROLLER_DOMAINDESCRIPTIONFACTORY_H_
 
 #include <cstddef>
+
+#include <boost/shared_ptr.hpp>
 #include <sdf/sdf.hh>
+#include <tinyxml.h>
 
 #include <nddlgen/controllers/NddlGeneratableFactory.h>
 #include <nddlgen/exceptions/ModelFactoryNotSetException.hpp>
@@ -26,36 +29,49 @@
 #include <nddlgen/models/DomainDescriptionModel.h>
 #include <nddlgen/models/NddlGeneratable.h>
 #include <nddlgen/models/WorkspaceModel.h>
+#include <nddlgen/utilities/InitialStateFact.h>
+#include <nddlgen/utilities/InitialStateGoal.h>
 #include <nddlgen/utilities/Types.hpp>
 #include <nddlgen/utilities/Foreach.hpp>
 
-namespace nddlgen { namespace controllers { class DomainDescriptionFactory; }}
+namespace nddlgen
+{
+	namespace controllers
+	{
+		class DomainDescriptionFactory;
+		typedef boost::shared_ptr<nddlgen::controllers::DomainDescriptionFactory> DomainDescriptionFactoryPtr;
+	}
+}
 
 class nddlgen::controllers::DomainDescriptionFactory
 {
 
 	private:
 
-		void instantiateWorkspace(nddlgen::models::DomainDescriptionModel* domainDescription);
-		void populateModelListFromSdf(sdf::ElementPtr modelElements, nddlgen::types::ModelList* models);
-		void addRelevantModelsToWorkspace(nddlgen::models::DomainDescriptionModel* domainDescription,
-				nddlgen::types::ModelList models);
-		void calculateDependencies(nddlgen::models::DomainDescriptionModel* domainDescription,
-				nddlgen::types::ModelList models);
+		nddlgen::controllers::NddlGeneratableFactoryPtr _modelFactory;
 
-		nddlgen::models::NddlGeneratable* instanceFactory(sdf::ElementPtr element);
+		void populateModelsFromSdf(nddlgen::models::DomainDescriptionModelPtr domainDescription,
+				nddlgen::types::SdfRoot sdfRoot);
 
-		nddlgen::controllers::NddlGeneratableFactory* _modelFactory;
+		void populateInitialStateFromIsd(nddlgen::models::DomainDescriptionModelPtr domainDescription,
+				nddlgen::types::IsdRoot isdRoot);
+
+		nddlgen::models::NddlGeneratablePtr modelFactory(sdf::ElementPtr element);
+
+		nddlgen::utilities::InitialStateFactPtr factFactory(TiXmlElement* factElement);
+
+		nddlgen::utilities::InitialStateGoalPtr goalFactory(TiXmlElement* goalElement);
 
 	public:
 
 		DomainDescriptionFactory();
+
 		virtual ~DomainDescriptionFactory();
 
-		nddlgen::models::DomainDescriptionModel* build(nddlgen::types::SdfRoot sdfRoot,
+		nddlgen::models::DomainDescriptionModelPtr build(nddlgen::types::SdfRoot sdfRoot,
 				nddlgen::types::IsdRoot isdRoot);
 
-		void setModelFactory(nddlgen::controllers::NddlGeneratableFactory* modelFactory);
+		void setModelFactory(nddlgen::controllers::NddlGeneratableFactoryPtr modelFactory);
 
 };
 

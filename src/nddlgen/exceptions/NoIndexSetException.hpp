@@ -14,9 +14,28 @@
  * limitations under the License.
  */
 
-#include <nddlgen/utilities/Meta.h>
+#ifndef NDDLGEN_EXCEPTIONS_NOINDEXSETEXCEPTION_HPP_
+#define NDDLGEN_EXCEPTIONS_NOINDEXSETEXCEPTION_HPP_
 
-const std::string nddlgen::utilities::Meta::NDDLGEN_VERSION = "0.8";
-const std::string nddlgen::utilities::Meta::NDDLGEN_PROJECT_HOMEPAGE = "nddlgen.charlydelta.org";
-const std::string nddlgen::utilities::Meta::NDDLGEN_SUPPORT_EMAIL = "nddlgen-support@charlydelta.org";
-const std::string nddlgen::utilities::Meta::AUTHOR_CHR_DREHER_EMAIL = "dreher@charlydelta.org";
+#include <exception>
+
+namespace nddlgen { namespace exceptions
+{
+
+	class NoIndexSetException : public std::exception
+	{
+		public:
+
+		NoIndexSetException() {}
+			virtual ~NoIndexSetException() throw (){}
+
+			virtual const char* what() const throw()
+			{
+				return "No index was set for fact or goal.";
+			}
+
+	};
+
+}}
+
+#endif

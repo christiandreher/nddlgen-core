@@ -16,7 +16,7 @@
 
 #include <nddlgen/controllers/WorkflowController.h>
 
-nddlgen::controllers::WorkflowController::WorkflowController(nddlgen::utilities::WorkflowControllerConfig* config)
+nddlgen::controllers::WorkflowController::WorkflowController(nddlgen::utilities::WorkflowControllerConfigPtr config)
 {
 	// Mark config object as read only and write to member
 	config->setReadOnly();
@@ -28,26 +28,12 @@ nddlgen::controllers::WorkflowController::WorkflowController(nddlgen::utilities:
 	this->_isDomainDescriptionBuilt = false;
 	this->_isNddlModelFileWritten = false;
 	this->_isNddlInitialStateFileWritten = false;
-
-	// Domain description object will be initialized later
-	this->_domainDescription = nullptr;
-
-	// ISD root will be initialized later if an ISD file was set to be parsed
-	this->_isdRoot = nullptr;
 }
 
 nddlgen::controllers::WorkflowController::~WorkflowController()
 {
-	// Delete domain description object
-	boost::checked_delete(this->_domainDescription);
 
-	// Delete all instances of the SDF library if an SDF file was parsed
-	if (this->_isSdfInputFileParsed)
-	{
-		this->_sdfRoot->ClearElements();
-	}
 }
-
 
 void nddlgen::controllers::WorkflowController::parseSdfInputFile()
 {
@@ -58,13 +44,10 @@ void nddlgen::controllers::WorkflowController::parseSdfInputFile()
 	}
 
 	// Instantiate SdfParser and pass WorkflowControllerConfig object
-	nddlgen::controllers::SdfParser* sp = new nddlgen::controllers::SdfParser(this->_config);
+	nddlgen::controllers::SdfParserPtr parser(new nddlgen::controllers::SdfParser(this->_config));
 
 	// Parse SDF and write root to member
-	this->_sdfRoot = sp->parseSdf();
-
-	// Delete SdfParser object
-	boost::checked_delete(sp);
+	this->_sdfRoot = parser->parseSdf();
 
 	// Set workflow control flag
 	this->_isSdfInputFileParsed = true;
@@ -78,14 +61,11 @@ void nddlgen::controllers::WorkflowController::parseIsdInputFile()
 		throw nddlgen::exceptions::WorkflowException("ISD input file has already been parsed.");
 	}
 
-	// Instatiate IsdParser and pass WorkflowControllerConfig object
-	nddlgen::controllers::IsdParser* ip = new nddlgen::controllers::IsdParser(this->_config);
+	// Instantiate IsdParser and pass WorkflowControllerConfig object
+	nddlgen::controllers::IsdParserPtr parser(new nddlgen::controllers::IsdParser(this->_config));
 
 	// Parse ISD and write root to member
-	this->_isdRoot = ip->parseIsd();
-
-	// Delete IsdParser object
-	boost::checked_delete(ip);
+	this->_isdRoot = parser->parseIsd();
 
 	// Set workflow control flag
 	this->_isIsdInputFileParsed = true;
@@ -106,17 +86,20 @@ void nddlgen::controllers::WorkflowController::buildDomainDescription()
 	}
 
 	// Instantiate and initialize DomainDescriptionFactory
-	nddlgen::controllers::DomainDescriptionFactory* ddf = new nddlgen::controllers::DomainDescriptionFactory();
-	ddf->setModelFactory(this->_config->getModelFactory());
+	nddlgen::controllers::DomainDescriptionFactoryPtr factory(new nddlgen::controllers::DomainDescriptionFactory());
+	factory->setModelFactory(this->_config->getModelFactory());
 
 	// Build the domain description model
-	this->_domainDescription = ddf->build(this->_sdfRoot, this->_isdRoot);
-
-	// Delete DomainDescriptionFactory object
-	boost::checked_delete(ddf);
+	this->_domainDescription = factory->build(this->_sdfRoot, this->_isdRoot);
 
 	// Set workflow control flag
 	this->_isDomainDescriptionBuilt = true;
+}
+
+void nddlgen::controllers::WorkflowController::writeNddlModelFile()
+{
+	// Call overloaded function with forceOverwrite set to false
+	this->writeNddlModelFile(false);
 }
 
 void nddlgen::controllers::WorkflowController::writeNddlModelFile(bool forceOverwrite)
@@ -138,6 +121,12 @@ void nddlgen::controllers::WorkflowController::writeNddlModelFile(bool forceOver
 
 	// Set workflow control flag
 	this->_isNddlModelFileWritten = true;
+}
+
+void nddlgen::controllers::WorkflowController::writeNddlInitialStateFile()
+{
+	// Call overloaded function with forceOverwrite set to false
+	this->writeNddlInitialStateFile(false);
 }
 
 void nddlgen::controllers::WorkflowController::writeNddlInitialStateFile(bool forceOverwrite)
@@ -166,16 +155,4 @@ void nddlgen::controllers::WorkflowController::writeNddlInitialStateFile(bool fo
 
 	// Set workflow control flag
 	this->_isNddlInitialStateFileWritten = true;
-}
-
-void nddlgen::controllers::WorkflowController::writeNddlModelFile()
-{
-	// Call overloaded function with forceOverwrite set to false
-	this->writeNddlModelFile(false);
-}
-
-void nddlgen::controllers::WorkflowController::writeNddlInitialStateFile()
-{
-	// Call overloaded function with forceOverwrite set to false
-	this->writeNddlInitialStateFile(false);
 }

@@ -14,43 +14,44 @@
  * limitations under the License.
  */
 
-#ifndef NDDLGEN_CONTROLLER_ISDPARSER_H_
-#define NDDLGEN_CONTROLLER_ISDPARSER_H_
+#ifndef NDDLGEN_MODELS_INITIALSTATEMODEL_H_
+#define NDDLGEN_MODELS_INITIALSTATEMODEL_H_
+
+#include <string>
 
 #include <boost/shared_ptr.hpp>
-#include <tinyxml.h>
 
-#include <nddlgen/exceptions/IsdInputFileNotSetException.hpp>
-#include <nddlgen/exceptions/FileMustBeIsdException.hpp>
-#include <nddlgen/exceptions/FileDoesNotExistException.hpp>
-#include <nddlgen/utilities/WorkflowControllerConfig.h>
+#include <nddlgen/utilities/InitialStateFact.h>
+#include <nddlgen/utilities/InitialStateGoal.h>
 #include <nddlgen/utilities/Types.hpp>
 
 namespace nddlgen
 {
-	namespace controllers
+	namespace models
 	{
-		class IsdParser;
-		typedef boost::shared_ptr<nddlgen::controllers::IsdParser> IsdParserPtr;
+		class InitialStateModel;
+		typedef boost::shared_ptr<nddlgen::models::InitialStateModel> InitialStateModelPtr;
 	}
 }
 
-class nddlgen::controllers::IsdParser
+class nddlgen::models::InitialStateModel
 {
 
 	private:
 
-		nddlgen::utilities::WorkflowControllerConfigPtr _config;
-
-		void checkAssertions();
+		nddlgen::types::FactList _facts;
+		nddlgen::types::GoalList _goals;
 
 	public:
 
-		IsdParser(nddlgen::utilities::WorkflowControllerConfigPtr config);
+		InitialStateModel();
+		virtual ~InitialStateModel();
 
-		virtual ~IsdParser();
+		void addFact(nddlgen::utilities::InitialStateFactPtr fact);
+		nddlgen::types::FactList getFacts();
 
-		nddlgen::types::IsdRoot parseIsd();
+		void addGoal(nddlgen::utilities::InitialStateGoalPtr goal);
+		nddlgen::types::GoalList getGoals();
 
 };
 

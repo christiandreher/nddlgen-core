@@ -25,13 +25,11 @@ nddlgen::utilities::WorkflowControllerConfig::WorkflowControllerConfig()
 	this->_outputFilesPath = "";
 
 	this->_readOnly = false;
-
-	this->_modelFactory = nullptr;
 }
 
 nddlgen::utilities::WorkflowControllerConfig::~WorkflowControllerConfig()
 {
-	boost::checked_delete(this->_modelFactory);
+
 }
 
 
@@ -73,7 +71,7 @@ void nddlgen::utilities::WorkflowControllerConfig::setOutputFilesPath(std::strin
 }
 
 void nddlgen::utilities::WorkflowControllerConfig::setModelFactory(
-		nddlgen::controllers::NddlGeneratableFactory* modelFactory)
+		nddlgen::controllers::NddlGeneratableFactoryPtr modelFactory)
 {
 	this->trySet();
 
@@ -227,7 +225,7 @@ std::string nddlgen::utilities::WorkflowControllerConfig::normalizePath(const bo
 	return result.string();
 }
 
-nddlgen::controllers::NddlGeneratableFactory* nddlgen::utilities::WorkflowControllerConfig::getModelFactory()
+nddlgen::controllers::NddlGeneratableFactoryPtr nddlgen::utilities::WorkflowControllerConfig::getModelFactory()
 {
 	return this->_modelFactory;
 }

@@ -14,44 +14,45 @@
  * limitations under the License.
  */
 
-#ifndef NDDLGEN_MODELS_ARMMODEL_H_
-#define NDDLGEN_MODELS_ARMMODEL_H_
+#ifndef NDDLGEN_UTILITIES_INITIALSTATEFACT_H_
+#define NDDLGEN_UTILITIES_INITIALSTATEFACT_H_
 
 #include <string>
-#include <iostream>
-#include <fstream>
+#include <list>
 
 #include <boost/shared_ptr.hpp>
+#include <boost/lexical_cast.hpp>
 
-#include <nddlgen/models/NddlGeneratable.h>
-#include <nddlgen/models/WorkspaceModel.h>
+#include <nddlgen/exceptions/NoIndexSetException.hpp>
 
 namespace nddlgen
 {
-	namespace models
+	namespace utilities
 	{
-		class ArmModel;
-		typedef boost::shared_ptr<ArmModel> ArmModelPtr;
+		class InitialStateFact;
+		typedef boost::shared_ptr<nddlgen::utilities::InitialStateFact> InitialStateFactPtr;
 	}
 }
 
-class nddlgen::models::ArmModel : public nddlgen::models::NddlGeneratable
+class nddlgen::utilities::InitialStateFact
 {
 
 	private:
 
-		nddlgen::models::WorkspaceModelPtr _workspace;
+		std::string _modelName;
+		std::string _predicate;
+		std::string _index;
 
 	public:
 
-		ArmModel();
-		virtual ~ArmModel();
+		InitialStateFact();
+		virtual ~InitialStateFact();
 
-		virtual void generateModel(std::ofstream& ofStream);
-		virtual void generateInitialState(std::ofstream& ofStream);
+		void setModelName(std::string modelName);
+		void setPredicate(std::string predicate);
+		void setIndex(int index);
 
-		void setWorkspace(nddlgen::models::WorkspaceModelPtr workspace);
-		nddlgen::models::WorkspaceModelPtr getWorkspace();
+		std::list<std::string> getFact();
 
 };
 

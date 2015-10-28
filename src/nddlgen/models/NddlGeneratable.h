@@ -21,55 +21,61 @@
 #include <fstream>
 #include <string>
 
+#include <boost/shared_ptr.hpp>
+
 #include <nddlgen/utilities/Types.hpp>
 #include <nddlgen/utilities/WriteStream.hpp>
 #include <nddlgen/utilities/Foreach.hpp>
 #include <nddlgen/utilities/ModelAction.h>
 
-namespace nddlgen { namespace models
+namespace nddlgen
+{
+	namespace models
+	{
+		class NddlGeneratable;
+		typedef boost::shared_ptr<nddlgen::models::NddlGeneratable> NddlGeneratablePtr;
+	}
+}
+
+class nddlgen::models::NddlGeneratable
 {
 
-	class NddlGeneratable
-	{
+	protected:
 
-		protected:
+		std::string _name;
+		std::string _className;
+		nddlgen::types::NddlGeneratableList _blockedBy;
+		std::list<std::string> _predicates;
+		nddlgen::types::ActionList _actions;
 
-			std::string _name;
-			std::string _className;
-			nddlgen::types::NddlGeneratableList _blockedBy;
-			std::list<std::string> _predicates;
-			nddlgen::types::ActionList _actions;
+	public:
 
-		public:
+		NddlGeneratable();
+		virtual ~NddlGeneratable();
 
-			NddlGeneratable();
-			virtual ~NddlGeneratable();
+		virtual void postInitProcessing();
 
-			virtual void postInitProcessing();
+		virtual void generateModel(std::ofstream& ofStream);
+		virtual void generateInitialState(std::ofstream& ofStream) = 0;
 
-			virtual void generateModel(std::ofstream& ofStream);
-			virtual void generateInitialState(std::ofstream& ofStream) = 0;
+		void setName(std::string name);
+		std::string getName();
+		std::string getNamePref();
+		std::string getNamePrefSuff();
 
-			void setName(std::string name);
-			std::string getName();
-			std::string getNamePref();
-			std::string getNamePrefSuff();
+		void setClassName(std::string className);
+		std::string getClassName();
 
-			void setClassName(std::string className);
-			std::string getClassName();
+		void addBlockingObject(nddlgen::models::NddlGeneratablePtr blockingObject);
+		bool isBlocked();
 
-			void addBlockingObject(nddlgen::models::NddlGeneratable* blockingObject);
-			bool isBlocked();
+		void addPredicate(std::string predicate);
+		bool hasPredicates();
 
-			void addPredicate(std::string predicate);
-			bool hasPredicates();
+		void addAction(nddlgen::utilities::ModelActionPtr action);
+		bool hasActions();
+		virtual nddlgen::types::ActionList getActions();
 
-			void addAction(nddlgen::utilities::ModelAction* action);
-			bool hasActions();
-			virtual nddlgen::types::ActionList getActions();
-
-	};
-
-}}
+};
 
 #endif

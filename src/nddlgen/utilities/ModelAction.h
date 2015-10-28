@@ -20,7 +20,16 @@
 #include <list>
 #include <string>
 
-namespace nddlgen { namespace utilities { class ModelAction; }}
+#include <boost/shared_ptr.hpp>
+
+namespace nddlgen
+{
+	namespace utilities
+	{
+		class ModelAction;
+		typedef boost::shared_ptr<nddlgen::utilities::ModelAction> ModelActionPtr;
+	}
+}
 
 class nddlgen::utilities::ModelAction
 {

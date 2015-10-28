@@ -74,9 +74,19 @@ namespace nddlgen
 	typedef nddlgen::controllers::WorkflowController Controller;
 
 	/**
+	 * @see nddlgen::controller::WorkflowControllerPtr
+	 */
+	typedef nddlgen::controllers::WorkflowControllerPtr ControllerPtr;
+
+	/**
 	 * @see nddlgen::controller::WorkflowControllerConfig
 	 */
 	typedef nddlgen::utilities::WorkflowControllerConfig ControllerConfig;
+
+	/**
+	 * @see nddlgen::controller::WorkflowControllerConfigPtr
+	 */
+	typedef nddlgen::utilities::WorkflowControllerConfigPtr ControllerConfigPtr;
 
 }
 

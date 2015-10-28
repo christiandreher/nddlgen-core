@@ -17,10 +17,10 @@
 #ifndef NDDLGEN_TYPES_TYPES_HPP_
 #define NDDLGEN_TYPES_TYPES_HPP_
 
-#include <boost/ptr_container/ptr_list.hpp>
+#include <list>
 
+#include <boost/shared_ptr.hpp>
 #include <sdf/sdf.hh>
-
 #include <tinyxml.h>
 
 // Forward declaration
@@ -34,21 +34,25 @@ namespace nddlgen
 	namespace utilities
 	{
 		class ModelAction;
+		class InitialStateFact;
+		class InitialStateGoal;
 	}
 }
 
 namespace nddlgen { namespace types
 {
 
-	typedef std::list<sdf::ElementPtr> ModelList;
+	typedef std::list<boost::shared_ptr<nddlgen::models::NddlGeneratable>> NddlGeneratableList;
 
-	typedef boost::ptr_list<nddlgen::models::NddlGeneratable> NddlGeneratableList;
+	typedef std::list<boost::shared_ptr<nddlgen::utilities::ModelAction>> ActionList;
 
-	typedef boost::ptr_list<nddlgen::utilities::ModelAction> ActionList;
+	typedef std::list<boost::shared_ptr<nddlgen::utilities::InitialStateFact>> FactList;
 
-	typedef sdf::ElementPtr SdfRoot;
+	typedef std::list<boost::shared_ptr<nddlgen::utilities::InitialStateGoal>> GoalList;
 
-	typedef TiXmlElement* IsdRoot;
+	typedef boost::shared_ptr<sdf::SDF> SdfRoot;
+
+	typedef boost::shared_ptr<TiXmlDocument> IsdRoot;
 
 }}
 

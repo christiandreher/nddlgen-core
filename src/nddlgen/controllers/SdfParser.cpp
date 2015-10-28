@@ -16,8 +16,9 @@
 
 #include <nddlgen/controllers/SdfParser.h>
 
-nddlgen::controllers::SdfParser::SdfParser(nddlgen::utilities::WorkflowControllerConfig* config)
+nddlgen::controllers::SdfParser::SdfParser(nddlgen::utilities::WorkflowControllerConfigPtr config)
 {
+	// Assign config to member variable
 	this->_config = config;
 }
 
@@ -32,13 +33,13 @@ nddlgen::types::SdfRoot nddlgen::controllers::SdfParser::parseSdf()
 	this->checkAssertions();
 
 	// Local variable initializations
-	sdf::SDFPtr sdf(new sdf::SDF);
+	sdf::SDFPtr doc(new sdf::SDF());
 
 	// Disable standard cerr output, since the output of the SDF library can't be suppressed otherwise
 	nddlgen::utilities::StdCerrHandler::disableCerr();
 
-	// Init .sdf based on installed sdf_format.xml file
-	if (!sdf::init(sdf))
+	// Initialize .sdf based on installed sdf_format.xml file
+	if (!sdf::init(doc))
 	{
 		// Re-enable standard cerr
 		nddlgen::utilities::StdCerrHandler::enableCerr();
@@ -46,20 +47,19 @@ nddlgen::types::SdfRoot nddlgen::controllers::SdfParser::parseSdf()
 	}
 
 	// Try to read the file and parse SDF
-	if (!sdf::readFile(this->_config->getSdfInputFile(), sdf))
+	if (!sdf::readFile(this->_config->getSdfInputFile(), doc))
 	{
-		// Re-enable cerr
+		// Re-enable standard cerr
 		nddlgen::utilities::StdCerrHandler::enableCerr();
 		throw nddlgen::exceptions::ReadingSdfFileException(nddlgen::utilities::StdCerrHandler::getBufferedCerrOutput());
 	}
 
-	// Re-enable cerr
+	// Re-enable standard cerr
 	nddlgen::utilities::StdCerrHandler::enableCerr();
 
-	// Return SdfRoot
-	return sdf->root;
+	// Return document
+	return doc;
 }
-
 
 void nddlgen::controllers::SdfParser::checkAssertions()
 {

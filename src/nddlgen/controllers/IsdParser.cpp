@@ -16,8 +16,9 @@
 
 #include <nddlgen/controllers/IsdParser.h>
 
-nddlgen::controllers::IsdParser::IsdParser(nddlgen::utilities::WorkflowControllerConfig* config)
+nddlgen::controllers::IsdParser::IsdParser(nddlgen::utilities::WorkflowControllerConfigPtr config)
 {
+	// Assign config to member variable
 	this->_config = config;
 }
 
@@ -31,21 +32,18 @@ nddlgen::types::IsdRoot nddlgen::controllers::IsdParser::parseIsd()
 	// Assert that all preconditions are met. Throw exception if not
 	this->checkAssertions();
 
-	TiXmlDocument isd(this->_config->getIsdInputFile());
+	// Local variable initializations
+	nddlgen::types::IsdRoot doc(new TiXmlDocument());
 
-	if (!isd.LoadFile())
+	// Try to read the file and parse ISD
+	if (!doc->LoadFile(this->_config->getIsdInputFile()))
 	{
-		return nullptr;
+		// todo: throw exception instead
+		return 0;
 	}
 
-	nddlgen::types::IsdRoot root = isd.FirstChildElement("isd");
-
-	if (!root)
-	{
-		return nullptr;
-	}
-
-	return root;
+	// Return document
+	return doc;
 }
 
 void nddlgen::controllers::IsdParser::checkAssertions()
