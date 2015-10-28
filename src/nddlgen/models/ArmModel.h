@@ -48,7 +48,6 @@ class nddlgen::models::ArmModel : public nddlgen::models::NddlGeneratable
 		virtual ~ArmModel();
 
 		virtual void generateModel(std::ofstream& ofStream);
-		virtual void generateInitialState(std::ofstream& ofStream);
 
 		void setWorkspace(nddlgen::models::WorkspaceModelPtr workspace);
 		nddlgen::models::WorkspaceModelPtr getWorkspace();

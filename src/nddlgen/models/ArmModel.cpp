@@ -76,11 +76,6 @@ void nddlgen::models::ArmModel::generateModel(std::ofstream& ofStream)
 	// End Arm member functions
 }
 
-void nddlgen::models::ArmModel::generateInitialState(std::ofstream& ofStream)
-{
-	//ofStream << this->_workspace->generateInitialStateAsString(ofStream);
-}
-
 void nddlgen::models::ArmModel::setWorkspace(nddlgen::models::WorkspaceModelPtr workspace)
 {
 	this->_workspace = workspace;

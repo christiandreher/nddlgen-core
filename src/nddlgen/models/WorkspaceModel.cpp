@@ -26,7 +26,6 @@ nddlgen::models::WorkspaceModel::~WorkspaceModel()
 
 }
 
-
 void nddlgen::models::WorkspaceModel::postInitProcessing()
 {
 	foreach (nddlgen::models::NddlGeneratablePtr generatableModel, this->_models)
@@ -34,7 +33,6 @@ void nddlgen::models::WorkspaceModel::postInitProcessing()
 		generatableModel->postInitProcessing();
 	}
 }
-
 
 void nddlgen::models::WorkspaceModel::generateModel(std::ofstream& ofStream)
 {
@@ -60,12 +58,6 @@ void nddlgen::models::WorkspaceModel::generateModel(std::ofstream& ofStream)
 
 	wrln(0, "}",								2);
 }
-
-void nddlgen::models::WorkspaceModel::generateInitialState(std::ofstream& ofStream)
-{
-
-}
-
 
 void nddlgen::models::WorkspaceModel::addModelToWorkspace(nddlgen::models::NddlGeneratablePtr model)
 {
