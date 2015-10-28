@@ -22,7 +22,7 @@
 #include <boost/algorithm/string.hpp>
 #include <boost/shared_ptr.hpp>
 
-#include <nddlgen/utilities/Models.hpp>
+#include <nddlgen/models/NddlGeneratable.h>
 
 namespace nddlgen
 {
