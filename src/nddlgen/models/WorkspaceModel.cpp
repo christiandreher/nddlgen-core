@@ -86,6 +86,11 @@ nddlgen::models::NddlGeneratablePtr nddlgen::models::WorkspaceModel::getModelByN
 	return null;
 }
 
+nddlgen::types::NddlGeneratableList nddlgen::models::WorkspaceModel::getModels()
+{
+	return this->_models;
+}
+
 nddlgen::types::ActionList nddlgen::models::WorkspaceModel::getActions()
 {
 	nddlgen::types::ActionList actionList;

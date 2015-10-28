@@ -21,6 +21,9 @@
 #include <list>
 
 #include <boost/shared_ptr.hpp>
+#include <boost/lexical_cast.hpp>
+
+#include <nddlgen/exceptions/NoIndexSetException.hpp>
 
 namespace nddlgen
 {
@@ -39,7 +42,7 @@ class nddlgen::utilities::InitialStateGoal
 		std::string _modelName;
 		std::string _predicate;
 		std::string _maxTicks;
-		int _index;
+		std::string _index;
 
 	public:
 

@@ -21,7 +21,7 @@ nddlgen::utilities::InitialStateGoal::InitialStateGoal()
 	this->_modelName = "";
 	this->_predicate = "";
 	this->_maxTicks = "";
-	this->_index = -1;
+	this->_index = "";
 }
 
 nddlgen::utilities::InitialStateGoal::~InitialStateGoal()
@@ -46,11 +46,16 @@ void nddlgen::utilities::InitialStateGoal::setMaxTicks(std::string maxTicks)
 
 void nddlgen::utilities::InitialStateGoal::setIndex(int index)
 {
-	this->_index = index;
+	this->_index = boost::lexical_cast<std::string>(index);
 }
 
 std::list<std::string> nddlgen::utilities::InitialStateGoal::getGoal()
 {
+	if (this->_index == "")
+	{
+		throw nddlgen::exceptions::NoIndexSetException();
+	}
+
 	std::list<std::string> goal;
 
 	std::string goalName = "goal" + this->_index;

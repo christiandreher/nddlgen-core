@@ -20,7 +20,7 @@ nddlgen::utilities::InitialStateFact::InitialStateFact()
 {
 	this->_modelName = "";
 	this->_predicate = "";
-	this->_index = -1;
+	this->_index = "";
 }
 
 nddlgen::utilities::InitialStateFact::~InitialStateFact()
@@ -40,12 +40,15 @@ void nddlgen::utilities::InitialStateFact::setPredicate(std::string predicate)
 
 void nddlgen::utilities::InitialStateFact::setIndex(int index)
 {
-	this->_index = index;
+	this->_index = boost::lexical_cast<std::string>(index);
 }
 
 std::list<std::string> nddlgen::utilities::InitialStateFact::getFact()
 {
-	// todo: check if everything is set correctly, throw exception if not
+	if (this->_index == "")
+	{
+		throw nddlgen::exceptions::NoIndexSetException();
+	}
 
 	std::list<std::string> fact;
 

@@ -58,6 +58,8 @@ class nddlgen::models::WorkspaceModel : public nddlgen::models::NddlGeneratable
 		void addModelToWorkspace(nddlgen::models::NddlGeneratablePtr model);
 		nddlgen::models::NddlGeneratablePtr getModelByName(std::string name);
 
+		nddlgen::types::NddlGeneratableList getModels();
+
 		virtual nddlgen::types::ActionList getActions();
 
 };

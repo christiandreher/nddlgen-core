@@ -106,9 +106,76 @@ void nddlgen::controllers::NddlGenerationController::writeInitialStateFile(
 	wrln(0, "// nddlgen-core v" + nddlgenVersion + " using " + adapter + "", 1);
 	wrln(0, "// Creation date: " + now, 2);
 
-	// Call generateInitialState() of sub-objects
-	domainDescription->getArm()->generateInitialState(ofStream);
+	// Inlcude NDDL model file
+	wrln(0, "#include \"" + controllerConfig->getOutputModelFileName() + "\"", 2);
 
+	// Instantiate models on workspace
+	nddlgen::types::NddlGeneratableList models = domainDescription->getArm()->getWorkspace()->getModels();
+
+	foreach (nddlgen::models::NddlGeneratablePtr generatableModel, models)
+	{
+		std::string className = generatableModel->getClassName();
+		std::string instanceName = generatableModel->getName();
+
+		wrln(0, className + " " + instanceName + " = new " + className + "();", 1);
+	}
+
+	wrel(1);
+
+	// Instantiate Workspace
+	std::string workspaceClassName = domainDescription->getArm()->getWorkspace()->getClassName();
+	std::string workspaceInstanceName = domainDescription->getArm()->getWorkspace()->getName();
+	std::string workspaceConstructorParameters = "";
+
+	foreach (nddlgen::models::NddlGeneratablePtr generatableModel, models)
+	{
+		workspaceConstructorParameters += generatableModel->getName() + ", ";
+	}
+
+	workspaceConstructorParameters = workspaceConstructorParameters.substr(0, workspaceConstructorParameters.size() - 2);
+
+	wrln(0, workspaceClassName + " " + workspaceInstanceName + " = new " + workspaceClassName + "(" + workspaceConstructorParameters + ");", 2);
+
+	// Instantiate Arm
+	std::string armClassName = domainDescription->getArm()->getClassName();
+	std::string armInstanceName = domainDescription->getArm()->getName();
+
+	wrln(0, armClassName + " " + armInstanceName + " = new " + armClassName + "(" + workspaceInstanceName + ");", 2);
+
+	// Close model instantiation (NDDL procedure call)
+	wrln(0, "close();", 2);
+
+	// Print facts
+	nddlgen::types::FactList facts = domainDescription->getInitialState()->getFacts();
+
+	foreach (nddlgen::utilities::InitialStateFactPtr fact, facts)
+	{
+		std::list<std::string> factLines = fact->getFact();
+
+		foreach (std::string factLine, factLines)
+		{
+			wrln(0, factLine, 1);
+		}
+
+		wrel(1);
+	}
+
+	// Print goals
+	nddlgen::types::GoalList goals = domainDescription->getInitialState()->getGoals();
+
+	foreach (nddlgen::utilities::InitialStateGoalPtr goal, goals)
+	{
+		std::list<std::string> goalLines = goal->getGoal();
+
+		foreach (std::string goalLine, goalLines)
+		{
+			wrln(0, goalLine, 1);
+		}
+
+		wrel(1);
+	}
+
+	// Close stream
 	ofStream.close();
 }
 

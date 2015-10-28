@@ -93,29 +93,22 @@ void nddlgen::controllers::DomainDescriptionFactory::populateInitialStateFromIsd
 		nddlgen::types::IsdRoot isdRoot)
 {
 	nddlgen::models::InitialStateModelPtr initialState(new nddlgen::models::InitialStateModel());
-//
-//	TiXmlHandle isdRootHandle(isdRoot.RootElement());
-//
-//	std::cout << isdRootHandle.ToElement()->Attribute("version") << std::endl;
-//
-//
-//	TiXmlElement* facts = isdRootHandle.FirstChild("facts").FirstChild("fact").ToElement();
-//	TiXmlElement* goals = isdRootHandle.FirstChild("goals").FirstChild("goal").ToElement();
-//
-//	for (; facts; facts = facts->NextSiblingElement())
-//	{
-//		nddlgen::utilities::InitialStateFact* fact = this->factFactory(facts);
-//		std::cout << "fact " << std::endl;
-//		initialState->addFact(fact);
-//	}
-//
-//	for (; goals; goals = goals->NextSiblingElement())
-//	{
-//		nddlgen::utilities::InitialStateGoal* goal = this->goalFactory(goals);
-//		std::cout << "goal " << std::endl;
-//		initialState->addGoal(goal);
-//	}
-//
+
+	TiXmlHandle isdRootHandle(isdRoot->RootElement());
+
+	TiXmlElement* facts = isdRootHandle.FirstChild("facts").FirstChild("fact").ToElement();
+	TiXmlElement* goals = isdRootHandle.FirstChild("goals").FirstChild("goal").ToElement();
+
+	for (; facts; facts = facts->NextSiblingElement())
+	{
+		initialState->addFact(this->factFactory(facts));
+	}
+
+	for (; goals; goals = goals->NextSiblingElement())
+	{
+		initialState->addGoal(this->goalFactory(goals));
+	}
+
 	domainDescription->setInitialState(initialState);
 }
 
