@@ -56,7 +56,6 @@ class nddlgen::models::NddlGeneratable
 		virtual void postInitProcessing();
 
 		virtual void generateModel(std::ofstream& ofStream);
-		virtual void generateInitialState(std::ofstream& ofStream) = 0;
 
 		void setName(std::string name);
 		std::string getName();
