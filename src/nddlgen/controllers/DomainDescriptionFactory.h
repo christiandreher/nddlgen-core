@@ -18,6 +18,8 @@
 #define NDDLGEN_CONTROLLER_DOMAINDESCRIPTIONFACTORY_H_
 
 #include <cstddef>
+#include <cstdlib>
+#include <vector>
 
 #include <boost/shared_ptr.hpp>
 #include <sdf/sdf.hh>
@@ -25,6 +27,9 @@
 
 #include <nddlgen/controllers/NddlGeneratableFactory.h>
 #include <nddlgen/exceptions/ModelFactoryNotSetException.hpp>
+#include <nddlgen/math/Cuboid.h>
+#include <nddlgen/math/Vector.h>
+#include <nddlgen/math/VectorOperations.h>
 #include <nddlgen/models/ArmModel.h>
 #include <nddlgen/models/DomainDescriptionModel.h>
 #include <nddlgen/models/NddlGeneratable.h>
@@ -57,6 +62,8 @@ class nddlgen::controllers::DomainDescriptionFactory
 				nddlgen::types::IsdRoot isdRoot);
 
 		nddlgen::models::NddlGeneratablePtr modelFactory(sdf::ElementPtr element);
+
+		nddlgen::math::CuboidPtr boundingBoxFactory(std::string basePose, std::string pose, std::string size);
 
 		nddlgen::utilities::InitialStateFactPtr factFactory(TiXmlElement* factElement);
 

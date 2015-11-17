@@ -111,3 +111,33 @@ nddlgen::types::ActionList nddlgen::models::NddlGeneratable::getActions()
 {
 	return this->_actions;
 }
+
+nddlgen::math::CuboidPtr nddlgen::models::NddlGeneratable::getObjectBoundingBox()
+{
+	return this->_objectBoundingBox;
+}
+
+void nddlgen::models::NddlGeneratable::setObjectBoundingBox(nddlgen::math::CuboidPtr objectBoundingBox)
+{
+	this->_objectBoundingBox = objectBoundingBox;
+}
+
+bool nddlgen::models::NddlGeneratable::hasObjectBoundingBox()
+{
+	return (bool) this->_objectBoundingBox;
+}
+
+nddlgen::math::CuboidPtr nddlgen::models::NddlGeneratable::getAccessibilityBoundingBox()
+{
+	return this->_accessibilityBoundingBox;
+}
+
+void nddlgen::models::NddlGeneratable::setAccessibilityBoundingBox(nddlgen::math::CuboidPtr accessibilityBoundingBox)
+{
+	this->_accessibilityBoundingBox = accessibilityBoundingBox;
+}
+
+bool nddlgen::models::NddlGeneratable::hasAccessibilityBoundingBox()
+{
+	return (bool) this->_accessibilityBoundingBox;
+}

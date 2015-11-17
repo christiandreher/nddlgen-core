@@ -28,6 +28,30 @@ nddlgen::models::WorkspaceModel::~WorkspaceModel()
 
 void nddlgen::models::WorkspaceModel::postInitProcessing()
 {
+	// Detect all blocking objects and populate models accordingly
+	foreach (nddlgen::models::NddlGeneratablePtr model1, this->_models)
+	{
+		foreach (nddlgen::models::NddlGeneratablePtr model2, this->_models)
+		{
+			if (model1 != model2)
+			{
+				if (model1->hasAccessibilityBoundingBox() && model2->hasObjectBoundingBox())
+				{
+					bool doBoundingBoxesIntersect = nddlgen::controllers::CollisionDetectionController::doesIntersect(
+							model1->getAccessibilityBoundingBox(),
+							model2->getObjectBoundingBox()
+					);
+
+					if (doBoundingBoxesIntersect)
+					{
+						model1->addBlockingObject(model2);
+					}
+				}
+			}
+		}
+	}
+
+	// Run post init processing for each model
 	foreach (nddlgen::models::NddlGeneratablePtr generatableModel, this->_models)
 	{
 		generatableModel->postInitProcessing();

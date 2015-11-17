@@ -23,6 +23,7 @@
 
 #include <boost/shared_ptr.hpp>
 
+#include <nddlgen/math/Cuboid.h>
 #include <nddlgen/utilities/Types.hpp>
 #include <nddlgen/utilities/WriteStream.hpp>
 #include <nddlgen/utilities/Foreach.hpp>
@@ -47,6 +48,8 @@ class nddlgen::models::NddlGeneratable
 		nddlgen::types::NddlGeneratableList _blockedBy;
 		std::list<std::string> _predicates;
 		nddlgen::types::ActionList _actions;
+		nddlgen::math::CuboidPtr _objectBoundingBox;
+		nddlgen::math::CuboidPtr _accessibilityBoundingBox;
 
 	public:
 
@@ -74,6 +77,14 @@ class nddlgen::models::NddlGeneratable
 		void addAction(nddlgen::utilities::ModelActionPtr action);
 		bool hasActions();
 		virtual nddlgen::types::ActionList getActions();
+
+		nddlgen::math::CuboidPtr getObjectBoundingBox();
+		void setObjectBoundingBox(nddlgen::math::CuboidPtr objectBoundingBox);
+		bool hasObjectBoundingBox();
+
+		nddlgen::math::CuboidPtr getAccessibilityBoundingBox();
+		void setAccessibilityBoundingBox(nddlgen::math::CuboidPtr accessibilityBoundingBox);
+		bool hasAccessibilityBoundingBox();
 
 };
 

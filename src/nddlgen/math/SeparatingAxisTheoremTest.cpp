@@ -29,6 +29,8 @@ nddlgen::math::SeparatingAxisTheoremTest::~SeparatingAxisTheoremTest()
 bool nddlgen::math::SeparatingAxisTheoremTest::doesIntersect(nddlgen::math::CuboidPtr box1,
 		nddlgen::math::CuboidPtr box2)
 {
+	// For all 15 projections, check if the projection does overlap. If it doesn't overlap once,
+	// the two cuboids do not intersect
 	if (!SeparatingAxisTheoremTest::doesProjectionIntersect(box1, box2, box1->getNormalXAxis())
 		|| !SeparatingAxisTheoremTest::doesProjectionIntersect(box1, box2, box1->getNormalYAxis())
 		|| !SeparatingAxisTheoremTest::doesProjectionIntersect(box1, box2, box1->getNormalZAxis())
