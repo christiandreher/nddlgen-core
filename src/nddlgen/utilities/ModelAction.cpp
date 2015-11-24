@@ -26,7 +26,6 @@ nddlgen::utilities::ModelAction::~ModelAction()
 
 }
 
-
 void nddlgen::utilities::ModelAction::setName(std::string name)
 {
 	this->_name = name;
@@ -51,7 +50,6 @@ void nddlgen::utilities::ModelAction::setMeetsEffect(std::string modelName, std:
 {
 	this->_meetsEffect = modelName + "." + predicate;
 }
-
 
 std::string nddlgen::utilities::ModelAction::getName()
 {

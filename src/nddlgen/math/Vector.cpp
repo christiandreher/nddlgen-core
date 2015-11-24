@@ -14,9 +14,36 @@
  * limitations under the License.
  */
 
-#include <nddlgen/utilities/Meta.h>
+#include <nddlgen/math/Vector.h>
 
-const std::string nddlgen::utilities::Meta::NDDLGEN_VERSION = "0.10.0";
-const std::string nddlgen::utilities::Meta::NDDLGEN_PROJECT_HOMEPAGE = "nddlgen.charlydelta.org";
-const std::string nddlgen::utilities::Meta::NDDLGEN_SUPPORT_EMAIL = "nddlgen-support@charlydelta.org";
-const std::string nddlgen::utilities::Meta::AUTHOR_CHR_DREHER_EMAIL = "dreher@charlydelta.org";
+nddlgen::math::Vector::Vector(double x, double y, double z)
+{
+	this->_x = x;
+	this->_y = y;
+	this->_z = z;
+}
+
+nddlgen::math::Vector::~Vector()
+{
+
+}
+
+double nddlgen::math::Vector::getX()
+{
+	return this->_x;
+}
+
+double nddlgen::math::Vector::getY()
+{
+	return this->_y;
+}
+
+double nddlgen::math::Vector::getZ()
+{
+	return this->_z;
+}
+
+bool nddlgen::math::Vector::isNull()
+{
+	return (this->_x == 0 && this->_y == 0 && this->_z == 0);
+}

@@ -22,6 +22,7 @@
 
 #include <boost/shared_ptr.hpp>
 
+#include <nddlgen/controllers/CollisionDetectionController.h>
 #include <nddlgen/models/NddlGeneratable.h>
 #include <nddlgen/utilities/Types.hpp>
 #include <nddlgen/utilities/Foreach.hpp>

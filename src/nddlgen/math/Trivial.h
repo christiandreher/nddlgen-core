@@ -14,9 +14,36 @@
  * limitations under the License.
  */
 
-#include <nddlgen/utilities/Meta.h>
+#ifndef NDDLGEN_MATH_TRIVIAL_H_
+#define NDDLGEN_MATH_TRIVIAL_H_
 
-const std::string nddlgen::utilities::Meta::NDDLGEN_VERSION = "0.10.0";
-const std::string nddlgen::utilities::Meta::NDDLGEN_PROJECT_HOMEPAGE = "nddlgen.charlydelta.org";
-const std::string nddlgen::utilities::Meta::NDDLGEN_SUPPORT_EMAIL = "nddlgen-support@charlydelta.org";
-const std::string nddlgen::utilities::Meta::AUTHOR_CHR_DREHER_EMAIL = "dreher@charlydelta.org";
+namespace nddlgen
+{
+	namespace math
+	{
+		class Trivial;
+	}
+}
+
+class nddlgen::math::Trivial
+{
+
+	private:
+
+		Trivial();
+		virtual ~Trivial();
+
+
+	public:
+
+		static int min(int a, int b);
+		static float min(float a, float b);
+		static double min(double a, double b);
+
+		static int max(int a, int b);
+		static float max(float a, float b);
+		static double max(double a, double b);
+
+};
+
+#endif

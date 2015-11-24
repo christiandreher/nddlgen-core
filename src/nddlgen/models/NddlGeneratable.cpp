@@ -26,12 +26,10 @@ nddlgen::models::NddlGeneratable::~NddlGeneratable()
 
 }
 
-
 void nddlgen::models::NddlGeneratable::postInitProcessing()
 {
 
 }
-
 
 void nddlgen::models::NddlGeneratable::generateModel(std::ofstream& ofStream)
 {
@@ -69,7 +67,6 @@ std::string nddlgen::models::NddlGeneratable::getNamePrefSuff()
 	return this->getNamePref() + "_param";
 }
 
-
 void nddlgen::models::NddlGeneratable::setClassName(std::string className)
 {
 	this->_className = className;
@@ -79,7 +76,6 @@ std::string nddlgen::models::NddlGeneratable::getClassName()
 {
 	return this->_className;
 }
-
 
 void nddlgen::models::NddlGeneratable::addBlockingObject(nddlgen::models::NddlGeneratablePtr blockingObject)
 {
@@ -91,7 +87,6 @@ bool nddlgen::models::NddlGeneratable::isBlocked()
 	return (this->_blockedBy.size() != 0);
 }
 
-
 void nddlgen::models::NddlGeneratable::addPredicate(std::string predicate)
 {
 	this->_predicates.push_back(predicate);
@@ -101,7 +96,6 @@ bool nddlgen::models::NddlGeneratable::hasPredicates()
 {
 	return (this->_predicates.size() != 0);
 }
-
 
 void nddlgen::models::NddlGeneratable::addAction(nddlgen::utilities::ModelActionPtr action)
 {
@@ -116,4 +110,34 @@ bool nddlgen::models::NddlGeneratable::hasActions()
 nddlgen::types::ActionList nddlgen::models::NddlGeneratable::getActions()
 {
 	return this->_actions;
+}
+
+nddlgen::math::CuboidPtr nddlgen::models::NddlGeneratable::getObjectBoundingBox()
+{
+	return this->_objectBoundingBox;
+}
+
+void nddlgen::models::NddlGeneratable::setObjectBoundingBox(nddlgen::math::CuboidPtr objectBoundingBox)
+{
+	this->_objectBoundingBox = objectBoundingBox;
+}
+
+bool nddlgen::models::NddlGeneratable::hasObjectBoundingBox()
+{
+	return (bool) this->_objectBoundingBox;
+}
+
+nddlgen::math::CuboidPtr nddlgen::models::NddlGeneratable::getAccessibilityBoundingBox()
+{
+	return this->_accessibilityBoundingBox;
+}
+
+void nddlgen::models::NddlGeneratable::setAccessibilityBoundingBox(nddlgen::math::CuboidPtr accessibilityBoundingBox)
+{
+	this->_accessibilityBoundingBox = accessibilityBoundingBox;
+}
+
+bool nddlgen::models::NddlGeneratable::hasAccessibilityBoundingBox()
+{
+	return (bool) this->_accessibilityBoundingBox;
 }

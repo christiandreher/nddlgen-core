@@ -14,9 +14,32 @@
  * limitations under the License.
  */
 
-#include <nddlgen/utilities/Meta.h>
+#ifndef NDDLGEN_CONTROLLERS_COLLISIONDETECTIONCONTROLLER_H_
+#define NDDLGEN_CONTROLLERS_COLLISIONDETECTIONCONTROLLER_H_
 
-const std::string nddlgen::utilities::Meta::NDDLGEN_VERSION = "0.10.0";
-const std::string nddlgen::utilities::Meta::NDDLGEN_PROJECT_HOMEPAGE = "nddlgen.charlydelta.org";
-const std::string nddlgen::utilities::Meta::NDDLGEN_SUPPORT_EMAIL = "nddlgen-support@charlydelta.org";
-const std::string nddlgen::utilities::Meta::AUTHOR_CHR_DREHER_EMAIL = "dreher@charlydelta.org";
+#include <nddlgen/math/Cuboid.h>
+#include <nddlgen/math/SeparatingAxisTheoremTest.h>
+
+namespace nddlgen
+{
+	namespace controllers
+	{
+		class CollisionDetectionController;
+	}
+}
+
+class nddlgen::controllers::CollisionDetectionController
+{
+
+	private:
+
+		CollisionDetectionController();
+		virtual ~CollisionDetectionController();
+
+	public:
+
+		static bool doesIntersect(nddlgen::math::CuboidPtr box1, nddlgen::math::CuboidPtr box2);
+
+};
+
+#endif

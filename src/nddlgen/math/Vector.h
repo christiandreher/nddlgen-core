@@ -14,9 +14,40 @@
  * limitations under the License.
  */
 
-#include <nddlgen/utilities/Meta.h>
+#ifndef NDDLGEN_MATH_VECTOR_H_
+#define NDDLGEN_MATH_VECTOR_H_
 
-const std::string nddlgen::utilities::Meta::NDDLGEN_VERSION = "0.10.0";
-const std::string nddlgen::utilities::Meta::NDDLGEN_PROJECT_HOMEPAGE = "nddlgen.charlydelta.org";
-const std::string nddlgen::utilities::Meta::NDDLGEN_SUPPORT_EMAIL = "nddlgen-support@charlydelta.org";
-const std::string nddlgen::utilities::Meta::AUTHOR_CHR_DREHER_EMAIL = "dreher@charlydelta.org";
+#include <boost/shared_ptr.hpp>
+
+namespace nddlgen
+{
+	namespace math
+	{
+		class Vector;
+		typedef boost::shared_ptr<nddlgen::math::Vector> VectorPtr;
+	}
+}
+
+class nddlgen::math::Vector
+{
+
+	private:
+
+		double _x;
+		double _y;
+		double _z;
+
+	public:
+
+		Vector(double x, double y, double z);
+		virtual ~Vector();
+
+		double getX();
+		double getY();
+		double getZ();
+
+		bool isNull();
+
+};
+
+#endif

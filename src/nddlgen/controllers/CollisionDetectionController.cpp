@@ -14,9 +14,31 @@
  * limitations under the License.
  */
 
-#include <nddlgen/utilities/Meta.h>
+#include <nddlgen/controllers/CollisionDetectionController.h>
 
-const std::string nddlgen::utilities::Meta::NDDLGEN_VERSION = "0.10.0";
-const std::string nddlgen::utilities::Meta::NDDLGEN_PROJECT_HOMEPAGE = "nddlgen.charlydelta.org";
-const std::string nddlgen::utilities::Meta::NDDLGEN_SUPPORT_EMAIL = "nddlgen-support@charlydelta.org";
-const std::string nddlgen::utilities::Meta::AUTHOR_CHR_DREHER_EMAIL = "dreher@charlydelta.org";
+nddlgen::controllers::CollisionDetectionController::CollisionDetectionController()
+{
+
+}
+
+nddlgen::controllers::CollisionDetectionController::~CollisionDetectionController()
+{
+
+}
+
+bool nddlgen::controllers::CollisionDetectionController::doesIntersect(
+		nddlgen::math::CuboidPtr box1,
+		nddlgen::math::CuboidPtr box2)
+{
+	if (!box1)
+	{
+		throw "Accessibility bounding box was not set.";
+	}
+
+	if (!box2)
+	{
+		throw "Object bounding box was not set.";
+	}
+
+	return nddlgen::math::SeparatingAxisTheoremTest::doesIntersect(box1, box2);
+}

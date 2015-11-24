@@ -74,7 +74,7 @@ void nddlgen::controllers::DomainDescriptionFactory::populateModelsFromSdf(
 		nddlgen::models::NddlGeneratablePtr generatableModel = this->modelFactory(currentModelElement);
 
 		// If generatableModel is null, it is not supported by the given model factory
-		// and will not be added to the workspace
+		// and will therefore not be added to the workspace
 		if (generatableModel)
 		{
 			workspace->addModelToWorkspace(generatableModel);
@@ -120,9 +120,150 @@ nddlgen::models::NddlGeneratablePtr nddlgen::controllers::DomainDescriptionFacto
 	if (instance)
 	{
 		instance->setName(elementName);
+
+		std::string basePoseRaw = element->GetElement("pose")->GetValue()->GetAsString();
+
+		sdf::ElementPtr boundingBox = element->GetElement("link");
+
+		while (boundingBox)
+		{
+			std::string linkName = boundingBox->GetAttribute("name")->GetAsString();
+
+			if (linkName.find("bounding_box") != std::string::npos)
+			{
+				std::string poseRaw = boundingBox->GetElement("visual")->GetElement("pose")
+						->GetValue()->GetAsString();
+				std::string sizeRaw = boundingBox->GetElement("visual")->GetElement("geometry")->GetElement("box")
+						->GetElement("size")->GetValue()->GetAsString();
+
+				nddlgen::math::CuboidPtr boundingBox = nddlgen::controllers::DomainDescriptionFactory::
+						boundingBoxFactory(basePoseRaw, poseRaw, sizeRaw);
+
+				if (linkName.find("object") != std::string::npos)
+				{
+					instance->setObjectBoundingBox(boundingBox);
+				}
+				else if (linkName.find("accessibility") != std::string::npos)
+				{
+					instance->setAccessibilityBoundingBox(boundingBox);
+				}
+			}
+
+			// Iterate
+			boundingBox = boundingBox->GetNextElement("link");
+		}
 	}
 
 	return instance;
+}
+
+nddlgen::math::CuboidPtr nddlgen::controllers::DomainDescriptionFactory::boundingBoxFactory(
+		std::string basePose,
+		std::string pose,
+		std::string size)
+{
+	// Vectors holding exploded strings
+	std::vector<std::string> basePoseSplit;
+	std::vector<std::string> poseSplit;
+	std::vector<std::string> sizeSplit;
+
+	// Explode strings and save to vectors defined above
+	boost::algorithm::split(basePoseSplit, basePose, boost::is_any_of(" "));
+	boost::algorithm::split(poseSplit, pose, boost::is_any_of(" "));
+	boost::algorithm::split(sizeSplit, size, boost::is_any_of(" "));
+
+	// Extract pose of base object
+	double xBase = atof(basePoseSplit[0].c_str());
+	double yBase = atof(basePoseSplit[1].c_str());
+	double zBase = atof(basePoseSplit[2].c_str());
+	double rollBase = atof(basePoseSplit[3].c_str());
+	double pitchBase = atof(basePoseSplit[4].c_str());
+	double yawBase = atof(basePoseSplit[5].c_str());
+
+	// Extract pose of bounding box
+	double x = atof(poseSplit[0].c_str());
+	double y = atof(poseSplit[1].c_str());
+	double z = atof(poseSplit[2].c_str());
+	double roll = atof(poseSplit[3].c_str());
+	double pitch = atof(poseSplit[4].c_str());
+	double yaw = atof(poseSplit[5].c_str());
+
+	// Extract extend of bounding box (an extend is the abs value of half the size)
+	double xExtend = atof(sizeSplit[0].c_str()) / 2;
+	double yExtend = atof(sizeSplit[1].c_str()) / 2;
+	double zExtend = atof(sizeSplit[2].c_str()) / 2;
+
+	// Construct vectors defining every single vertex of the cuboid
+	nddlgen::math::VectorPtr vertex1(new nddlgen::math::Vector(
+			x + xExtend + xBase,
+			y + yExtend + yBase,
+			z + zExtend + zBase)
+	);
+	nddlgen::math::VectorPtr vertex2(new nddlgen::math::Vector(
+			x + xExtend + xBase,
+			y - yExtend + yBase,
+			z + zExtend + zBase)
+	);
+	nddlgen::math::VectorPtr vertex3(new nddlgen::math::Vector(
+			x - xExtend + xBase,
+			y + yExtend + yBase,
+			z + zExtend + zBase)
+	);
+	nddlgen::math::VectorPtr vertex4(new nddlgen::math::Vector(
+			x - xExtend + xBase,
+			y - yExtend + yBase,
+			z + zExtend + zBase)
+	);
+	nddlgen::math::VectorPtr vertex5(new nddlgen::math::Vector(
+			x + xExtend + xBase,
+			y + yExtend + yBase,
+			z - zExtend + zBase)
+	);
+	nddlgen::math::VectorPtr vertex6(new nddlgen::math::Vector(
+			x + xExtend + xBase,
+			y - yExtend + yBase,
+			z - zExtend + zBase)
+	);
+	nddlgen::math::VectorPtr vertex7(new nddlgen::math::Vector(
+			x - xExtend + xBase,
+			y + yExtend + yBase,
+			z - zExtend + zBase)
+	);
+	nddlgen::math::VectorPtr vertex8(new nddlgen::math::Vector(
+			x - xExtend + xBase,
+			y - yExtend + yBase,
+			z - zExtend + zBase)
+	);
+
+	// Define and construct vector of all vertices
+	std::vector<nddlgen::math::VectorPtr> vertices;
+	vertices.push_back(vertex1);
+	vertices.push_back(vertex2);
+	vertices.push_back(vertex3);
+	vertices.push_back(vertex4);
+	vertices.push_back(vertex5);
+	vertices.push_back(vertex6);
+	vertices.push_back(vertex7);
+	vertices.push_back(vertex8);
+
+	// Calculate normals for each axis
+	nddlgen::math::VectorPtr xAxisNormal = nddlgen::math::VectorOperations::crossProduct(
+			nddlgen::math::VectorOperations::minus(vertex1, vertex5),
+			nddlgen::math::VectorOperations::minus(vertex6, vertex5)
+	);
+	nddlgen::math::VectorPtr yAxisNormal = nddlgen::math::VectorOperations::crossProduct(
+			nddlgen::math::VectorOperations::minus(vertex1, vertex5),
+			nddlgen::math::VectorOperations::minus(vertex7, vertex5)
+	);
+	nddlgen::math::VectorPtr zAxisNormal = nddlgen::math::VectorOperations::crossProduct(
+			nddlgen::math::VectorOperations::minus(vertex7, vertex5),
+			nddlgen::math::VectorOperations::minus(vertex6, vertex5)
+	);
+
+	// Construct cuboid defining the bounding box
+	nddlgen::math::CuboidPtr boundingBox(new nddlgen::math::Cuboid(vertices, xAxisNormal, yAxisNormal, zAxisNormal));
+
+	return boundingBox;
 }
 
 nddlgen::utilities::InitialStateFactPtr nddlgen::controllers::DomainDescriptionFactory::factFactory(TiXmlElement* factElement)
