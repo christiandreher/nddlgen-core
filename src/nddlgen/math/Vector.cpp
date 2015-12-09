@@ -43,6 +43,36 @@ double nddlgen::math::Vector::getZ()
 	return this->_z;
 }
 
+void nddlgen::math::Vector::setX(double x)
+{
+	this->_x = x;
+}
+
+void nddlgen::math::Vector::setY(double y)
+{
+	this->_y = y;
+}
+
+void nddlgen::math::Vector::setZ(double z)
+{
+	this->_z = z;
+}
+
+void nddlgen::math::Vector::addX(double x)
+{
+	this->_x += x;
+}
+
+void nddlgen::math::Vector::addY(double y)
+{
+	this->_y += y;
+}
+
+void nddlgen::math::Vector::addZ(double z)
+{
+	this->_z += z;
+}
+
 bool nddlgen::math::Vector::isNull()
 {
 	return (this->_x == 0 && this->_y == 0 && this->_z == 0);

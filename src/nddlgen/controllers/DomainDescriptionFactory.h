@@ -28,6 +28,7 @@
 #include <nddlgen/controllers/NddlGeneratableFactory.h>
 #include <nddlgen/exceptions/ModelFactoryNotSetException.hpp>
 #include <nddlgen/math/Cuboid.h>
+#include <nddlgen/math/CuboidOperations.h>
 #include <nddlgen/math/Vector.h>
 #include <nddlgen/math/VectorOperations.h>
 #include <nddlgen/models/ArmModel.h>

@@ -14,47 +14,35 @@
  * limitations under the License.
  */
 
-#ifndef NDDLGEN_MATH_VECTOR_H_
-#define NDDLGEN_MATH_VECTOR_H_
+#ifndef NDDLGEN_MATH_CUBOIDOPERATIONS_H_
+#define NDDLGEN_MATH_CUBOIDOPERATIONS_H_
 
-#include <boost/shared_ptr.hpp>
+#include <cmath>
+#include <vector>
+
+#include <nddlgen/math/Vector.h>
 
 namespace nddlgen
 {
 	namespace math
 	{
-		class Vector;
-		typedef boost::shared_ptr<nddlgen::math::Vector> VectorPtr;
+		class CuboidOperations;
 	}
 }
 
-class nddlgen::math::Vector
+class nddlgen::math::CuboidOperations
 {
 
 	private:
 
-		double _x;
-		double _y;
-		double _z;
+		CuboidOperations();
+		virtual ~CuboidOperations();
 
 	public:
 
-		Vector(double x, double y, double z);
-		virtual ~Vector();
-
-		double getX();
-		double getY();
-		double getZ();
-
-		void setX(double x);
-		void setY(double y);
-		void setZ(double z);
-
-		void addX(double x);
-		void addY(double y);
-		void addZ(double z);
-
-		bool isNull();
+		static void roll(std::vector<nddlgen::math::VectorPtr> vertices, double angle);
+		static void pitch(std::vector<nddlgen::math::VectorPtr> vertices, double angle);
+		static void yaw(std::vector<nddlgen::math::VectorPtr> vertices, double angle);
 
 };
 
