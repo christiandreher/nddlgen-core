@@ -62,7 +62,7 @@ std::list<std::string> nddlgen::utilities::InitialStateGoal::getGoal()
 
 	goal.push_back("goal(" + this->_modelName + "." + this->_predicate + " " + goalName + ");");
 	goal.push_back("lt(0, " + goalName + ".start);");
-	goal.push_back("lt(" + goalName + ".start, 10)");
+	goal.push_back("lt(" + goalName + ".start, 10);");
 
 	return goal;
 }
