@@ -30,13 +30,16 @@ class nddlgen::exceptions::FileAlreadyExistsException : public std::exception
 
 	public:
 
-		explicit FileAlreadyExistsException(const std::string& fileName): _fileName(fileName) {}
+		explicit FileAlreadyExistsException(const std::string& fileName)
+		{
+			this->_fileName = "The file \"" + fileName + "\" already exists.";
+		}
+
 		virtual ~FileAlreadyExistsException() throw (){}
 
 		virtual const char* what() const throw()
 		{
-			std::string output = "The file \"" + this->_fileName + "\" already exists.";
-			return output.c_str();
+			return this->_fileName.c_str();
 		}
 
 };
