@@ -162,6 +162,9 @@ nddlgen::math::CuboidPtr nddlgen::controllers::DomainDescriptionFactory::boundin
 		std::string pose,
 		std::string size)
 {
+	// For all values: (x,y,z) element of double^3 (no unit defined by gazebo)
+	//				   (roll,pitch,yaw) element of double^3 (in radians)
+
 	// Vectors holding exploded strings
 	std::vector<std::string> basePoseSplit;
 	std::vector<std::string> poseSplit;
@@ -180,60 +183,29 @@ nddlgen::math::CuboidPtr nddlgen::controllers::DomainDescriptionFactory::boundin
 	double pitchBase = atof(basePoseSplit[4].c_str());
 	double yawBase = atof(basePoseSplit[5].c_str());
 
-	// Extract pose of bounding box
-	double x = atof(poseSplit[0].c_str());
-	double y = atof(poseSplit[1].c_str());
-	double z = atof(poseSplit[2].c_str());
+	// Extract pose of bounding box and add base pose
+	double x = atof(poseSplit[0].c_str()) + xBase;
+	double y = atof(poseSplit[1].c_str()) + yBase;
+	double z = atof(poseSplit[2].c_str()) + zBase;
 	double roll = atof(poseSplit[3].c_str());
 	double pitch = atof(poseSplit[4].c_str());
 	double yaw = atof(poseSplit[5].c_str());
 
 	// Extract extend of bounding box (an extend is the abs value of half the size)
-	double xExtend = atof(sizeSplit[0].c_str()) / 2;
-	double yExtend = atof(sizeSplit[1].c_str()) / 2;
-	double zExtend = atof(sizeSplit[2].c_str()) / 2;
+	double xExtend = atof(sizeSplit[0].c_str()) / 2.f;
+	double yExtend = atof(sizeSplit[1].c_str()) / 2.f;
+	double zExtend = atof(sizeSplit[2].c_str()) / 2.f;
 
-	// Construct vectors defining every single vertex of the cuboid
-	nddlgen::math::VectorPtr vertex1(new nddlgen::math::Vector(
-			x + xExtend + xBase,
-			y + yExtend + yBase,
-			z + zExtend + zBase)
-	);
-	nddlgen::math::VectorPtr vertex2(new nddlgen::math::Vector(
-			x + xExtend + xBase,
-			y - yExtend + yBase,
-			z + zExtend + zBase)
-	);
-	nddlgen::math::VectorPtr vertex3(new nddlgen::math::Vector(
-			x - xExtend + xBase,
-			y + yExtend + yBase,
-			z + zExtend + zBase)
-	);
-	nddlgen::math::VectorPtr vertex4(new nddlgen::math::Vector(
-			x - xExtend + xBase,
-			y - yExtend + yBase,
-			z + zExtend + zBase)
-	);
-	nddlgen::math::VectorPtr vertex5(new nddlgen::math::Vector(
-			x + xExtend + xBase,
-			y + yExtend + yBase,
-			z - zExtend + zBase)
-	);
-	nddlgen::math::VectorPtr vertex6(new nddlgen::math::Vector(
-			x + xExtend + xBase,
-			y - yExtend + yBase,
-			z - zExtend + zBase)
-	);
-	nddlgen::math::VectorPtr vertex7(new nddlgen::math::Vector(
-			x - xExtend + xBase,
-			y + yExtend + yBase,
-			z - zExtend + zBase)
-	);
-	nddlgen::math::VectorPtr vertex8(new nddlgen::math::Vector(
-			x - xExtend + xBase,
-			y - yExtend + yBase,
-			z - zExtend + zBase)
-	);
+	// Construct vectors defining every single vertex of the cuboid by extends with the
+	// origin in the middle of the cuboid. This eases rotations
+	nddlgen::math::VectorPtr vertex1(new nddlgen::math::Vector(  xExtend,   yExtend,   zExtend));
+	nddlgen::math::VectorPtr vertex2(new nddlgen::math::Vector(  xExtend, - yExtend,   zExtend));
+	nddlgen::math::VectorPtr vertex3(new nddlgen::math::Vector(- xExtend,   yExtend,   zExtend));
+	nddlgen::math::VectorPtr vertex4(new nddlgen::math::Vector(- xExtend, - yExtend,   zExtend));
+	nddlgen::math::VectorPtr vertex5(new nddlgen::math::Vector(  xExtend,   yExtend, - zExtend));
+	nddlgen::math::VectorPtr vertex6(new nddlgen::math::Vector(  xExtend, - yExtend, - zExtend));
+	nddlgen::math::VectorPtr vertex7(new nddlgen::math::Vector(- xExtend,   yExtend, - zExtend));
+	nddlgen::math::VectorPtr vertex8(new nddlgen::math::Vector(- xExtend, - yExtend, - zExtend));
 
 	// Define and construct vector of all vertices
 	std::vector<nddlgen::math::VectorPtr> vertices;
@@ -245,6 +217,28 @@ nddlgen::math::CuboidPtr nddlgen::controllers::DomainDescriptionFactory::boundin
 	vertices.push_back(vertex6);
 	vertices.push_back(vertex7);
 	vertices.push_back(vertex8);
+
+	// Roll cuboid
+	nddlgen::math::CuboidOperations::roll(vertices, rollBase);
+	nddlgen::math::CuboidOperations::roll(vertices, roll);
+
+	// Pitch cuboid
+	nddlgen::math::CuboidOperations::pitch(vertices, pitchBase);
+	nddlgen::math::CuboidOperations::pitch(vertices, pitch);
+
+	// Yaw cuboid
+	nddlgen::math::CuboidOperations::yaw(vertices, yawBase);
+	nddlgen::math::CuboidOperations::yaw(vertices, yaw);
+
+	// Define absolute position of cuboid in space
+	for (int i = 0; i < 8 /* amount of vertices of a cuboid */; i++)
+	{
+		nddlgen::math::VectorPtr vertex = vertices[i];
+
+		vertex->addX(x);
+		vertex->addY(y);
+		vertex->addZ(z);
+	}
 
 	// Calculate normals for each axis
 	nddlgen::math::VectorPtr xAxisNormal = nddlgen::math::VectorOperations::crossProduct(
