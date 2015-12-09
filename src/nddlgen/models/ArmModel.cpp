@@ -38,7 +38,7 @@ void nddlgen::models::ArmModel::generateModel(std::ofstream& ofStream)
 	this->_workspace->generateModel(ofStream);
 
 	// #\t  text																	#endl
-	wrln(0, "class " + armClass,													1);
+	wrln(0, "class " + armClass + " extends Timeline",								1);
 	wrln(0, "{", 																	1);
 	wrln(1, 	workspaceClass + " " + workspacePref + ";",							2);
 

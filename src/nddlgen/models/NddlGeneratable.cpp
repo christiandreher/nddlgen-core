@@ -33,8 +33,8 @@ void nddlgen::models::NddlGeneratable::postInitProcessing()
 
 void nddlgen::models::NddlGeneratable::generateModel(std::ofstream& ofStream)
 {
-	wrln(0, "class " + this->_className,	1);
-	wrln(0, "{",							1);
+	wrln(0, "class " + this->_className + " extends Timeline",	1);
+	wrln(0, "{",												1);
 
 	if (this->hasPredicates())
 	{

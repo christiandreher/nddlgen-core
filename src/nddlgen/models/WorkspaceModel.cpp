@@ -73,8 +73,8 @@ void nddlgen::models::WorkspaceModel::generateModel(std::ofstream& ofStream)
 
 	}
 
-	wrln(0, "class " + this->getClassName(),	1);
-	wrln(0, "{",								1);
+	wrln(0, "class " + this->getClassName() + " extends Timeline",	1);
+	wrln(0, "{",													1);
 
 	this->generateWorkspaceMembers(ofStream);
 
