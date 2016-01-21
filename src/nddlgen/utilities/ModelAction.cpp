@@ -36,21 +36,6 @@ void nddlgen::utilities::ModelAction::setDuration(std::string duration)
 	this->_duration = duration;
 }
 
-void nddlgen::utilities::ModelAction::setMetByCondition(std::string modelName, std::string predicate)
-{
-	this->_metByCondition = modelName + "." + predicate;
-}
-
-void nddlgen::utilities::ModelAction::setContainedByCondition(std::string modelName, std::string predicate)
-{
-	this->_containedByCondition = modelName + "." + predicate;
-}
-
-void nddlgen::utilities::ModelAction::setMeetsEffect(std::string modelName, std::string predicate)
-{
-	this->_meetsEffect = modelName + "." + predicate;
-}
-
 std::string nddlgen::utilities::ModelAction::getName()
 {
 	return this->_name;
@@ -61,21 +46,6 @@ std::string nddlgen::utilities::ModelAction::getDuration()
 	return this->_duration;
 }
 
-std::string nddlgen::utilities::ModelAction::getMetByCondition(std::string workspaceNamePref)
-{
-	return "met_by(condition object." + workspaceNamePref + "." + this->_metByCondition + ");";
-}
-
-std::string nddlgen::utilities::ModelAction::getContainedByCondition(std::string workspaceNamePref)
-{
-	return "contained_by(condition object." + workspaceNamePref + "." + this->_containedByCondition + ");";
-}
-
-std::string nddlgen::utilities::ModelAction::getMeetsEffect(std::string workspaceNamePref)
-{
-	return "meets(effect object." + workspaceNamePref + "." + this->_meetsEffect + ");";
-}
-
 std::string nddlgen::utilities::ModelAction::getActionDefinition()
 {
 	return "action " + this->getName() + " { duration=" + this->getDuration() + "; }";
@@ -83,22 +53,248 @@ std::string nddlgen::utilities::ModelAction::getActionDefinition()
 
 std::list<std::string> nddlgen::utilities::ModelAction::getActionSteps(std::string workspaceNamePref)
 {
-	std::list<std::string> actionSteps;
+	return this->_actionSteps;
+}
 
-	if (this->_metByCondition != "")
+void nddlgen::utilities::ModelAction::addGenericConditionOrEffect(std::string relationName, std::string conditionOrEffect,
+		std::string modelName, std::string predicate, std::string tokenName)
+{
+	if (tokenName != "")
 	{
-		actionSteps.push_back(this->getMetByCondition(workspaceNamePref));
+		tokenName = " " + tokenName;
 	}
 
-	if (this->_containedByCondition != "")
-	{
-		actionSteps.push_back(this->getContainedByCondition(workspaceNamePref));
-	}
+	std::string line = relationName + " (" + conditionOrEffect + " " + modelName + "." + predicate + tokenName + ");";
 
-	if (this->_meetsEffect != "")
-	{
-		actionSteps.push_back(this->getMeetsEffect(workspaceNamePref));
-	}
+	this->_actionSteps.push_back(line);
+}
 
-	return actionSteps;
+void nddlgen::utilities::ModelAction::addBeforeCondition(std::string modelName, std::string predicate, std::string tokenName)
+{
+	this->addGenericConditionOrEffect("before", "condition", modelName, predicate, tokenName);
+}
+
+void nddlgen::utilities::ModelAction::addAfterCondition(std::string modelName, std::string predicate, std::string tokenName)
+{
+	this->addGenericConditionOrEffect("after", "condition", modelName, predicate, tokenName);
+}
+
+void nddlgen::utilities::ModelAction::addMeetsCondition(std::string modelName, std::string predicate, std::string tokenName)
+{
+	this->addGenericConditionOrEffect("meets", "condition", modelName, predicate, tokenName);
+}
+
+void nddlgen::utilities::ModelAction::addMetByCondition(std::string modelName, std::string predicate, std::string tokenName)
+{
+	this->addGenericConditionOrEffect("met_by", "condition", modelName, predicate, tokenName);
+}
+
+void nddlgen::utilities::ModelAction::addEqualCondition(std::string modelName, std::string predicate, std::string tokenName)
+{
+	this->addGenericConditionOrEffect("equal", "condition", modelName, predicate, tokenName);
+}
+
+void nddlgen::utilities::ModelAction::addEqualsCondition(std::string modelName, std::string predicate, std::string tokenName)
+{
+	this->addGenericConditionOrEffect("equals", "condition", modelName, predicate, tokenName);
+}
+
+void nddlgen::utilities::ModelAction::addContainsCondition(std::string modelName, std::string predicate, std::string tokenName)
+{
+	this->addGenericConditionOrEffect("contains", "condition", modelName, predicate, tokenName);
+}
+
+void nddlgen::utilities::ModelAction::addContainedByCondition(std::string modelName, std::string predicate, std::string tokenName)
+{
+	this->addGenericConditionOrEffect("contained_by", "condition", modelName, predicate, tokenName);
+}
+
+void nddlgen::utilities::ModelAction::addParalleledByCondition(std::string modelName, std::string predicate, std::string tokenName)
+{
+	this->addGenericConditionOrEffect("paralleled_by", "condition", modelName, predicate, tokenName);
+}
+
+void nddlgen::utilities::ModelAction::addParallelsCondition(std::string modelName, std::string predicate, std::string tokenName)
+{
+	this->addGenericConditionOrEffect("parallels", "condition", modelName, predicate, tokenName);
+}
+
+void nddlgen::utilities::ModelAction::addStartsCondition(std::string modelName, std::string predicate, std::string tokenName)
+{
+	this->addGenericConditionOrEffect("starts", "condition", modelName, predicate, tokenName);
+}
+
+void nddlgen::utilities::ModelAction::addEndsCondition(std::string modelName, std::string predicate, std::string tokenName)
+{
+	this->addGenericConditionOrEffect("ends", "condition", modelName, predicate, tokenName);
+}
+
+void nddlgen::utilities::ModelAction::addEndsAfterCondition(std::string modelName, std::string predicate, std::string tokenName)
+{
+	this->addGenericConditionOrEffect("ends_after", "condition", modelName, predicate, tokenName);
+}
+
+void nddlgen::utilities::ModelAction::addEndsBeforeCondition(std::string modelName, std::string predicate, std::string tokenName)
+{
+	this->addGenericConditionOrEffect("ends_before", "condition", modelName, predicate, tokenName);
+}
+
+void nddlgen::utilities::ModelAction::addEndsAfterStartCondition(std::string modelName, std::string predicate, std::string tokenName)
+{
+	this->addGenericConditionOrEffect("ends_after_start", "condition", modelName, predicate, tokenName);
+}
+
+void nddlgen::utilities::ModelAction::addStartsBeforeEndCondition(std::string modelName, std::string predicate, std::string tokenName)
+{
+	this->addGenericConditionOrEffect("starts_before_end", "condition", modelName, predicate, tokenName);
+}
+
+void nddlgen::utilities::ModelAction::addStartsDuringCondition(std::string modelName, std::string predicate, std::string tokenName)
+{
+	this->addGenericConditionOrEffect("starts_during", "condition", modelName, predicate, tokenName);
+}
+
+void nddlgen::utilities::ModelAction::addContainsStartCondition(std::string modelName, std::string predicate, std::string tokenName)
+{
+	this->addGenericConditionOrEffect("contains_start", "condition", modelName, predicate, tokenName);
+}
+
+void nddlgen::utilities::ModelAction::addEndsDuringCondition(std::string modelName, std::string predicate, std::string tokenName)
+{
+	this->addGenericConditionOrEffect("ends_during", "condition", modelName, predicate, tokenName);
+}
+
+void nddlgen::utilities::ModelAction::addContainsEndCondition(std::string modelName, std::string predicate, std::string tokenName)
+{
+	this->addGenericConditionOrEffect("contains_end", "condition", modelName, predicate, tokenName);
+}
+
+void nddlgen::utilities::ModelAction::addStartsAfterCondition(std::string modelName, std::string predicate, std::string tokenName)
+{
+	this->addGenericConditionOrEffect("starts_after", "condition", modelName, predicate, tokenName);
+}
+
+void nddlgen::utilities::ModelAction::addStartsBeforeCondition(std::string modelName, std::string predicate, std::string tokenName)
+{
+	this->addGenericConditionOrEffect("starts_before", "condition", modelName, predicate, tokenName);
+}
+
+void nddlgen::utilities::ModelAction::addAnyCondition(std::string modelName, std::string predicate, std::string tokenName)
+{
+	this->addGenericConditionOrEffect("any", "condition", modelName, predicate, tokenName);
+}
+
+void nddlgen::utilities::ModelAction::addBeforeEffect(std::string modelName, std::string predicate, std::string tokenName)
+{
+	this->addGenericConditionOrEffect("before", "effect", modelName, predicate, tokenName);
+}
+
+void nddlgen::utilities::ModelAction::addAfterEffect(std::string modelName, std::string predicate, std::string tokenName)
+{
+	this->addGenericConditionOrEffect("after", "effect", modelName, predicate, tokenName);
+}
+
+void nddlgen::utilities::ModelAction::addMeetsEffect(std::string modelName, std::string predicate, std::string tokenName)
+{
+	this->addGenericConditionOrEffect("meets", "effect", modelName, predicate, tokenName);
+}
+
+void nddlgen::utilities::ModelAction::addMetByEffect(std::string modelName, std::string predicate, std::string tokenName)
+{
+	this->addGenericConditionOrEffect("met_by", "effect", modelName, predicate, tokenName);
+}
+
+void nddlgen::utilities::ModelAction::addEqualEffect(std::string modelName, std::string predicate, std::string tokenName)
+{
+	this->addGenericConditionOrEffect("equal", "effect", modelName, predicate, tokenName);
+}
+
+void nddlgen::utilities::ModelAction::addEqualsEffect(std::string modelName, std::string predicate, std::string tokenName)
+{
+	this->addGenericConditionOrEffect("equals", "effect", modelName, predicate, tokenName);
+}
+
+void nddlgen::utilities::ModelAction::addContainsEffect(std::string modelName, std::string predicate, std::string tokenName)
+{
+	this->addGenericConditionOrEffect("contains", "effect", modelName, predicate, tokenName);
+}
+
+void nddlgen::utilities::ModelAction::addContainedByEffect(std::string modelName, std::string predicate, std::string tokenName)
+{
+	this->addGenericConditionOrEffect("contained_by", "effect", modelName, predicate, tokenName);
+}
+
+void nddlgen::utilities::ModelAction::addParalleledByEffect(std::string modelName, std::string predicate, std::string tokenName)
+{
+	this->addGenericConditionOrEffect("paralleled_by", "effect", modelName, predicate, tokenName);
+}
+
+void nddlgen::utilities::ModelAction::addParallelsEffect(std::string modelName, std::string predicate, std::string tokenName)
+{
+	this->addGenericConditionOrEffect("parallels", "effect", modelName, predicate, tokenName);
+}
+
+void nddlgen::utilities::ModelAction::addStartsEffect(std::string modelName, std::string predicate, std::string tokenName)
+{
+	this->addGenericConditionOrEffect("starts", "effect", modelName, predicate, tokenName);
+}
+
+void nddlgen::utilities::ModelAction::addEndsEffect(std::string modelName, std::string predicate, std::string tokenName)
+{
+	this->addGenericConditionOrEffect("ends", "effect", modelName, predicate, tokenName);
+}
+
+void nddlgen::utilities::ModelAction::addEndsAfterEffect(std::string modelName, std::string predicate, std::string tokenName)
+{
+	this->addGenericConditionOrEffect("ends_after", "effect", modelName, predicate, tokenName);
+}
+
+void nddlgen::utilities::ModelAction::addEndsBeforeEffect(std::string modelName, std::string predicate, std::string tokenName)
+{
+	this->addGenericConditionOrEffect("ends_before", "effect", modelName, predicate, tokenName);
+}
+
+void nddlgen::utilities::ModelAction::addEndsAfterStartEffect(std::string modelName, std::string predicate, std::string tokenName)
+{
+	this->addGenericConditionOrEffect("ends_after_start", "effect", modelName, predicate, tokenName);
+}
+
+void nddlgen::utilities::ModelAction::addStartsBeforeEndEffect(std::string modelName, std::string predicate, std::string tokenName)
+{
+	this->addGenericConditionOrEffect("starts_before_end", "effect", modelName, predicate, tokenName);
+}
+
+void nddlgen::utilities::ModelAction::addStartsDuringEffect(std::string modelName, std::string predicate, std::string tokenName)
+{
+	this->addGenericConditionOrEffect("starts_during", "effect", modelName, predicate, tokenName);
+}
+
+void nddlgen::utilities::ModelAction::addContainsStartEffect(std::string modelName, std::string predicate, std::string tokenName)
+{
+	this->addGenericConditionOrEffect("contains_start", "effect", modelName, predicate, tokenName);
+}
+
+void nddlgen::utilities::ModelAction::addEndsDuringEffect(std::string modelName, std::string predicate, std::string tokenName)
+{
+	this->addGenericConditionOrEffect("ends_during", "effect", modelName, predicate, tokenName);
+}
+
+void nddlgen::utilities::ModelAction::addContainsEndEffect(std::string modelName, std::string predicate, std::string tokenName)
+{
+	this->addGenericConditionOrEffect("contains_end", "effect", modelName, predicate, tokenName);
+}
+
+void nddlgen::utilities::ModelAction::addStartsAfterEffect(std::string modelName, std::string predicate, std::string tokenName)
+{
+	this->addGenericConditionOrEffect("starts_after", "effect", modelName, predicate, tokenName);
+}
+
+void nddlgen::utilities::ModelAction::addStartsBeforeEffect(std::string modelName, std::string predicate, std::string tokenName)
+{
+	this->addGenericConditionOrEffect("starts_before", "effect", modelName, predicate, tokenName);
+}
+
+void nddlgen::utilities::ModelAction::addAnyEffect(std::string modelName, std::string predicate, std::string tokenName)
+{
+	this->addGenericConditionOrEffect("any", "effect", modelName, predicate, tokenName);
 }

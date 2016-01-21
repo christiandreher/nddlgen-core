@@ -20,6 +20,7 @@
 #include <iostream>
 #include <fstream>
 #include <string>
+#include <list>
 
 #include <boost/algorithm/string.hpp>
 #include <boost/date_time/posix_time/posix_time.hpp>
@@ -27,8 +28,12 @@
 
 #include <nddlgen/exceptions/FileAlreadyExistsException.hpp>
 #include <nddlgen/models/DomainDescriptionModel.h>
-#include <nddlgen/utilities/WorkflowControllerConfig.h>
+#include <nddlgen/models/NddlGeneratable.h>
+#include <nddlgen/models/ProcessModel.h>
+#include <nddlgen/utilities/Foreach.hpp>
+#include <nddlgen/utilities/Types.hpp>
 #include <nddlgen/utilities/Meta.h>
+#include <nddlgen/utilities/WorkflowControllerConfig.h>
 
 namespace nddlgen
 {

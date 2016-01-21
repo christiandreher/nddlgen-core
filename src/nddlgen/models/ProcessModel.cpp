@@ -14,39 +14,18 @@
  * limitations under the License.
  */
 
-#ifndef NDDLGEN_MODELS_ARMMODEL_H_
-#define NDDLGEN_MODELS_ARMMODEL_H_
+#include <nddlgen/models/ProcessModel.h>
 
-#include <string>
-#include <iostream>
-#include <fstream>
-
-#include <boost/shared_ptr.hpp>
-
-#include <nddlgen/models/NddlGeneratable.h>
-#include <nddlgen/models/WorkspaceModel.h>
-
-namespace nddlgen
+nddlgen::models::ProcessModel::ProcessModel()
 {
-	namespace models
-	{
-		class ArmModel;
-		typedef boost::shared_ptr<ArmModel> ArmModelPtr;
-	}
+	this->setClassName("Process");
+
+	this->addPredicate("pending");
+	this->addPredicate("processing");
+	this->addPredicate("done");
 }
 
-class nddlgen::models::ArmModel : public nddlgen::models::NddlGeneratable
+nddlgen::models::ProcessModel::~ProcessModel()
 {
 
-	public:
-
-		ArmModel();
-		virtual ~ArmModel();
-
-		virtual void generateModel(std::ofstream& ofStream);
-
-		nddlgen::models::WorkspaceModelPtr getWorkspace();
-
-};
-
-#endif
+}

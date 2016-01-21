@@ -29,9 +29,9 @@ nddlgen::models::WorkspaceModel::~WorkspaceModel()
 void nddlgen::models::WorkspaceModel::postInitProcessing()
 {
 	// Detect all blocking objects and populate models accordingly
-	foreach (nddlgen::models::NddlGeneratablePtr model1, this->_models)
+	foreach (nddlgen::models::NddlGeneratablePtr model1, this->_subObjects)
 	{
-		foreach (nddlgen::models::NddlGeneratablePtr model2, this->_models)
+		foreach (nddlgen::models::NddlGeneratablePtr model2, this->_subObjects)
 		{
 			if (model1 != model2)
 			{
@@ -52,45 +52,20 @@ void nddlgen::models::WorkspaceModel::postInitProcessing()
 	}
 
 	// Run post init processing for each model
-	foreach (nddlgen::models::NddlGeneratablePtr generatableModel, this->_models)
+	foreach (nddlgen::models::NddlGeneratablePtr generatableModel, this->_subObjects)
 	{
 		generatableModel->postInitProcessing();
 	}
 }
 
-void nddlgen::models::WorkspaceModel::generateModel(std::ofstream& ofStream)
-{
-	std::list<std::string> alreadyDefinedClasses;
-
-	foreach (nddlgen::models::NddlGeneratablePtr generatableModel, this->_models)
-	{
-		if (std::find(alreadyDefinedClasses.begin(), alreadyDefinedClasses.end(), generatableModel->getClassName())
-			== alreadyDefinedClasses.end())
-		{
-			generatableModel->generateModel(ofStream);
-			alreadyDefinedClasses.push_back(generatableModel->getClassName());
-		}
-
-	}
-
-	wrln(0, "class " + this->getClassName() + " extends Timeline",	1);
-	wrln(0, "{",													1);
-
-	this->generateWorkspaceMembers(ofStream);
-
-	this->generateWorkspaceConstructor(ofStream);
-
-	wrln(0, "}",								2);
-}
-
 void nddlgen::models::WorkspaceModel::addModelToWorkspace(nddlgen::models::NddlGeneratablePtr model)
 {
-	this->_models.push_back(model);
+	this->_subObjects.push_back(model);
 }
 
 nddlgen::models::NddlGeneratablePtr nddlgen::models::WorkspaceModel::getModelByName(std::string name)
 {
-	foreach (nddlgen::models::NddlGeneratablePtr generatableModel, this->_models)
+	foreach (nddlgen::models::NddlGeneratablePtr generatableModel, this->_subObjects)
 	{
 		if (generatableModel->getName() == name)
 		{
@@ -104,62 +79,5 @@ nddlgen::models::NddlGeneratablePtr nddlgen::models::WorkspaceModel::getModelByN
 
 nddlgen::types::NddlGeneratableList nddlgen::models::WorkspaceModel::getModels()
 {
-	return this->_models;
-}
-
-nddlgen::types::ActionList nddlgen::models::WorkspaceModel::getActions()
-{
-	nddlgen::types::ActionList actionList;
-
-	foreach (nddlgen::models::NddlGeneratablePtr generatableModel, this->_models)
-	{
-		nddlgen::types::ActionList actions = generatableModel->getActions();
-
-		actionList.insert(actionList.end(), actions.begin(), actions.end());
-	}
-
-	return actionList;
-}
-
-void nddlgen::models::WorkspaceModel::generateWorkspaceMembers(std::ofstream& ofStream)
-{
-	foreach (nddlgen::models::NddlGeneratablePtr generatableModel, this->_models)
-	{
-		std::string className = generatableModel->getClassName();
-		std::string instanceName = generatableModel->getNamePref();
-
-		wrln(1, className + " " + instanceName + ";", 		1);
-	}
-
-	wrel(1);
-}
-
-void nddlgen::models::WorkspaceModel::generateWorkspaceConstructor(std::ofstream& ofStream)
-{
-	std::string constructorHeader = this->getClassName() + "(";
-
-	if (this->_models.size() > 0)
-	{
-		foreach (nddlgen::models::NddlGeneratablePtr generatableModel, this->_models)
-		{
-			std::string parameter = generatableModel->getClassName() + " " + generatableModel->getNamePrefSuff() + ", ";
-			constructorHeader += parameter;
-		}
-
-		constructorHeader = constructorHeader.substr(0, constructorHeader.length() - 2);
-	}
-
-	constructorHeader += ")";
-
-	wrln(1, constructorHeader,								1);
-	wrln(1, "{",											1);
-
-	foreach (nddlgen::models::NddlGeneratablePtr generatableModel, this->_models)
-	{
-		std::string assignment = generatableModel->getNamePref() + " = " + generatableModel->getNamePrefSuff() + ";";
-
-		wrln(2, assignment, 1);
-	}
-
-	wrln(1, "}",											1);
+	return this->_subObjects;
 }

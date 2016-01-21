@@ -38,9 +38,9 @@ class nddlgen::utilities::ModelAction
 
 		std::string _name;
 		std::string _duration;
-		std::string _metByCondition;
-		std::string _containedByCondition;
-		std::string _meetsEffect;
+		std::list<std::string> _actionSteps;
+
+		void addGenericConditionOrEffect(std::string relationName, std::string conditionOrEffect, std::string modelName, std::string predicate, std::string tokenName);
 
 	public:
 
@@ -49,15 +49,59 @@ class nddlgen::utilities::ModelAction
 
 		void setName(std::string name);
 		void setDuration(std::string duration);
-		void setMetByCondition(std::string modelName, std::string predicate);
-		void setContainedByCondition(std::string modelName, std::string predicate);
-		void setMeetsEffect(std::string modelName, std::string predicate);
+
+		void addBeforeCondition(std::string modelName, std::string predicate, std::string tokenName = "");
+		void addAfterCondition(std::string modelName, std::string predicate, std::string tokenName = "");
+		void addMeetsCondition(std::string modelName, std::string predicate, std::string tokenName = "");
+		void addMetByCondition(std::string modelName, std::string predicate, std::string tokenName = "");
+		void addEqualCondition(std::string modelName, std::string predicate, std::string tokenName = "");
+		void addEqualsCondition(std::string modelName, std::string predicate, std::string tokenName = "");
+		void addContainsCondition(std::string modelName, std::string predicate, std::string tokenName = "");
+		void addContainedByCondition(std::string modelName, std::string predicate, std::string tokenName = "");
+		void addParalleledByCondition(std::string modelName, std::string predicate, std::string tokenName = "");
+		void addParallelsCondition(std::string modelName, std::string predicate, std::string tokenName = "");
+		void addStartsCondition(std::string modelName, std::string predicate, std::string tokenName = "");
+		void addEndsCondition(std::string modelName, std::string predicate, std::string tokenName = "");
+		void addEndsAfterCondition(std::string modelName, std::string predicate, std::string tokenName = "");
+		void addEndsBeforeCondition(std::string modelName, std::string predicate, std::string tokenName = "");
+		void addEndsAfterStartCondition(std::string modelName, std::string predicate, std::string tokenName = "");
+		void addStartsBeforeEndCondition(std::string modelName, std::string predicate, std::string tokenName = "");
+		void addStartsDuringCondition(std::string modelName, std::string predicate, std::string tokenName = "");
+		void addContainsStartCondition(std::string modelName, std::string predicate, std::string tokenName = "");
+		void addEndsDuringCondition(std::string modelName, std::string predicate, std::string tokenName = "");
+		void addContainsEndCondition(std::string modelName, std::string predicate, std::string tokenName = "");
+		void addStartsAfterCondition(std::string modelName, std::string predicate, std::string tokenName = "");
+		void addStartsBeforeCondition(std::string modelName, std::string predicate, std::string tokenName = "");
+		void addAnyCondition(std::string modelName, std::string predicate, std::string tokenName = "");
+
+		void addBeforeEffect(std::string modelName, std::string predicate, std::string tokenName = "");
+		void addAfterEffect(std::string modelName, std::string predicate, std::string tokenName = "");
+		void addMeetsEffect(std::string modelName, std::string predicate, std::string tokenName = "");
+		void addMetByEffect(std::string modelName, std::string predicate, std::string tokenName = "");
+		void addEqualEffect(std::string modelName, std::string predicate, std::string tokenName = "");
+		void addEqualsEffect(std::string modelName, std::string predicate, std::string tokenName = "");
+		void addContainsEffect(std::string modelName, std::string predicate, std::string tokenName = "");
+		void addContainedByEffect(std::string modelName, std::string predicate, std::string tokenName = "");
+		void addParalleledByEffect(std::string modelName, std::string predicate, std::string tokenName = "");
+		void addParallelsEffect(std::string modelName, std::string predicate, std::string tokenName = "");
+		void addStartsEffect(std::string modelName, std::string predicate, std::string tokenName = "");
+		void addEndsEffect(std::string modelName, std::string predicate, std::string tokenName = "");
+		void addEndsAfterEffect(std::string modelName, std::string predicate, std::string tokenName = "");
+		void addEndsBeforeEffect(std::string modelName, std::string predicate, std::string tokenName = "");
+		void addEndsAfterStartEffect(std::string modelName, std::string predicate, std::string tokenName = "");
+		void addStartsBeforeEndEffect(std::string modelName, std::string predicate, std::string tokenName = "");
+		void addStartsDuringEffect(std::string modelName, std::string predicate, std::string tokenName = "");
+		void addContainsStartEffect(std::string modelName, std::string predicate, std::string tokenName = "");
+		void addEndsDuringEffect(std::string modelName, std::string predicate, std::string tokenName = "");
+		void addContainsEndEffect(std::string modelName, std::string predicate, std::string tokenName = "");
+		void addStartsAfterEffect(std::string modelName, std::string predicate, std::string tokenName = "");
+		void addStartsBeforeEffect(std::string modelName, std::string predicate, std::string tokenName = "");
+		void addAnyEffect(std::string modelName, std::string predicate, std::string tokenName = "");
+
+		void addCustomLineToActionSteps(std::string line);
 
 		std::string getName();
 		std::string getDuration();
-		std::string getMetByCondition(std::string workspaceNamePref);
-		std::string getContainedByCondition(std::string workspaceNamePref);
-		std::string getMeetsEffect(std::string workspaceNamePref);
 		std::string getActionDefinition();
 		std::list<std::string> getActionSteps(std::string workspaceNamePref);
 

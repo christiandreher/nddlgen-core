@@ -20,6 +20,8 @@
 #include <iostream>
 #include <fstream>
 #include <string>
+#include <list>
+#include <vector>
 
 #include <boost/shared_ptr.hpp>
 
@@ -50,6 +52,7 @@ class nddlgen::models::NddlGeneratable
 		nddlgen::types::ActionList _actions;
 		nddlgen::math::CuboidPtr _objectBoundingBox;
 		nddlgen::math::CuboidPtr _accessibilityBoundingBox;
+		std::vector<nddlgen::models::NddlGeneratablePtr> _subObjects;
 
 	public:
 
@@ -58,7 +61,9 @@ class nddlgen::models::NddlGeneratable
 
 		virtual void postInitProcessing();
 
+		virtual void generateForwardDeclaration(std::ofstream& ofStream);
 		virtual void generateModel(std::ofstream& ofStream);
+		virtual void generateInstantiation(std::ofstream& ofStream);
 
 		void setName(std::string name);
 		std::string getName();
@@ -76,7 +81,7 @@ class nddlgen::models::NddlGeneratable
 
 		void addAction(nddlgen::utilities::ModelActionPtr action);
 		bool hasActions();
-		virtual nddlgen::types::ActionList getActions();
+		nddlgen::types::ActionList getActions();
 
 		nddlgen::math::CuboidPtr getObjectBoundingBox();
 		void setObjectBoundingBox(nddlgen::math::CuboidPtr objectBoundingBox);
@@ -85,6 +90,12 @@ class nddlgen::models::NddlGeneratable
 		nddlgen::math::CuboidPtr getAccessibilityBoundingBox();
 		void setAccessibilityBoundingBox(nddlgen::math::CuboidPtr accessibilityBoundingBox);
 		bool hasAccessibilityBoundingBox();
+
+		bool hasSubObjects();
+		void addSubObject(nddlgen::models::NddlGeneratablePtr subObject);
+		std::vector<nddlgen::models::NddlGeneratablePtr> getSubObjects();
+		nddlgen::models::NddlGeneratablePtr getSubObjectByName(std::string name);
+		void setInstanceNameFor(int index, std::string instanceName);
 
 };
 

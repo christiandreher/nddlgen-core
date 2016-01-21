@@ -41,8 +41,6 @@ class nddlgen::models::WorkspaceModel : public nddlgen::models::NddlGeneratable
 
 	private:
 
-		nddlgen::types::NddlGeneratableList _models;
-
 		void generateWorkspaceMembers(std::ofstream& ofStream);
 		void generateWorkspaceConstructor(std::ofstream& ofStream);
 
@@ -53,14 +51,10 @@ class nddlgen::models::WorkspaceModel : public nddlgen::models::NddlGeneratable
 
 		virtual void postInitProcessing();
 
-		virtual void generateModel(std::ofstream& ofStream);
-
 		void addModelToWorkspace(nddlgen::models::NddlGeneratablePtr model);
 		nddlgen::models::NddlGeneratablePtr getModelByName(std::string name);
 
 		nddlgen::types::NddlGeneratableList getModels();
-
-		virtual nddlgen::types::ActionList getActions();
 
 };
 

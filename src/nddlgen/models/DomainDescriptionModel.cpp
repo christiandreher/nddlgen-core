@@ -45,3 +45,57 @@ nddlgen::models::InitialStateModelPtr nddlgen::models::DomainDescriptionModel::g
 {
 	return this->_initialState;
 }
+
+void nddlgen::models::DomainDescriptionModel::summarizeNeededClasses()
+{
+	std::list<nddlgen::models::NddlGeneratablePtr> allObjects = this->wrapSubObjects(this->_arm);
+
+	foreach (nddlgen::models::NddlGeneratablePtr object, allObjects)
+	{
+		this->_usedClasses.insert(std::pair<std::string, nddlgen::models::NddlGeneratablePtr>(object->getClassName(),
+				object));
+	}
+}
+
+void nddlgen::models::DomainDescriptionModel::generateForwardDeclarations(std::ofstream& ofStream)
+{
+	for (std::map<std::string, nddlgen::models::NddlGeneratablePtr>::iterator it = this->_usedClasses.begin();
+			it != this->_usedClasses.end(); it++)
+	{
+		it->second->generateForwardDeclaration(ofStream);
+	}
+}
+
+void nddlgen::models::DomainDescriptionModel::generateInstantiations(std::ofstream& ofStream)
+{
+	this->_arm->generateInstantiation(ofStream);
+}
+
+void nddlgen::models::DomainDescriptionModel::generateModels(std::ofstream& ofStream)
+{
+	for (std::map<std::string, nddlgen::models::NddlGeneratablePtr>::iterator it = this->_usedClasses.begin();
+			it != this->_usedClasses.end(); it++)
+	{
+		it->second->generateModel(ofStream);
+	}
+}
+
+std::list<nddlgen::models::NddlGeneratablePtr> nddlgen::models::DomainDescriptionModel::wrapSubObjects(nddlgen::models::NddlGeneratablePtr model)
+{
+	std::list<nddlgen::models::NddlGeneratablePtr> output;
+
+	if (model->hasSubObjects())
+	{
+		std::vector<nddlgen::models::NddlGeneratablePtr> subObjects = model->getSubObjects();
+
+		foreach (nddlgen::models::NddlGeneratablePtr subObject, subObjects)
+		{
+			std::list<nddlgen::models::NddlGeneratablePtr> recursiveOutput = this->wrapSubObjects(subObject);
+			output.insert(output.end(), recursiveOutput.begin(), recursiveOutput.end());
+		}
+	}
+
+	output.push_back(model);
+
+	return output;
+}

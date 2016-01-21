@@ -18,11 +18,16 @@
 #define NDDLGEN_MODELS_DOMAINDESCRIPTIONMODEL_H_
 
 #include <cstddef>
+#include <fstream>
+#include <list>
+#include <map>
 
 #include <boost/shared_ptr.hpp>
 
 #include <nddlgen/models/ArmModel.h>
+#include <nddlgen/models/NddlGeneratable.h>
 #include <nddlgen/models/InitialStateModel.h>
+#include <nddlgen/utilities/Foreach.hpp>
 
 namespace nddlgen
 {
@@ -40,6 +45,9 @@ class nddlgen::models::DomainDescriptionModel
 
 		nddlgen::models::ArmModelPtr _arm;
 		nddlgen::models::InitialStateModelPtr _initialState;
+		std::map<std::string, nddlgen::models::NddlGeneratablePtr> _usedClasses;
+
+		std::list<nddlgen::models::NddlGeneratablePtr> wrapSubObjects(nddlgen::models::NddlGeneratablePtr model);
 
 	public:
 
@@ -51,6 +59,12 @@ class nddlgen::models::DomainDescriptionModel
 
 		void setInitialState(nddlgen::models::InitialStateModelPtr initialState);
 		nddlgen::models::InitialStateModelPtr getInitialState();
+
+		void summarizeNeededClasses();
+
+		void generateForwardDeclarations(std::ofstream& ofStream);
+		void generateInstantiations(std::ofstream& ofStream);
+		void generateModels(std::ofstream& ofStream);
 
 };
 

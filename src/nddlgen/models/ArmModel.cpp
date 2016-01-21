@@ -30,30 +30,15 @@ void nddlgen::models::ArmModel::generateModel(std::ofstream& ofStream)
 {
 	std::string armClass = this->getClassName();
 	std::string workspaceClass = this->getWorkspace()->getClassName();
-	std::string workspacePref = this->_workspace->getNamePref();
-	std::string workspacePrefSuff = this->_workspace->getNamePrefSuff();
-	nddlgen::types::ActionList actions = this->_workspace->getActions();
+	std::string workspacePref = this->getWorkspace()->getNamePref();
+	std::string workspacePrefSuff = this->getWorkspace()->getNamePrefSuff();
 
-	// Arm class
-	this->_workspace->generateModel(ofStream);
+	// TODO: copy all actions from subclasses into Arm object and
+	// process actions below with the _actions member
+	nddlgen::types::ActionList actions = this->getWorkspace()->getActions();
 
-	// #\t  text																	#endl
-	wrln(0, "class " + armClass + " extends Timeline",								1);
-	wrln(0, "{", 																	1);
-	wrln(1, 	workspaceClass + " " + workspacePref + ";",							2);
-
-	wrln(1, 	armClass + "(" + workspaceClass + " " + workspacePrefSuff + ")",	1);
-	wrln(1, 	"{",																1);
-	wrln(2,			workspacePref + " = " + workspacePrefSuff + ";",				1);
-	wrln(1, 	"}",																2);
-
-	foreach (nddlgen::utilities::ModelActionPtr action, actions)
-	{
-		wrln(1, action->getActionDefinition(), 										1);
-	}
-
-	wrln(0, "}",																	2);
-	// End Arm class
+	// Call super class version of this method (calls generateModel(...) for all sub classes)
+	nddlgen::models::NddlGeneratable::generateModel(ofStream);
 
 	// Arm member functions
 	foreach (nddlgen::utilities::ModelActionPtr action, actions)
@@ -62,26 +47,21 @@ void nddlgen::models::ArmModel::generateModel(std::ofstream& ofStream)
 		std::list<std::string> actionSteps = action->getActionSteps(workspacePref);
 
 		// Arm member function
-		wrln(0, armClass + "::" + actionName,										1);
-		wrln(0, "{",																1);
+		wrln(0, armClass + "::" + actionName, 1);
+		wrln(0, "{", 1);
 
 		foreach (std::string actionStep, actionSteps)
 		{
-			wrln(1, actionStep, 													1);
+			wrln(1, actionStep, 1);
 		}
 
-		wrln(0, "}",																2);
+		wrln(0, "}", 2);
 		// End Arm member function
 	}
 	// End Arm member functions
 }
 
-void nddlgen::models::ArmModel::setWorkspace(nddlgen::models::WorkspaceModelPtr workspace)
-{
-	this->_workspace = workspace;
-}
-
 nddlgen::models::WorkspaceModelPtr nddlgen::models::ArmModel::getWorkspace()
 {
-	return this->_workspace;
+	return boost::dynamic_pointer_cast<nddlgen::models::WorkspaceModel>(this->getSubObjectByName("workspace"));
 }

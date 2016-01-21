@@ -38,13 +38,15 @@ nddlgen::models::DomainDescriptionModelPtr nddlgen::controllers::DomainDescripti
 	nddlgen::models::DomainDescriptionModelPtr domainDescription(new nddlgen::models::DomainDescriptionModel());
 	nddlgen::models::ArmModelPtr arm(new nddlgen::models::ArmModel());
 	nddlgen::models::WorkspaceModelPtr workspace(new nddlgen::models::WorkspaceModel());
+	nddlgen::models::ProcessModelPtr armProcess(new nddlgen::models::ProcessModel());
 
 	// Set names for arm and workspace
 	arm->setName("arm");
 	workspace->setName("workspace");
 
-	// Add both of them into the hierarchy
-	arm->setWorkspace(workspace);
+	// Add both of them plus the arm process to the hierarchy
+	arm->addSubObject(workspace);
+	arm->addSubObject(armProcess);
 	domainDescription->setArm(arm);
 
 	// Populate the model with given SDF and ISD roots
@@ -68,15 +70,59 @@ void nddlgen::controllers::DomainDescriptionFactory::populateModelsFromSdf(
 	nddlgen::models::WorkspaceModelPtr workspace = domainDescription->getArm()->getWorkspace();
 	sdf::ElementPtr currentModelElement = sdfRoot->root->GetElement("world")->GetElement("model");
 
+	// Map containing all sub object classees and an incrementing index to keep
+	// track of numbers to avoid instances with the same name
+	std::map<std::string, int> indices;
+
 	// Iterate through elements in SDF model node
 	while (currentModelElement)
 	{
 		nddlgen::models::NddlGeneratablePtr generatableModel = this->modelFactory(currentModelElement);
 
 		// If generatableModel is null, it is not supported by the given model factory
-		// and will therefore not be added to the workspace
+		// and will therefore be ignored and not added to the workspace
 		if (generatableModel)
 		{
+			if (generatableModel->hasSubObjects())
+			{
+				std::vector<nddlgen::models::NddlGeneratablePtr> subObjects = generatableModel->getSubObjects();
+
+				int index = 0;
+
+				// Initialize instance names
+				foreach (nddlgen::models::NddlGeneratablePtr subObject, subObjects)
+				{
+					std::string subObjectClass = subObject->getClassName();
+					std::string instanceName = subObject->getName();
+					std::map<std::string, int>::iterator it = indices.find(subObjectClass);
+
+					if (instanceName == "")
+					{
+						instanceName = boost::to_lower_copy(subObject->getClassName());
+					}
+
+					instanceName += "_";
+
+					// Check if subObjectClass exists in indices
+					if (it != indices.end())
+					{
+						instanceName = instanceName + boost::lexical_cast<std::string>(it->second);
+						generatableModel->setInstanceNameFor(index, instanceName);
+
+						it->second++;
+					}
+					else
+					{
+						instanceName = instanceName + boost::lexical_cast<std::string>(1);
+						generatableModel->setInstanceNameFor(index, instanceName);
+
+						indices.insert(std::pair<std::string, int>(subObjectClass, 2));
+					}
+
+					index++;
+				}
+			}
+
 			workspace->addModelToWorkspace(generatableModel);
 		}
 
@@ -86,6 +132,9 @@ void nddlgen::controllers::DomainDescriptionFactory::populateModelsFromSdf(
 
 	// Run post-init processing
 	workspace->postInitProcessing();
+
+	// Summarize all needed classes
+	domainDescription->summarizeNeededClasses();
 }
 
 void nddlgen::controllers::DomainDescriptionFactory::populateInitialStateFromIsd(
