@@ -38,20 +38,24 @@ nddlgen::models::DomainDescriptionModelPtr nddlgen::controllers::DomainDescripti
 	nddlgen::models::DomainDescriptionModelPtr domainDescription(new nddlgen::models::DomainDescriptionModel());
 	nddlgen::models::ArmModelPtr arm(new nddlgen::models::ArmModel());
 	nddlgen::models::WorkspaceModelPtr workspace(new nddlgen::models::WorkspaceModel());
-	nddlgen::models::ProcessModelPtr armProcess(new nddlgen::models::ProcessModel());
 
 	// Set names for arm and workspace
 	arm->setName("arm");
 	workspace->setName("workspace");
 
-	// Add both of them plus the arm process to the hierarchy
+	// Add workspace and arm to the hierarchy
 	arm->addSubObject(workspace);
-	arm->addSubObject(armProcess);
 	domainDescription->setArm(arm);
 
 	// Populate the model with given SDF and ISD roots
 	this->populateModelsFromSdf(domainDescription, sdfRoot);
 	this->populateInitialStateFromIsd(domainDescription, isdRoot);
+
+	// Call configurateDomain(...) to allow user to modify domain further
+	this->_modelFactory->configurateDomain(domainDescription);
+
+	// Run post-init processing to gather all needed classes and actions, and also calculate dependencies
+	domainDescription->postInitProcessing();
 
 	// Return the fully qualified domain description model
 	return domainDescription;
@@ -129,12 +133,6 @@ void nddlgen::controllers::DomainDescriptionFactory::populateModelsFromSdf(
 		// Iterate
 		currentModelElement = currentModelElement->GetNextElement("model");
 	}
-
-	// Run post-init processing
-	workspace->postInitProcessing();
-
-	// Summarize all needed classes
-	domainDescription->summarizeNeededClasses();
 }
 
 void nddlgen::controllers::DomainDescriptionFactory::populateInitialStateFromIsd(

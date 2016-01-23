@@ -25,6 +25,7 @@
 
 #include <nddlgen/models/NddlGeneratable.h>
 #include <nddlgen/models/WorkspaceModel.h>
+#include <nddlgen/models/ProcessModel.h>
 
 namespace nddlgen
 {

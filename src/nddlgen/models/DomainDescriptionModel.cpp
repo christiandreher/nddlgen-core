@@ -46,15 +46,19 @@ nddlgen::models::InitialStateModelPtr nddlgen::models::DomainDescriptionModel::g
 	return this->_initialState;
 }
 
-void nddlgen::models::DomainDescriptionModel::summarizeNeededClasses()
+void nddlgen::models::DomainDescriptionModel::postInitProcessing()
 {
-	std::list<nddlgen::models::NddlGeneratablePtr> allObjects = this->wrapSubObjects(this->_arm);
+	// Calculate dependencies between models. Runs collision detection
+	this->calculateDependencies();
 
-	foreach (nddlgen::models::NddlGeneratablePtr object, allObjects)
-	{
-		this->_usedClasses.insert(std::pair<std::string, nddlgen::models::NddlGeneratablePtr>(object->getClassName(),
-				object));
-	}
+	// Run post-init processing for each sub object
+	this->recursivePostInitProcessing(this->_arm);
+
+	// Gather used classes to be able to perform class-based generation processes
+	this->gatherUsedClasses();
+
+	// Gather actions to be able to print them
+	this->gatherActions();
 }
 
 void nddlgen::models::DomainDescriptionModel::generateForwardDeclarations(std::ofstream& ofStream)
@@ -64,11 +68,15 @@ void nddlgen::models::DomainDescriptionModel::generateForwardDeclarations(std::o
 	{
 		it->second->generateForwardDeclaration(ofStream);
 	}
+
+	wrel(1);
 }
 
 void nddlgen::models::DomainDescriptionModel::generateInstantiations(std::ofstream& ofStream)
 {
 	this->_arm->generateInstantiation(ofStream);
+
+	wrel(1);
 }
 
 void nddlgen::models::DomainDescriptionModel::generateModels(std::ofstream& ofStream)
@@ -80,7 +88,96 @@ void nddlgen::models::DomainDescriptionModel::generateModels(std::ofstream& ofSt
 	}
 }
 
-std::list<nddlgen::models::NddlGeneratablePtr> nddlgen::models::DomainDescriptionModel::wrapSubObjects(nddlgen::models::NddlGeneratablePtr model)
+void nddlgen::models::DomainDescriptionModel::generateFacts(std::ofstream& ofStream)
+{
+	nddlgen::types::FactList facts = this->getInitialState()->getFacts();
+
+	foreach (nddlgen::utilities::InitialStateFactPtr fact, facts)
+	{
+		std::list<std::string> factLines = fact->getFact();
+
+		foreach (std::string factLine, factLines)
+		{
+			wrln(0, factLine, 1);
+		}
+
+		wrel(1);
+	}
+}
+
+void nddlgen::models::DomainDescriptionModel::generateGoals(std::ofstream& ofStream)
+{
+	nddlgen::types::GoalList goals = this->getInitialState()->getGoals();
+
+	foreach (nddlgen::utilities::InitialStateGoalPtr goal, goals)
+	{
+		std::list<std::string> goalLines = goal->getGoal();
+
+		foreach (std::string goalLine, goalLines)
+		{
+			wrln(0, goalLine, 1);
+		}
+
+		wrel(1);
+	}
+}
+
+void nddlgen::models::DomainDescriptionModel::calculateDependencies()
+{
+	nddlgen::types::NddlGeneratableList models = this->getArm()->getWorkspace()->getModels();
+
+	// Detect all blocking objects and populate models accordingly
+	foreach (nddlgen::models::NddlGeneratablePtr model1, models)
+	{
+		foreach (nddlgen::models::NddlGeneratablePtr model2, models)
+		{
+			if (model1 != model2)
+			{
+				if (model1->hasAccessibilityBoundingBox() && model2->hasObjectBoundingBox())
+				{
+					bool doBoundingBoxesIntersect = nddlgen::controllers::CollisionDetectionController::doesIntersect(
+							model1->getAccessibilityBoundingBox(),
+							model2->getObjectBoundingBox()
+					);
+
+					if (doBoundingBoxesIntersect)
+					{
+						model1->addBlockingObject(model2);
+					}
+				}
+			}
+		}
+	}
+}
+
+void nddlgen::models::DomainDescriptionModel::recursivePostInitProcessing(nddlgen::models::NddlGeneratablePtr model)
+{
+	if (model->hasSubObjects())
+	{
+		std::vector<nddlgen::models::NddlGeneratablePtr> subObjects = model->getSubObjects();
+
+		foreach (nddlgen::models::NddlGeneratablePtr subObject, subObjects)
+		{
+			this->recursivePostInitProcessing(subObject);
+		}
+	}
+
+	model->postInitProcessing();
+}
+
+void nddlgen::models::DomainDescriptionModel::gatherUsedClasses()
+{
+	std::list<nddlgen::models::NddlGeneratablePtr> allObjects = this->gatherUsedObjects(this->_arm);
+
+	foreach (nddlgen::models::NddlGeneratablePtr object, allObjects)
+	{
+		this->_usedClasses.insert(std::pair<std::string, nddlgen::models::NddlGeneratablePtr>(object->getClassName(),
+				object));
+	}
+}
+
+std::list<nddlgen::models::NddlGeneratablePtr> nddlgen::models::DomainDescriptionModel::gatherUsedObjects(
+		nddlgen::models::NddlGeneratablePtr model)
 {
 	std::list<nddlgen::models::NddlGeneratablePtr> output;
 
@@ -90,7 +187,7 @@ std::list<nddlgen::models::NddlGeneratablePtr> nddlgen::models::DomainDescriptio
 
 		foreach (nddlgen::models::NddlGeneratablePtr subObject, subObjects)
 		{
-			std::list<nddlgen::models::NddlGeneratablePtr> recursiveOutput = this->wrapSubObjects(subObject);
+			std::list<nddlgen::models::NddlGeneratablePtr> recursiveOutput = this->gatherUsedObjects(subObject);
 			output.insert(output.end(), recursiveOutput.begin(), recursiveOutput.end());
 		}
 	}
@@ -98,4 +195,9 @@ std::list<nddlgen::models::NddlGeneratablePtr> nddlgen::models::DomainDescriptio
 	output.push_back(model);
 
 	return output;
+}
+
+void nddlgen::models::DomainDescriptionModel::gatherActions()
+{
+	// TODO: implement
 }

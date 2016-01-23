@@ -61,11 +61,10 @@ void nddlgen::controllers::NddlGenerationController::writeModelFile(
 	wrln(0, "// nddlgen-core v" + nddlgenVersion + " using " + adapter + "", 1);
 	wrln(0, "// Creation date: " + now, 2);
 
-	// Forward declarations
+	// Print forward declarations
 	domainDescription->generateForwardDeclarations(ofStream);
-	wrel(1);
 
-	// Models
+	// Print model for each used class
 	domainDescription->generateModels(ofStream);
 
 	// Model file generated, close stream
@@ -86,6 +85,7 @@ void nddlgen::controllers::NddlGenerationController::writeInitialStateFile(
 	// Open output file stream
 	std::ofstream ofStream(controllerConfig->getOutputInitialStateFile());
 
+	// TODO print boilerplate in a seperated function
 	// Initialize needed variables (short-hands)
 	std::string nddlgenVersion = nddlgen::utilities::Meta::NDDLGEN_VERSION;
 	std::string nddlgenProjectHomepage = nddlgen::utilities::Meta::NDDLGEN_PROJECT_HOMEPAGE;
@@ -115,40 +115,15 @@ void nddlgen::controllers::NddlGenerationController::writeInitialStateFile(
 
 	// Instantiate all needed objects
 	domainDescription->generateInstantiations(ofStream);
-	wrel(1);
 
 	// Close model instantiation (NDDL procedure call)
 	wrln(0, "close();", 2);
 
 	// Print facts
-	nddlgen::types::FactList facts = domainDescription->getInitialState()->getFacts();
-
-	foreach (nddlgen::utilities::InitialStateFactPtr fact, facts)
-	{
-		std::list<std::string> factLines = fact->getFact();
-
-		foreach (std::string factLine, factLines)
-		{
-			wrln(0, factLine, 1);
-		}
-
-		wrel(1);
-	}
+	domainDescription->generateFacts(ofStream);
 
 	// Print goals
-	nddlgen::types::GoalList goals = domainDescription->getInitialState()->getGoals();
-
-	foreach (nddlgen::utilities::InitialStateGoalPtr goal, goals)
-	{
-		std::list<std::string> goalLines = goal->getGoal();
-
-		foreach (std::string goalLine, goalLines)
-		{
-			wrln(0, goalLine, 1);
-		}
-
-		wrel(1);
-	}
+	domainDescription->generateGoals(ofStream);
 
 	// Close stream
 	ofStream.close();

@@ -23,6 +23,9 @@
 #include <boost/shared_ptr.hpp>
 
 #include <nddlgen/models/NddlGeneratable.h>
+#include <nddlgen/models/ArmModel.h>
+#include <nddlgen/models/WorkspaceModel.h>
+#include <nddlgen/models/DomainDescriptionModel.h>
 
 namespace nddlgen
 {
@@ -49,8 +52,14 @@ class nddlgen::controllers::NddlGeneratableFactory
 		NddlGeneratableFactory();
 		virtual ~NddlGeneratableFactory();
 
+		virtual void configurateDomain(nddlgen::models::DomainDescriptionModelPtr domain);
+
 		nddlgen::models::NddlGeneratablePtr fromString(std::string modelName);
+
 		virtual void registerNddlGeneratables() = 0;
+
+		static nddlgen::models::NddlGeneratablePtr createArm();
+		static nddlgen::models::NddlGeneratablePtr createWorkspace();
 
 };
 

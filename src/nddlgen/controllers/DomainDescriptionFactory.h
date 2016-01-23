@@ -37,7 +37,6 @@
 #include <nddlgen/models/DomainDescriptionModel.h>
 #include <nddlgen/models/NddlGeneratable.h>
 #include <nddlgen/models/WorkspaceModel.h>
-#include <nddlgen/models/ProcessModel.h>
 #include <nddlgen/utilities/InitialStateFact.h>
 #include <nddlgen/utilities/InitialStateGoal.h>
 #include <nddlgen/utilities/Types.hpp>

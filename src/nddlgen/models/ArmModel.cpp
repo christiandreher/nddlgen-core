@@ -18,7 +18,10 @@
 
 nddlgen::models::ArmModel::ArmModel()
 {
+	nddlgen::models::ProcessModelPtr armProcess(new nddlgen::models::ProcessModel());
+
 	this->setClassName("Arm");
+	this->addSubObject(armProcess);
 }
 
 nddlgen::models::ArmModel::~ArmModel()
@@ -37,7 +40,7 @@ void nddlgen::models::ArmModel::generateModel(std::ofstream& ofStream)
 	// process actions below with the _actions member
 	nddlgen::types::ActionList actions = this->getWorkspace()->getActions();
 
-	// Call super class version of this method (calls generateModel(...) for all sub classes)
+	// Call super class version of this method (generates class only)
 	nddlgen::models::NddlGeneratable::generateModel(ofStream);
 
 	// Arm member functions

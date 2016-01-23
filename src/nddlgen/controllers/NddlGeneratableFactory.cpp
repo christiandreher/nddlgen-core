@@ -26,6 +26,11 @@ nddlgen::controllers::NddlGeneratableFactory::~NddlGeneratableFactory()
 
 }
 
+void nddlgen::controllers::NddlGeneratableFactory::configurateDomain(nddlgen::models::DomainDescriptionModelPtr domain)
+{
+	// Dummy which can be overridden. Default function does nothing
+}
+
 nddlgen::models::NddlGeneratablePtr nddlgen::controllers::NddlGeneratableFactory::fromString(std::string modelName)
 {
 	std::string modelNameLc = boost::algorithm::to_lower_copy(modelName);
@@ -51,4 +56,16 @@ void nddlgen::controllers::NddlGeneratableFactory::registerNddlGeneratable(
 	std::string modelNameLc = boost::algorithm::to_lower_copy(modelName);
 
 	this->_registeredNddlGeneratables[modelNameLc] = createFunction;
+}
+
+nddlgen::models::NddlGeneratablePtr nddlgen::controllers::NddlGeneratableFactory::createArm()
+{
+	nddlgen::models::ArmModelPtr model(new nddlgen::models::ArmModel());
+	return model;
+}
+
+nddlgen::models::NddlGeneratablePtr nddlgen::controllers::NddlGeneratableFactory::createWorkspace()
+{
+	nddlgen::models::WorkspaceModelPtr model(new nddlgen::models::WorkspaceModel());
+	return model;
 }
