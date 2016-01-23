@@ -49,10 +49,14 @@ class nddlgen::controllers::NddlGenerationController
 
 	private:
 
-		static std::string getPrettifiedDate();
-
 		NddlGenerationController();
 		virtual ~NddlGenerationController();
+
+		static void generateModelBoilerplate(std::ofstream& ofStream, nddlgen::utilities::WorkflowControllerConfigPtr controllerConfig);
+		static void generateInitialStateBoilerplate(std::ofstream& ofStream, nddlgen::utilities::WorkflowControllerConfigPtr controllerConfig);
+		static void generateBoilerplate(std::ofstream& ofStream, nddlgen::utilities::WorkflowControllerConfigPtr controllerConfig, std::string modelOrInitialState);
+
+		static std::string getPrettifiedDate();
 
 	public:
 

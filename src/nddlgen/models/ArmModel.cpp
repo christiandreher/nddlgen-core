@@ -19,6 +19,7 @@
 nddlgen::models::ArmModel::ArmModel()
 {
 	nddlgen::models::ProcessModelPtr armProcess(new nddlgen::models::ProcessModel());
+	armProcess->setName("armprocess");
 
 	this->setClassName("Arm");
 	this->addSubObject(armProcess);
