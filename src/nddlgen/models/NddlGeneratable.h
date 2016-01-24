@@ -24,6 +24,7 @@
 #include <vector>
 
 #include <boost/shared_ptr.hpp>
+#include <boost/enable_shared_from_this.hpp>
 
 #include <nddlgen/math/Cuboid.h>
 #include <nddlgen/utilities/Types.hpp>
@@ -40,7 +41,7 @@ namespace nddlgen
 	}
 }
 
-class nddlgen::models::NddlGeneratable
+class nddlgen::models::NddlGeneratable : public boost::enable_shared_from_this<nddlgen::models::NddlGeneratable>
 {
 
 	protected:
@@ -53,13 +54,16 @@ class nddlgen::models::NddlGeneratable
 		nddlgen::math::CuboidPtr _objectBoundingBox;
 		nddlgen::math::CuboidPtr _accessibilityBoundingBox;
 		std::vector<nddlgen::models::NddlGeneratablePtr> _subObjects;
+		boost::weak_ptr<nddlgen::models::NddlGeneratable> _superObject;
 
 	public:
 
 		NddlGeneratable();
 		virtual ~NddlGeneratable();
 
-		virtual void postInitProcessing();
+		virtual void initPredicates();
+		virtual void initSubObjects();
+		virtual void initActions();
 
 		virtual void generateForwardDeclaration(std::ofstream& ofStream);
 		virtual void generateModel(std::ofstream& ofStream);
@@ -69,6 +73,8 @@ class nddlgen::models::NddlGeneratable
 		std::string getName();
 		std::string getNamePref();
 		std::string getNamePrefSuff();
+
+		virtual std::string getAccessor();
 
 		void setClassName(std::string className);
 		std::string getClassName();
@@ -96,6 +102,9 @@ class nddlgen::models::NddlGeneratable
 		std::vector<nddlgen::models::NddlGeneratablePtr> getSubObjects();
 		nddlgen::models::NddlGeneratablePtr getSubObjectByName(std::string name);
 		void setInstanceNameFor(int index, std::string instanceName);
+
+		bool hasSuperObject();
+		void setSuperObject(nddlgen::models::NddlGeneratablePtr superObject);
 
 };
 

@@ -39,7 +39,7 @@ nddlgen::models::NddlGeneratablePtr nddlgen::controllers::NddlGeneratableFactory
 	for (NddlGeneratableMap::reverse_iterator i = this->_registeredNddlGeneratables.rbegin();
 			i != this->_registeredNddlGeneratables.rend(); i++)
 	{
-		if (boost::algorithm::contains(modelName, i->first))
+		if (modelNameLc == i->first || boost::algorithm::contains(modelNameLc, i->first))
 		{
 			return i->second();
 		}

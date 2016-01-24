@@ -44,9 +44,11 @@ class nddlgen::models::ArmModel : public nddlgen::models::NddlGeneratable
 		ArmModel();
 		virtual ~ArmModel();
 
-		virtual void generateModel(std::ofstream& ofStream);
+		virtual void initSubObjects();
 
 		nddlgen::models::WorkspaceModelPtr getWorkspace();
+
+		virtual std::string getAccessor();
 
 };
 

@@ -19,13 +19,16 @@
 nddlgen::models::ProcessModel::ProcessModel()
 {
 	this->setClassName("Process");
-
-	this->addPredicate("pending");
-	this->addPredicate("processing");
-	this->addPredicate("done");
 }
 
 nddlgen::models::ProcessModel::~ProcessModel()
 {
 
+}
+
+void nddlgen::models::ProcessModel::initPredicates()
+{
+	this->addPredicate("pending");
+	this->addPredicate("processing");
+	this->addPredicate("done");
 }

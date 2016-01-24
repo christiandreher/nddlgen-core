@@ -18,11 +18,7 @@
 
 nddlgen::models::ArmModel::ArmModel()
 {
-	nddlgen::models::ProcessModelPtr armProcess(new nddlgen::models::ProcessModel());
-	armProcess->setName("armprocess");
-
 	this->setClassName("Arm");
-	this->addSubObject(armProcess);
 }
 
 nddlgen::models::ArmModel::~ArmModel()
@@ -30,42 +26,22 @@ nddlgen::models::ArmModel::~ArmModel()
 
 }
 
-void nddlgen::models::ArmModel::generateModel(std::ofstream& ofStream)
+void nddlgen::models::ArmModel::initSubObjects()
 {
-	std::string armClass = this->getClassName();
-	std::string workspaceClass = this->getWorkspace()->getClassName();
-	std::string workspacePref = this->getWorkspace()->getNamePref();
-	std::string workspacePrefSuff = this->getWorkspace()->getNamePrefSuff();
+	nddlgen::models::ProcessModelPtr armProcess(new nddlgen::models::ProcessModel());
+	armProcess->setName("armprocess");
 
-	// TODO: copy all actions from subclasses into Arm object and
-	// process actions below with the _actions member
-	nddlgen::types::ActionList actions = this->getWorkspace()->getActions();
-
-	// Call super class version of this method (generates class only)
-	nddlgen::models::NddlGeneratable::generateModel(ofStream);
-
-	// Arm member functions
-	foreach (nddlgen::utilities::ModelActionPtr action, actions)
-	{
-		std::string actionName = action->getName();
-		std::list<std::string> actionSteps = action->getActionSteps(workspacePref);
-
-		// Arm member function
-		wrln(0, armClass + "::" + actionName, 1);
-		wrln(0, "{", 1);
-
-		foreach (std::string actionStep, actionSteps)
-		{
-			wrln(1, actionStep, 1);
-		}
-
-		wrln(0, "}", 2);
-		// End Arm member function
-	}
-	// End Arm member functions
+	this->addSubObject(armProcess);
 }
 
 nddlgen::models::WorkspaceModelPtr nddlgen::models::ArmModel::getWorkspace()
 {
-	return boost::dynamic_pointer_cast<nddlgen::models::WorkspaceModel>(this->getSubObjectByName("workspace"));
+	nddlgen::models::NddlGeneratablePtr workspaceUncasted = this->getSubObjectByName("workspace");
+	nddlgen::models::WorkspaceModelPtr workspace = boost::dynamic_pointer_cast<nddlgen::models::WorkspaceModel>(workspaceUncasted);
+	return workspace;
+}
+
+std::string nddlgen::models::ArmModel::getAccessor()
+{
+	return "object";
 }

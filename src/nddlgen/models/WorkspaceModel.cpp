@@ -28,21 +28,12 @@ nddlgen::models::WorkspaceModel::~WorkspaceModel()
 
 void nddlgen::models::WorkspaceModel::addModelToWorkspace(nddlgen::models::NddlGeneratablePtr model)
 {
-	this->_subObjects.push_back(model);
+	this->addSubObject(model);
 }
 
 nddlgen::models::NddlGeneratablePtr nddlgen::models::WorkspaceModel::getModelByName(std::string name)
 {
-	foreach (nddlgen::models::NddlGeneratablePtr generatableModel, this->_subObjects)
-	{
-		if (generatableModel->getName() == name)
-		{
-			return generatableModel;
-		}
-	}
-
-	nddlgen::models::NddlGeneratablePtr null(0);
-	return null;
+	return this->getSubObjectByName(name);
 }
 
 nddlgen::types::NddlGeneratableList nddlgen::models::WorkspaceModel::getModels()

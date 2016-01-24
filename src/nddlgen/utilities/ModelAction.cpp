@@ -51,7 +51,7 @@ std::string nddlgen::utilities::ModelAction::getActionDefinition()
 	return "action " + this->getName() + " { duration=" + this->getDuration() + "; }";
 }
 
-std::list<std::string> nddlgen::utilities::ModelAction::getActionSteps(std::string workspaceNamePref)
+std::list<std::string> nddlgen::utilities::ModelAction::getActionSteps()
 {
 	return this->_actionSteps;
 }

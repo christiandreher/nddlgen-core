@@ -66,7 +66,9 @@ class nddlgen::controllers::DomainDescriptionFactory
 
 		nddlgen::models::NddlGeneratablePtr modelFactory(sdf::ElementPtr element);
 
-		nddlgen::math::CuboidPtr boundingBoxFactory(std::string basePose, std::string pose, std::string size);
+		nddlgen::math::CuboidPtr boundingBoxFactory(std::string basePose,
+				std::string pose,
+				std::string size);
 
 		nddlgen::utilities::InitialStateFactPtr factFactory(TiXmlElement* factElement);
 

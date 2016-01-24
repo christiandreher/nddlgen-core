@@ -26,9 +26,19 @@ nddlgen::models::NddlGeneratable::~NddlGeneratable()
 
 }
 
-void nddlgen::models::NddlGeneratable::postInitProcessing()
+void nddlgen::models::NddlGeneratable::initPredicates()
 {
+	// Dummy. Do nothing
+}
 
+void nddlgen::models::NddlGeneratable::initSubObjects()
+{
+	// Dummy. Do nothing
+}
+
+void nddlgen::models::NddlGeneratable::initActions()
+{
+	// Dummy. Do nothing
 }
 
 void nddlgen::models::NddlGeneratable::generateForwardDeclaration(std::ofstream& ofStream)
@@ -156,6 +166,20 @@ std::string nddlgen::models::NddlGeneratable::getNamePrefSuff()
 	return this->getNamePref() + "_param";
 }
 
+std::string nddlgen::models::NddlGeneratable::getAccessor()
+{
+	std::string accessor = this->getNamePref();
+
+	if (this->hasSuperObject())
+	{
+		nddlgen::models::NddlGeneratablePtr superObject = this->_superObject.lock();
+
+		accessor = superObject->getAccessor() + "." + accessor;
+	}
+
+	return accessor;
+}
+
 void nddlgen::models::NddlGeneratable::setClassName(std::string className)
 {
 	this->_className = className;
@@ -238,6 +262,7 @@ bool nddlgen::models::NddlGeneratable::hasSubObjects()
 
 void nddlgen::models::NddlGeneratable::addSubObject(nddlgen::models::NddlGeneratablePtr subObject)
 {
+	subObject->setSuperObject(this->shared_from_this());
 	this->_subObjects.push_back(subObject);
 }
 
@@ -263,4 +288,15 @@ nddlgen::models::NddlGeneratablePtr nddlgen::models::NddlGeneratable::getSubObje
 void nddlgen::models::NddlGeneratable::setInstanceNameFor(int index, std::string instanceName)
 {
 	this->_subObjects.at(index)->setName(instanceName);
+}
+
+bool nddlgen::models::NddlGeneratable::hasSuperObject()
+{
+	nddlgen::models::NddlGeneratablePtr superObject = this->_superObject.lock();
+	return (bool) superObject;
+}
+
+void nddlgen::models::NddlGeneratable::setSuperObject(nddlgen::models::NddlGeneratablePtr superObject)
+{
+	this->_superObject = superObject;
 }

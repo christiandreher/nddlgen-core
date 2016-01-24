@@ -103,7 +103,7 @@ class nddlgen::utilities::ModelAction
 		std::string getName();
 		std::string getDuration();
 		std::string getActionDefinition();
-		std::list<std::string> getActionSteps(std::string workspaceNamePref);
+		std::list<std::string> getActionSteps();
 
 };
 

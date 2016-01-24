@@ -30,16 +30,18 @@ nddlgen::models::DomainDescriptionModelPtr nddlgen::controllers::DomainDescripti
 		nddlgen::types::SdfRoot sdfRoot,
 		nddlgen::types::IsdRoot isdRoot)
 {
+	// Assert that a model factory was set
 	if (!this->_modelFactory)
 	{
 		throw nddlgen::exceptions::ModelFactoryNotSetException();
 	}
 
+	// Instantiate basic models
 	nddlgen::models::DomainDescriptionModelPtr domainDescription(new nddlgen::models::DomainDescriptionModel());
-	nddlgen::models::ArmModelPtr arm(new nddlgen::models::ArmModel());
-	nddlgen::models::WorkspaceModelPtr workspace(new nddlgen::models::WorkspaceModel());
+	nddlgen::models::ArmModelPtr arm = boost::dynamic_pointer_cast<nddlgen::models::ArmModel>(this->_modelFactory->fromString("arm"));
+	nddlgen::models::WorkspaceModelPtr workspace = boost::dynamic_pointer_cast<nddlgen::models::WorkspaceModel>(this->_modelFactory->fromString("workspace"));
 
-	// Set names for arm and workspace
+	// Set names for arm and workspace manually
 	arm->setName("arm");
 	workspace->setName("workspace");
 
@@ -51,11 +53,26 @@ nddlgen::models::DomainDescriptionModelPtr nddlgen::controllers::DomainDescripti
 	this->populateModelsFromSdf(domainDescription, sdfRoot);
 	this->populateInitialStateFromIsd(domainDescription, isdRoot);
 
+	// Populate model hierarchy by calling initSubObjects() for all models
+	domainDescription->initSubObjects();
+
+	// Initialize predicates by calling initPredicates() for all models
+	domainDescription->initPredicates();
+
 	// Call configurateDomain(...) to allow user to modify domain further
 	this->_modelFactory->configurateDomain(domainDescription);
 
-	// Run post-init processing to gather all needed classes and actions, and also calculate dependencies
-	domainDescription->postInitProcessing();
+	// Detect blocking objects
+	domainDescription->detectBlockingObjects();
+
+	// Initialize actions by calling initActions() for all models
+	domainDescription->initActions();
+
+	// Gather used classes
+	domainDescription->gatherUsedClasses();
+
+	// Gather all actions
+	domainDescription->gatherActions();
 
 	// Return the fully qualified domain description model
 	return domainDescription;
@@ -71,12 +88,9 @@ void nddlgen::controllers::DomainDescriptionFactory::populateModelsFromSdf(
 		nddlgen::models::DomainDescriptionModelPtr domainDescription,
 		nddlgen::types::SdfRoot sdfRoot)
 {
+	// Initialize needed variables
 	nddlgen::models::WorkspaceModelPtr workspace = domainDescription->getArm()->getWorkspace();
 	sdf::ElementPtr currentModelElement = sdfRoot->root->GetElement("world")->GetElement("model");
-
-	// Map containing all sub object classees and an incrementing index to keep
-	// track of numbers to avoid instances with the same name
-	std::map<std::string, int> indices;
 
 	// Iterate through elements in SDF model node
 	while (currentModelElement)
@@ -87,46 +101,7 @@ void nddlgen::controllers::DomainDescriptionFactory::populateModelsFromSdf(
 		// and will therefore be ignored and not added to the workspace
 		if (generatableModel)
 		{
-			if (generatableModel->hasSubObjects())
-			{
-				std::vector<nddlgen::models::NddlGeneratablePtr> subObjects = generatableModel->getSubObjects();
-
-				int index = 0;
-
-				// Initialize instance names
-				foreach (nddlgen::models::NddlGeneratablePtr subObject, subObjects)
-				{
-					std::string subObjectClass = subObject->getClassName();
-					std::string instanceName = subObject->getName();
-					std::map<std::string, int>::iterator it = indices.find(subObjectClass);
-
-					if (instanceName == "")
-					{
-						instanceName = boost::to_lower_copy(subObject->getClassName());
-					}
-
-					instanceName += "_";
-
-					// Check if subObjectClass exists in indices
-					if (it != indices.end())
-					{
-						instanceName = instanceName + boost::lexical_cast<std::string>(it->second);
-						generatableModel->setInstanceNameFor(index, instanceName);
-
-						it->second++;
-					}
-					else
-					{
-						instanceName = instanceName + boost::lexical_cast<std::string>(1);
-						generatableModel->setInstanceNameFor(index, instanceName);
-
-						indices.insert(std::pair<std::string, int>(subObjectClass, 2));
-					}
-
-					index++;
-				}
-			}
-
+			// First add generatableModel to workspace to make sure that it is initialized properly
 			workspace->addModelToWorkspace(generatableModel);
 		}
 

@@ -41,6 +41,8 @@ class nddlgen::models::ProcessModel : public nddlgen::models::NddlGeneratable
 		ProcessModel();
 		virtual ~ProcessModel();
 
+		virtual void initPredicates();
+
 };
 
 #endif
