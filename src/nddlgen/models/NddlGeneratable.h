@@ -56,6 +56,10 @@ class nddlgen::models::NddlGeneratable : public boost::enable_shared_from_this<n
 		std::vector<nddlgen::models::NddlGeneratablePtr> _subObjects;
 		boost::weak_ptr<nddlgen::models::NddlGeneratable> _superObject;
 
+		void generateModelPredicates(std::ofstream& ofStream);
+		void generateModelSubObjects(std::ofstream& ofStream);
+		void generateModelConstructor(std::ofstream& ofStream);
+
 	public:
 
 		NddlGeneratable();

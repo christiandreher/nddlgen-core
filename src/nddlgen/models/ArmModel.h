@@ -39,6 +39,10 @@ namespace nddlgen
 class nddlgen::models::ArmModel : public nddlgen::models::NddlGeneratable
 {
 
+	private:
+
+		std::list<std::string> _actionPrototypes;
+
 	public:
 
 		ArmModel();
@@ -46,9 +50,13 @@ class nddlgen::models::ArmModel : public nddlgen::models::NddlGeneratable
 
 		virtual void initSubObjects();
 
+		virtual void generateModel(std::ofstream& ofStream);
+
 		nddlgen::models::WorkspaceModelPtr getWorkspace();
 
 		virtual std::string getAccessor();
+
+		void setActionPrototypes(std::list<std::string> actionPrototypes);
 
 };
 

@@ -38,20 +38,45 @@ namespace nddlgen
 	}
 }
 
+/**
+ * Parser to handle a SDF file.
+ *
+ * @author Christian Dreher
+ */
 class nddlgen::controllers::SdfParser
 {
 
 	private:
 
+		/**
+		 * Workflow controller configuration.
+		 */
 		nddlgen::utilities::WorkflowControllerConfigPtr _config;
 
+		/**
+		 * Helper to ensure that all assertions are met.
+		 */
 		void checkAssertions();
 
 	public:
 
+		/**
+		 * Instantiates a new SDF parser with required workflow controller configuration.
+		 *
+		 * @param config Workflow controller configuration
+		 */
 		SdfParser(nddlgen::utilities::WorkflowControllerConfigPtr config);
+
+		/**
+		 * Destructor to free memory.
+		 */
 		virtual ~SdfParser();
 
+		/**
+		 * Parses the SDF file as specified in workflow controller configuration object.
+		 *
+		 * @return SDF document root
+		 */
 		nddlgen::types::SdfRoot parseSdf();
 
 };

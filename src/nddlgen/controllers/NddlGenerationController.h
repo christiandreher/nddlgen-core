@@ -44,25 +44,78 @@ namespace nddlgen
 	}
 }
 
+/**
+ * Controller to generate NDDL files.
+ *
+ * @author Christian Dreher
+ */
 class nddlgen::controllers::NddlGenerationController
 {
 
 	private:
 
+		/**
+		 * Private constructor to prevent instantiation.
+		 */
 		NddlGenerationController();
+
+		/**
+		 * Destructor to free memory.
+		 */
 		virtual ~NddlGenerationController();
 
+		/**
+		 * Generates an nddlgen model file boilerplate.
+		 *
+		 * @param ofStream Output file stream
+		 * @param controllerConfig Workflow controller configuration
+		 */
 		static void generateModelBoilerplate(std::ofstream& ofStream, nddlgen::utilities::WorkflowControllerConfigPtr controllerConfig);
+
+		/**
+		 * Generates an nddlgen initial state file boilerplate.
+		 *
+		 * @param ofStream Output file stream
+		 * @param controllerConfig Workflow controller configuration
+		 */
 		static void generateInitialStateBoilerplate(std::ofstream& ofStream, nddlgen::utilities::WorkflowControllerConfigPtr controllerConfig);
+
+		/**
+		 * Generic function to generate boilerplate.
+		 *
+		 * @param ofStream Output file stream
+		 * @param controllerConfig Workflow controller configuration
+		 * @param modelOrInitialState Either "model" or "initial state", according to desired boiler plate
+		 */
 		static void generateBoilerplate(std::ofstream& ofStream, nddlgen::utilities::WorkflowControllerConfigPtr controllerConfig, std::string modelOrInitialState);
 
+		/**
+		 * Gets timestamp and prettifies it.
+		 *
+		 * @return Prettified date as string
+		 */
 		static std::string getPrettifiedDate();
 
 	public:
 
+		/**
+		 * Generates NDDL model file.
+		 *
+		 * @param domainDescription Domain description model
+		 * @param controllerConfig Workflow controller configuration
+		 * @param forceOverwrite Flag to indicate, how already existing files should be handled
+		 */
 		static void writeModelFile(nddlgen::models::DomainDescriptionModelPtr domainDescription,
 				nddlgen::utilities::WorkflowControllerConfigPtr controllerConfig,
 				bool forceOverwrite);
+
+		/**
+		 * Generates NDDL initial state file.
+		 *
+		 * @param domainDescription Domain description model
+		 * @param controllerConfig Workflow controller configuration
+		 * @param forceOverwrite Flag to indicate, how already existing files should be handled
+		 */
 		static void writeInitialStateFile(nddlgen::models::DomainDescriptionModelPtr domainDescription,
 				nddlgen::utilities::WorkflowControllerConfigPtr controllerConfig,
 				bool forceOverwrite);

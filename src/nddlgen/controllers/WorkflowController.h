@@ -40,7 +40,7 @@ namespace nddlgen
 
 /**
  * An object of this class controls the workflow to successfully generate NDDL model
- * files out of a Gazebo SDF file, and/or NDDL initial state files out of SDF and ISD files.
+ * files and/or NDDL initial state files out of SDF and ISD files.
  *
  * @author Christian Dreher
  */

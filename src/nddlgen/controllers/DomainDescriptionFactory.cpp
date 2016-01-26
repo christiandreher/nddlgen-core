@@ -121,16 +121,19 @@ void nddlgen::controllers::DomainDescriptionFactory::populateInitialStateFromIsd
 	TiXmlElement* facts = isdRootHandle.FirstChild("facts").FirstChild("fact").ToElement();
 	TiXmlElement* goals = isdRootHandle.FirstChild("goals").FirstChild("goal").ToElement();
 
+	// Iterate through facts
 	for (; facts; facts = facts->NextSiblingElement())
 	{
 		initialState->addFact(this->factFactory(facts));
 	}
 
+	// Iterate through goals
 	for (; goals; goals = goals->NextSiblingElement())
 	{
 		initialState->addGoal(this->goalFactory(goals));
 	}
 
+	// Add initial state model to domain description model
 	domainDescription->setInitialState(initialState);
 }
 
@@ -139,8 +142,10 @@ nddlgen::models::NddlGeneratablePtr nddlgen::controllers::DomainDescriptionFacto
 	std::string elementName = element->GetAttribute("name")->GetAsString();
 	nddlgen::models::NddlGeneratablePtr instance = this->_modelFactory->fromString(elementName);
 
+	// If instance is set
 	if (instance)
 	{
+		// Set name
 		instance->setName(elementName);
 
 		std::string basePoseRaw = element->GetElement("pose")->GetValue()->GetAsString();

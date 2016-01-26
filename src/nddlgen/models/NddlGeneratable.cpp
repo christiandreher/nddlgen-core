@@ -79,7 +79,7 @@ void nddlgen::models::NddlGeneratable::generateModel(std::ofstream& ofStream)
 
 	// Timeline needs to be extended so that no actions are performed at once
 	// and no predicates overlap
-	if (this->hasPredicates() || this->getClassName() == "Arm")
+	if (this->hasPredicates())
 	{
 		extendsTimeline = " extends Timeline";
 	}
@@ -87,6 +87,20 @@ void nddlgen::models::NddlGeneratable::generateModel(std::ofstream& ofStream)
 	wrln(0, "class " + this->_className + extendsTimeline, 1);
 	wrln(0, "{", 1);
 
+	// Print predicates if present
+	this->generateModelPredicates(ofStream);
+
+	// Print sub objects as member if present
+	this->generateModelSubObjects(ofStream);
+
+	// Print constructor if sub objects are set
+	this->generateModelConstructor(ofStream);
+
+	wrln(0, "}", 2);
+}
+
+void nddlgen::models::NddlGeneratable::generateModelPredicates(std::ofstream& ofStream)
+{
 	// Print predicates if present
 	if (this->hasPredicates())
 	{
@@ -100,12 +114,14 @@ void nddlgen::models::NddlGeneratable::generateModel(std::ofstream& ofStream)
 			wrel(1);
 		}
 	}
+}
 
-	// Print sub objects if present
+void nddlgen::models::NddlGeneratable::generateModelSubObjects(std::ofstream& ofStream)
+{
+	// Only print members if the model has any sub objects
 	if (this->hasSubObjects())
 	{
-		// Print members
-
+		// For each sub object, print member
 		foreach (nddlgen::models::NddlGeneratablePtr generatableModel, this->_subObjects)
 		{
 			std::string className = generatableModel->getClassName();
@@ -115,9 +131,15 @@ void nddlgen::models::NddlGeneratable::generateModel(std::ofstream& ofStream)
 		}
 
 		wrel(1);
+	}
+}
 
+void nddlgen::models::NddlGeneratable::generateModelConstructor(std::ofstream& ofStream)
+{
+	// Only print constructor if the model has any sub objects
+	if (this->hasSubObjects())
+	{
 		// Print constructor
-
 		std::string constructorHeader = this->getClassName() + "(";
 
 		foreach (nddlgen::models::NddlGeneratablePtr generatableModel, this->_subObjects)
@@ -142,8 +164,6 @@ void nddlgen::models::NddlGeneratable::generateModel(std::ofstream& ofStream)
 
 		wrln(1, "}", 1);
 	}
-
-	wrln(0, "}", 2);
 }
 
 void nddlgen::models::NddlGeneratable::setName(std::string name)

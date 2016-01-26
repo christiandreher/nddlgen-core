@@ -36,29 +36,89 @@ namespace nddlgen
 	}
 }
 
+/**
+ * Typedefs for function pointer and function pointer map
+ */
 typedef nddlgen::models::NddlGeneratablePtr (*CreateNddlGeneratable)(void);
 typedef std::map<std::string, CreateNddlGeneratable> NddlGeneratableMap;
 
+/**
+ * Abstract factory class to instantiate NddlGeneratables. This enables programs which
+ * use the nddlgen framework to register their own models according to their field of application.
+ *
+ * @author Christian Dreher
+ */
 class nddlgen::controllers::NddlGeneratableFactory
 {
 
 	protected:
 
+		/**
+		 * Map containing all registered NddlGeneratables.
+		 */
 		NddlGeneratableMap _registeredNddlGeneratables;
+
+		/**
+		 * Helper function to register a new NddlGeneratable.
+		 *
+		 * @param modelName Name of the Model (CLass name)
+		 * @param createFunction Create function
+		 */
 		void registerNddlGeneratable(std::string modelName, CreateNddlGeneratable createFunction);
 
 	public:
 
+		/**
+		 * Constructs a new NddlGeneratableFactory.
+		 */
 		NddlGeneratableFactory();
+
+		/**
+		 * Destructor to free memory.
+		 */
 		virtual ~NddlGeneratableFactory();
 
+		/**
+		 * Just after the Domain tree was built, but before all methods and classes are gathered,
+		 * this function will be called. This enables framework users to configurate the domain
+		 * if the other functionality is not enough.
+		 *
+		 * @param domain (Not fully qualified) domain description model
+		 */
 		virtual void configurateDomain(nddlgen::models::DomainDescriptionModelPtr domain);
 
+		/**
+		 * Generate an NddlGeneratable from modelName. This method will match all registered
+		 * classes to the given modelName parameter. If either the lower case modelName is equal
+		 * to the lower case class name or the lower case modelName is contained in the lower
+		 * case class name, an instance of this class will be returned.
+		 *
+		 * @param modelName Name of the model
+		 *
+		 * @return NddlGeneratable object
+		 */
 		nddlgen::models::NddlGeneratablePtr fromString(std::string modelName);
 
+		/**
+		 * Pure virtual function which has to be overridden. Inside this function, all possible
+		 * objects (NddlGeneratables) should be registered (using registerNddlGeneratable(...)).
+		 * This function is the initialization of the factory. The factory instance is later used
+		 * by the framework so that it can instantiate objects, which it is not fully aware of.
+		 */
 		virtual void registerNddlGeneratables() = 0;
 
+		/**
+		 * Creates the default Arm NddlGeneratable model
+		 *
+		 * @return ArmModel instance
+		 */
 		static nddlgen::models::NddlGeneratablePtr createArm();
+
+		/**
+		 * Creates the default Workspace NddlGeneratable model
+		 *
+		 * @return WorkspaceModel instance
+		 */
 		static nddlgen::models::NddlGeneratablePtr createWorkspace();
 
 };

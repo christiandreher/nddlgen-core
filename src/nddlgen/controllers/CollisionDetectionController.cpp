@@ -30,15 +30,18 @@ bool nddlgen::controllers::CollisionDetectionController::doesIntersect(
 		nddlgen::math::CuboidPtr box1,
 		nddlgen::math::CuboidPtr box2)
 {
+	// Assert that box1 is set
 	if (!box1)
 	{
 		throw "Accessibility bounding box was not set.";
 	}
 
+	// Assert that box2 is set
 	if (!box2)
 	{
 		throw "Object bounding box was not set.";
 	}
 
+	// Run collision detection
 	return nddlgen::math::SeparatingAxisTheoremTest::doesIntersect(box1, box2);
 }

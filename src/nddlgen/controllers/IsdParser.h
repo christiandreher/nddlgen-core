@@ -35,21 +35,45 @@ namespace nddlgen
 	}
 }
 
+/**
+ * Parser to handle a ISD file.
+ *
+ * @author Christian Dreher
+ */
 class nddlgen::controllers::IsdParser
 {
 
 	private:
 
+		/**
+		 * Workflow controller configuration.
+		 */
 		nddlgen::utilities::WorkflowControllerConfigPtr _config;
 
+		/**
+		 * Helper to ensure that all assertions are met.
+		 */
 		void checkAssertions();
 
 	public:
 
+		/**
+		 * Instantiates a new ISD parser with required workflow controller configuration.
+		 *
+		 * @param config Workflow controller configuration
+		 */
 		IsdParser(nddlgen::utilities::WorkflowControllerConfigPtr config);
 
+		/**
+		 * Destructor to free memory.
+		 */
 		virtual ~IsdParser();
 
+		/**
+		 * Parses the ISD file as specified in workflow controller configuration object.
+		 *
+		 * @return ISD document root
+		 */
 		nddlgen::types::IsdRoot parseIsd();
 
 };

@@ -28,16 +28,37 @@ namespace nddlgen
 	}
 }
 
+/**
+ * Controller to test for collisions between to objects.
+ *
+ * @author Christian Dreher
+ */
 class nddlgen::controllers::CollisionDetectionController
 {
 
 	private:
 
+		/**
+		 * Private constructor to prevent instantiation.
+		 */
 		CollisionDetectionController();
+
+		/**
+		 * Destructor to free memory.
+		 */
 		virtual ~CollisionDetectionController();
 
 	public:
 
+		/**
+		 * Test for intersection between to objects. Eventually, this should be changed to
+		 * also allow cylindric shaped bounding boxes
+		 *
+		 * @param box1 First box
+		 * @param box2 Second box
+		 *
+		 * @return True, if box1 and box2 intersect, false if not
+		 */
 		static bool doesIntersect(nddlgen::math::CuboidPtr box1, nddlgen::math::CuboidPtr box2);
 
 };
