@@ -22,6 +22,7 @@
 #include <boost/shared_ptr.hpp>
 
 #include <nddlgen/math/Vector.h>
+#include <nddlgen/exceptions/CuboidInstantiationException.hpp>
 
 namespace nddlgen
 {

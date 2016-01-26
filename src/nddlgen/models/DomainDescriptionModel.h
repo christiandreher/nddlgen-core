@@ -18,11 +18,18 @@
 #define NDDLGEN_MODELS_DOMAINDESCRIPTIONMODEL_H_
 
 #include <cstddef>
+#include <fstream>
+#include <list>
+#include <map>
 
 #include <boost/shared_ptr.hpp>
 
+#include <nddlgen/controllers/CollisionDetectionController.h>
 #include <nddlgen/models/ArmModel.h>
+#include <nddlgen/models/NddlGeneratable.h>
 #include <nddlgen/models/InitialStateModel.h>
+#include <nddlgen/utilities/Foreach.hpp>
+#include <nddlgen/utilities/Types.hpp>
 
 namespace nddlgen
 {
@@ -40,6 +47,14 @@ class nddlgen::models::DomainDescriptionModel
 
 		nddlgen::models::ArmModelPtr _arm;
 		nddlgen::models::InitialStateModelPtr _initialState;
+		std::map<std::string, nddlgen::models::NddlGeneratablePtr> _usedClasses;
+		nddlgen::types::ActionList _actions;
+
+		void initSubObjects(nddlgen::models::NddlGeneratablePtr model, std::map<std::string, int> indices);
+		void initPredicates(nddlgen::models::NddlGeneratablePtr model);
+		void initActions(nddlgen::models::NddlGeneratablePtr model);
+
+		std::list<nddlgen::models::NddlGeneratablePtr> gatherUsedObjects(nddlgen::models::NddlGeneratablePtr model);
 
 	public:
 
@@ -51,6 +66,20 @@ class nddlgen::models::DomainDescriptionModel
 
 		void setInitialState(nddlgen::models::InitialStateModelPtr initialState);
 		nddlgen::models::InitialStateModelPtr getInitialState();
+
+		void initSubObjects();
+		void initPredicates();
+		void detectBlockingObjects();
+		void initActions();
+		void gatherUsedClasses();
+		void gatherActions();
+
+		void generateForwardDeclarations(std::ofstream& ofStream);
+		void generateInstantiations(std::ofstream& ofStream);
+		void generateModels(std::ofstream& ofStream);
+		void generateActions(std::ofstream& ofStream);
+		void generateFacts(std::ofstream& ofStream);
+		void generateGoals(std::ofstream& ofStream);
 
 };
 

@@ -25,6 +25,7 @@
 
 #include <nddlgen/models/NddlGeneratable.h>
 #include <nddlgen/models/WorkspaceModel.h>
+#include <nddlgen/models/ProcessModel.h>
 
 namespace nddlgen
 {
@@ -40,17 +41,22 @@ class nddlgen::models::ArmModel : public nddlgen::models::NddlGeneratable
 
 	private:
 
-		nddlgen::models::WorkspaceModelPtr _workspace;
+		std::list<std::string> _actionPrototypes;
 
 	public:
 
 		ArmModel();
 		virtual ~ArmModel();
 
+		virtual void initSubObjects();
+
 		virtual void generateModel(std::ofstream& ofStream);
 
-		void setWorkspace(nddlgen::models::WorkspaceModelPtr workspace);
 		nddlgen::models::WorkspaceModelPtr getWorkspace();
+
+		virtual std::string getAccessor();
+
+		void setActionPrototypes(std::list<std::string> actionPrototypes);
 
 };
 

@@ -23,8 +23,7 @@ nddlgen::math::Cuboid::Cuboid(std::vector<nddlgen::math::VectorPtr> vertices,
 {
 	if (vertices.size() != 8)
 	{
-		// todo: throw proper exception
-		throw "A bounding box must be defined by exactly 8 vertices.";
+		throw nddlgen::exceptions::CuboidInstantiationException();
 	}
 
 	this->_vertices = vertices;

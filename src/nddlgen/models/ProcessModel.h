@@ -14,29 +14,35 @@
  * limitations under the License.
  */
 
-#include <nddlgen/models/WorkspaceModel.h>
+#ifndef NDDLGEN_MODELS_PROCESSMODEL_H_
+#define NDDLGEN_MODELS_PROCESSMODEL_H_
 
-nddlgen::models::WorkspaceModel::WorkspaceModel()
+#include <iostream>
+#include <fstream>
+
+#include <boost/shared_ptr.hpp>
+
+#include <nddlgen/models/NddlGeneratable.h>
+
+namespace nddlgen
 {
-	this->setClassName("Workspace");
+	namespace models
+	{
+		class ProcessModel;
+		typedef boost::shared_ptr<ProcessModel> ProcessModelPtr;
+	}
 }
 
-nddlgen::models::WorkspaceModel::~WorkspaceModel()
+class nddlgen::models::ProcessModel : public nddlgen::models::NddlGeneratable
 {
 
-}
+	public:
 
-void nddlgen::models::WorkspaceModel::addModelToWorkspace(nddlgen::models::NddlGeneratablePtr model)
-{
-	this->addSubObject(model);
-}
+		ProcessModel();
+		virtual ~ProcessModel();
 
-nddlgen::models::NddlGeneratablePtr nddlgen::models::WorkspaceModel::getModelByName(std::string name)
-{
-	return this->getSubObjectByName(name);
-}
+		virtual void initPredicates();
 
-nddlgen::types::NddlGeneratableList nddlgen::models::WorkspaceModel::getModels()
-{
-	return this->_subObjects;
-}
+};
+
+#endif

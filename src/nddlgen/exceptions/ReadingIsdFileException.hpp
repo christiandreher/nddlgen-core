@@ -14,29 +14,26 @@
  * limitations under the License.
  */
 
-#include <nddlgen/models/WorkspaceModel.h>
+#ifndef NDDLGEN_EXCEPTIONS_READINGISDFILEEXCEPTION_HPP_
+#define NDDLGEN_EXCEPTIONS_READINGISDFILEEXCEPTION_HPP_
 
-nddlgen::models::WorkspaceModel::WorkspaceModel()
+#include <exception>
+
+namespace nddlgen { namespace exceptions { class ReadingIsdFileException; }}
+
+class nddlgen::exceptions::ReadingIsdFileException : public std::exception
 {
-	this->setClassName("Workspace");
-}
 
-nddlgen::models::WorkspaceModel::~WorkspaceModel()
-{
+	public:
 
-}
+		explicit ReadingIsdFileException() {}
+		virtual ~ReadingIsdFileException() throw (){}
 
-void nddlgen::models::WorkspaceModel::addModelToWorkspace(nddlgen::models::NddlGeneratablePtr model)
-{
-	this->addSubObject(model);
-}
+		virtual const char* what() const throw()
+		{
+			return "Unable to read .isd file.";
+		}
 
-nddlgen::models::NddlGeneratablePtr nddlgen::models::WorkspaceModel::getModelByName(std::string name)
-{
-	return this->getSubObjectByName(name);
-}
+};
 
-nddlgen::types::NddlGeneratableList nddlgen::models::WorkspaceModel::getModels()
-{
-	return this->_subObjects;
-}
+#endif

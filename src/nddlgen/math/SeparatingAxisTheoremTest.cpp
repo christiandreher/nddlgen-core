@@ -66,6 +66,8 @@ bool nddlgen::math::SeparatingAxisTheoremTest::doesProjectionIntersect(nddlgen::
 		nddlgen::math::CuboidPtr box2,
 		nddlgen::math::VectorPtr axis)
 {
+	// Implementation adapted from Acegikmo (stackoverflow community member) from a C#/Unity example
+
 	if (axis->isNull())
 	{
 		return true;

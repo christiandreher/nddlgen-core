@@ -18,7 +18,7 @@
 
 nddlgen::utilities::WorkflowControllerConfig::WorkflowControllerConfig()
 {
-	this->_adapter = "a custom adapter";
+	this->_adapter = "an custom, unnamed adapter";
 
 	this->_sdfInputFile = "";
 	this->_isdInputFile = "";

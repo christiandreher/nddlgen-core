@@ -32,17 +32,51 @@ namespace nddlgen
 	}
 }
 
+/**
+ * Implementation of the separating axis theorem (SAT) test.
+ * Can be used to check for collisions between cuboids.
+ *
+ * @author Christian Dreher
+ */
 class nddlgen::math::SeparatingAxisTheoremTest
 {
 
 	private:
 
+		/**
+		 * Private constructor to prevent instantiation.
+		 */
 		SeparatingAxisTheoremTest();
+
+		/**
+		 * Destructor to free memory.
+		 */
 		virtual ~SeparatingAxisTheoremTest();
 
 	public:
 
+		/**
+		 * Checks if two objects (box1 and box2) do intersect by using the seperating axis theorem.
+		 *
+		 * @param box1 First box
+		 * @param box2 Second box
+		 *
+		 * @return True, if boxes intersect according to SAT, false if not
+		 */
 		static bool doesIntersect(nddlgen::math::CuboidPtr box1, nddlgen::math::CuboidPtr box2);
+
+		/**
+		 * Checks if the projection of two objects (box1 and box2) do intersect, when projected
+		 * to axis. From: http://gamedev.stackexchange.com/a/92055/74703
+		 * Translated from a C#/Unity code example
+		 * Courtesy of Acegikmo (stackoverflow community member)
+		 *
+		 * @param box1 First box to be projected
+		 * @param box2 Second box to be projected
+		 * @param axis Axis where the objects should be projected to
+		 *
+		 * @return True, if the projections of the objects do intersect when projected to axis, false if not.
+		 */
 		static bool doesProjectionIntersect(nddlgen::math::CuboidPtr box1,
 				nddlgen::math::CuboidPtr box2,
 				nddlgen::math::VectorPtr axis);

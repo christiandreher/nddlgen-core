@@ -38,8 +38,7 @@ nddlgen::types::IsdRoot nddlgen::controllers::IsdParser::parseIsd()
 	// Try to read the file and parse ISD
 	if (!doc->LoadFile(this->_config->getIsdInputFile()))
 	{
-		// todo: throw exception instead
-		return 0;
+		throw nddlgen::exceptions::ReadingIsdFileException();
 	}
 
 	// Return document

@@ -30,26 +30,49 @@ nddlgen::models::DomainDescriptionModelPtr nddlgen::controllers::DomainDescripti
 		nddlgen::types::SdfRoot sdfRoot,
 		nddlgen::types::IsdRoot isdRoot)
 {
+	// Assert that a model factory was set
 	if (!this->_modelFactory)
 	{
 		throw nddlgen::exceptions::ModelFactoryNotSetException();
 	}
 
+	// Instantiate basic models
 	nddlgen::models::DomainDescriptionModelPtr domainDescription(new nddlgen::models::DomainDescriptionModel());
-	nddlgen::models::ArmModelPtr arm(new nddlgen::models::ArmModel());
-	nddlgen::models::WorkspaceModelPtr workspace(new nddlgen::models::WorkspaceModel());
+	nddlgen::models::ArmModelPtr arm = boost::dynamic_pointer_cast<nddlgen::models::ArmModel>(this->_modelFactory->fromString("arm"));
+	nddlgen::models::WorkspaceModelPtr workspace = boost::dynamic_pointer_cast<nddlgen::models::WorkspaceModel>(this->_modelFactory->fromString("workspace"));
 
-	// Set names for arm and workspace
+	// Set names for arm and workspace manually
 	arm->setName("arm");
 	workspace->setName("workspace");
 
-	// Add both of them into the hierarchy
-	arm->setWorkspace(workspace);
+	// Add workspace and arm to the hierarchy
+	arm->addSubObject(workspace);
 	domainDescription->setArm(arm);
 
 	// Populate the model with given SDF and ISD roots
 	this->populateModelsFromSdf(domainDescription, sdfRoot);
 	this->populateInitialStateFromIsd(domainDescription, isdRoot);
+
+	// Populate model hierarchy by calling initSubObjects() for all models
+	domainDescription->initSubObjects();
+
+	// Initialize predicates by calling initPredicates() for all models
+	domainDescription->initPredicates();
+
+	// Call configurateDomain(...) to allow user to modify domain further
+	this->_modelFactory->configurateDomain(domainDescription);
+
+	// Detect blocking objects
+	domainDescription->detectBlockingObjects();
+
+	// Initialize actions by calling initActions() for all models
+	domainDescription->initActions();
+
+	// Gather used classes
+	domainDescription->gatherUsedClasses();
+
+	// Gather all actions
+	domainDescription->gatherActions();
 
 	// Return the fully qualified domain description model
 	return domainDescription;
@@ -65,6 +88,7 @@ void nddlgen::controllers::DomainDescriptionFactory::populateModelsFromSdf(
 		nddlgen::models::DomainDescriptionModelPtr domainDescription,
 		nddlgen::types::SdfRoot sdfRoot)
 {
+	// Initialize needed variables
 	nddlgen::models::WorkspaceModelPtr workspace = domainDescription->getArm()->getWorkspace();
 	sdf::ElementPtr currentModelElement = sdfRoot->root->GetElement("world")->GetElement("model");
 
@@ -74,18 +98,16 @@ void nddlgen::controllers::DomainDescriptionFactory::populateModelsFromSdf(
 		nddlgen::models::NddlGeneratablePtr generatableModel = this->modelFactory(currentModelElement);
 
 		// If generatableModel is null, it is not supported by the given model factory
-		// and will therefore not be added to the workspace
+		// and will therefore be ignored and not added to the workspace
 		if (generatableModel)
 		{
+			// First add generatableModel to workspace to make sure that it is initialized properly
 			workspace->addModelToWorkspace(generatableModel);
 		}
 
 		// Iterate
 		currentModelElement = currentModelElement->GetNextElement("model");
 	}
-
-	// Run post-init processing
-	workspace->postInitProcessing();
 }
 
 void nddlgen::controllers::DomainDescriptionFactory::populateInitialStateFromIsd(
@@ -99,16 +121,19 @@ void nddlgen::controllers::DomainDescriptionFactory::populateInitialStateFromIsd
 	TiXmlElement* facts = isdRootHandle.FirstChild("facts").FirstChild("fact").ToElement();
 	TiXmlElement* goals = isdRootHandle.FirstChild("goals").FirstChild("goal").ToElement();
 
+	// Iterate through facts
 	for (; facts; facts = facts->NextSiblingElement())
 	{
 		initialState->addFact(this->factFactory(facts));
 	}
 
+	// Iterate through goals
 	for (; goals; goals = goals->NextSiblingElement())
 	{
 		initialState->addGoal(this->goalFactory(goals));
 	}
 
+	// Add initial state model to domain description model
 	domainDescription->setInitialState(initialState);
 }
 
@@ -117,8 +142,10 @@ nddlgen::models::NddlGeneratablePtr nddlgen::controllers::DomainDescriptionFacto
 	std::string elementName = element->GetAttribute("name")->GetAsString();
 	nddlgen::models::NddlGeneratablePtr instance = this->_modelFactory->fromString(elementName);
 
+	// If instance is set
 	if (instance)
 	{
+		// Set name
 		instance->setName(elementName);
 
 		std::string basePoseRaw = element->GetElement("pose")->GetValue()->GetAsString();

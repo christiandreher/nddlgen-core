@@ -14,29 +14,21 @@
  * limitations under the License.
  */
 
-#include <nddlgen/models/WorkspaceModel.h>
+#include <nddlgen/models/ProcessModel.h>
 
-nddlgen::models::WorkspaceModel::WorkspaceModel()
+nddlgen::models::ProcessModel::ProcessModel()
 {
-	this->setClassName("Workspace");
+	this->setClassName("Process");
 }
 
-nddlgen::models::WorkspaceModel::~WorkspaceModel()
+nddlgen::models::ProcessModel::~ProcessModel()
 {
 
 }
 
-void nddlgen::models::WorkspaceModel::addModelToWorkspace(nddlgen::models::NddlGeneratablePtr model)
+void nddlgen::models::ProcessModel::initPredicates()
 {
-	this->addSubObject(model);
-}
-
-nddlgen::models::NddlGeneratablePtr nddlgen::models::WorkspaceModel::getModelByName(std::string name)
-{
-	return this->getSubObjectByName(name);
-}
-
-nddlgen::types::NddlGeneratableList nddlgen::models::WorkspaceModel::getModels()
-{
-	return this->_subObjects;
+	this->addPredicate("pending");
+	this->addPredicate("processing");
+	this->addPredicate("done");
 }

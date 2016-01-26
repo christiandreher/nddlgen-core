@@ -18,6 +18,7 @@
 #define NDDLGEN_TYPES_TYPES_HPP_
 
 #include <list>
+#include <vector>
 
 #include <boost/shared_ptr.hpp>
 #include <sdf/sdf.hh>
@@ -42,7 +43,7 @@ namespace nddlgen
 namespace nddlgen { namespace types
 {
 
-	typedef std::list<boost::shared_ptr<nddlgen::models::NddlGeneratable>> NddlGeneratableList;
+	typedef std::vector<boost::shared_ptr<nddlgen::models::NddlGeneratable>> NddlGeneratableList;
 
 	typedef std::list<boost::shared_ptr<nddlgen::utilities::ModelAction>> ActionList;
 
