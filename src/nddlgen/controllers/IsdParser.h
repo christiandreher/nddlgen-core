@@ -20,6 +20,7 @@
 #include <boost/shared_ptr.hpp>
 #include <tinyxml.h>
 
+#include <nddlgen/exceptions/ReadingIsdFileException.hpp>
 #include <nddlgen/exceptions/IsdInputFileNotSetException.hpp>
 #include <nddlgen/exceptions/FileMustBeIsdException.hpp>
 #include <nddlgen/exceptions/FileDoesNotExistException.hpp>
