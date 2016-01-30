@@ -55,7 +55,7 @@ void nddlgen::models::NddlGeneratable::generateInstantiation(std::ofstream& ofSt
 
 	if (this->hasSubObjects())
 	{
-		std::vector<nddlgen::models::NddlGeneratablePtr> subObjects = this->getSubObjects();
+		nddlgen::types::NddlGeneratableList subObjects = this->getSubObjects();
 
 		foreach (nddlgen::models::NddlGeneratablePtr subObject, subObjects)
 		{
@@ -313,23 +313,36 @@ void nddlgen::models::NddlGeneratable::addSubObject(nddlgen::models::NddlGenerat
 	this->_subObjects.push_back(subObject);
 }
 
-std::vector<nddlgen::models::NddlGeneratablePtr> nddlgen::models::NddlGeneratable::getSubObjects()
+nddlgen::types::NddlGeneratableList nddlgen::models::NddlGeneratable::getSubObjects()
 {
 	return this->_subObjects;
 }
 
-nddlgen::models::NddlGeneratablePtr nddlgen::models::NddlGeneratable::getSubObjectByName(std::string name)
+nddlgen::models::NddlGeneratablePtr nddlgen::models::NddlGeneratable::getSubObjectByName(
+		std::string name,
+		bool findInTree)
 {
+	nddlgen::models::NddlGeneratablePtr output(0);
+
 	foreach (nddlgen::models::NddlGeneratablePtr generatableModel, this->_subObjects)
 	{
 		if (generatableModel->getName() == name)
 		{
-			return generatableModel;
+			output = generatableModel;
+		}
+
+		if (!output && findInTree)
+		{
+			output = generatableModel->getSubObjectByName(name, findInTree);
+		}
+
+		if (output)
+		{
+			return output;
 		}
 	}
 
-	nddlgen::models::NddlGeneratablePtr null(0);
-	return null;
+	return output;
 }
 
 void nddlgen::models::NddlGeneratable::setInstanceNameFor(int index, std::string instanceName)

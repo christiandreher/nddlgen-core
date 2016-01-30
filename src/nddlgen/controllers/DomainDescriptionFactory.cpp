@@ -264,7 +264,7 @@ void nddlgen::controllers::DomainDescriptionFactory::subObjectPopulationHelper(
 		int index = 0;
 
 		// Get sub objects
-		std::vector<nddlgen::models::NddlGeneratablePtr> subObjects = model->getSubObjects();
+		nddlgen::types::NddlGeneratableList subObjects = model->getSubObjects();
 
 		// Loop through sub objects and use it as parameter for the recursive call
 		foreach (nddlgen::models::NddlGeneratablePtr subObject, subObjects)
@@ -310,7 +310,7 @@ void nddlgen::controllers::DomainDescriptionFactory::predicatesPopulationHelper(
 	if (model->hasSubObjects())
 	{
 		// Get sub objects
-		std::vector<nddlgen::models::NddlGeneratablePtr> subObjects = model->getSubObjects();
+		nddlgen::types::NddlGeneratableList subObjects = model->getSubObjects();
 
 		// Loop through sub objects and use it as parameter for the recursive call
 		foreach (nddlgen::models::NddlGeneratablePtr subObject, subObjects)
@@ -330,7 +330,7 @@ void nddlgen::controllers::DomainDescriptionFactory::actionsPopulationHelper(
 	if (model->hasSubObjects())
 	{
 		// Get sub objects
-		std::vector<nddlgen::models::NddlGeneratablePtr> subObjects = model->getSubObjects();
+		nddlgen::types::NddlGeneratableList subObjects = model->getSubObjects();
 
 		// Loop through sub objects and use it as parameter for the recursive call
 		foreach (nddlgen::models::NddlGeneratablePtr subObject, subObjects)
@@ -516,7 +516,7 @@ nddlgen::types::NddlGeneratableList nddlgen::controllers::DomainDescriptionFacto
 	if (model->hasSubObjects())
 	{
 		// Get sub objects
-		std::vector<nddlgen::models::NddlGeneratablePtr> subObjects = model->getSubObjects();
+		nddlgen::types::NddlGeneratableList subObjects = model->getSubObjects();
 
 		// Loop through sub objects and use it as parameter for the recursive call
 		foreach (nddlgen::models::NddlGeneratablePtr subObject, subObjects)

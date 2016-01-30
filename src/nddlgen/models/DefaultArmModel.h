@@ -46,6 +46,7 @@ class nddlgen::models::DefaultArmModel : public nddlgen::models::NddlGeneratable
 	public:
 
 		DefaultArmModel();
+
 		virtual ~DefaultArmModel();
 
 		virtual void initSubObjects();

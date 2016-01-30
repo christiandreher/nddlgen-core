@@ -36,12 +36,23 @@ namespace nddlgen
 class nddlgen::models::ProcessModel : public nddlgen::models::NddlGeneratable
 {
 
+	private:
+
+		std::string _pendingPredicate;
+		std::string _processingPredicate;
+		std::string _donePredicate;
+
 	public:
 
 		ProcessModel();
+
 		virtual ~ProcessModel();
 
 		virtual void initPredicates();
+
+		std::string getPendingPredicate();
+		std::string getProcessingPredicate();
+		std::string getDonePredicate();
 
 };
 
