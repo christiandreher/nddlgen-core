@@ -23,9 +23,8 @@
 #include <boost/shared_ptr.hpp>
 
 #include <nddlgen/models/NddlGeneratable.h>
-#include <nddlgen/models/ArmModel.h>
-#include <nddlgen/models/WorkspaceModel.h>
-#include <nddlgen/models/DomainDescriptionModel.h>
+#include <nddlgen/models/DefaultArmModel.h>
+#include <nddlgen/models/DefaultWorkspaceModel.h>
 
 namespace nddlgen
 {
@@ -79,15 +78,6 @@ class nddlgen::controllers::NddlGeneratableFactory
 		virtual ~NddlGeneratableFactory();
 
 		/**
-		 * Just after the Domain tree was built, but before all methods and classes are gathered,
-		 * this function will be called. This enables framework users to configurate the domain
-		 * if the other functionality is not enough.
-		 *
-		 * @param domain (Not fully qualified) domain description model
-		 */
-		virtual void configurateDomain(nddlgen::models::DomainDescriptionModelPtr domain);
-
-		/**
 		 * Generate an NddlGeneratable from modelName. This method will match all registered
 		 * classes to the given modelName parameter. If either the lower case modelName is equal
 		 * to the lower case class name or the lower case modelName is contained in the lower
@@ -112,14 +102,14 @@ class nddlgen::controllers::NddlGeneratableFactory
 		 *
 		 * @return ArmModel instance
 		 */
-		static nddlgen::models::NddlGeneratablePtr createArm();
+		static nddlgen::models::NddlGeneratablePtr createDefaultArm();
 
 		/**
 		 * Creates the default Workspace NddlGeneratable model
 		 *
 		 * @return WorkspaceModel instance
 		 */
-		static nddlgen::models::NddlGeneratablePtr createWorkspace();
+		static nddlgen::models::NddlGeneratablePtr createDefaultWorkspace();
 
 };
 

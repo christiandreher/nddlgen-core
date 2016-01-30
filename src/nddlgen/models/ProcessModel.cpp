@@ -19,6 +19,10 @@
 nddlgen::models::ProcessModel::ProcessModel()
 {
 	this->setClassName("Process");
+
+	this->_pendingPredicate = "pending";
+	this->_processingPredicate = "processing";
+	this->_donePredicate = "done";
 }
 
 nddlgen::models::ProcessModel::~ProcessModel()
@@ -28,7 +32,24 @@ nddlgen::models::ProcessModel::~ProcessModel()
 
 void nddlgen::models::ProcessModel::initPredicates()
 {
-	this->addPredicate("pending");
-	this->addPredicate("processing");
-	this->addPredicate("done");
+	this->addPredicate(this->_pendingPredicate);
+	this->addPredicate(this->_processingPredicate);
+	this->addPredicate(this->_donePredicate);
+
+	this->setInitialPredicate(this->_pendingPredicate);
+}
+
+std::string nddlgen::models::ProcessModel::getPendingPredicate()
+{
+	return this->_pendingPredicate;
+}
+
+std::string nddlgen::models::ProcessModel::getProcessingPredicate()
+{
+	return this->_processingPredicate;
+}
+
+std::string nddlgen::models::ProcessModel::getDonePredicate()
+{
+	return this->_donePredicate;
 }

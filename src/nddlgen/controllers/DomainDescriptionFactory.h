@@ -33,10 +33,10 @@
 #include <nddlgen/math/CuboidOperations.h>
 #include <nddlgen/math/Vector.h>
 #include <nddlgen/math/VectorOperations.h>
-#include <nddlgen/models/ArmModel.h>
+#include <nddlgen/models/DefaultArmModel.h>
+#include <nddlgen/models/DefaultWorkspaceModel.h>
 #include <nddlgen/models/DomainDescriptionModel.h>
 #include <nddlgen/models/NddlGeneratable.h>
-#include <nddlgen/models/WorkspaceModel.h>
 #include <nddlgen/utilities/InitialStateFact.h>
 #include <nddlgen/utilities/InitialStateGoal.h>
 #include <nddlgen/utilities/Types.hpp>
@@ -67,22 +67,124 @@ class nddlgen::controllers::DomainDescriptionFactory
 		nddlgen::controllers::NddlGeneratableFactoryPtr _modelFactory;
 
 		/**
-		 * Populates workspace with the models that are found in the SDF.
+		 * Collection of all NddlGeneratable objects within the hierarchy.
+		 * Access this only with the getObjects() function, since this value
+		 * will be evaluated lazily.
+		 */
+		nddlgen::types::NddlGeneratableList _objects;
+
+		/**
+		 * Populates domain description model with the models that are found in the SDF.
 		 *
 		 * @param domainDescription Domain description model
 		 * @param sdfRoot SDF document root
 		 */
-		void populateModelsFromSdf(nddlgen::models::DomainDescriptionModelPtr domainDescription,
-				nddlgen::types::SdfRoot sdfRoot);
+		void populateWithModelsFromSdf(
+				nddlgen::models::DomainDescriptionModelPtr domainDescription,
+				nddlgen::types::SdfRoot sdfRoot
+		);
 
 		/**
-		 * Populates initial state model with the data in the ISD.
+		 * Populates domain description model with the goals from the ISD.
 		 *
 		 * @param domainDescription Domain description model
 		 * @param isdRoot ISD document root
 		 */
-		void populateInitialStateFromIsd(nddlgen::models::DomainDescriptionModelPtr domainDescription,
-				nddlgen::types::IsdRoot isdRoot);
+		void populateWithGoalsFromIsd(
+				nddlgen::models::DomainDescriptionModelPtr domainDescription,
+				nddlgen::types::IsdRoot isdRoot
+		);
+
+		/**
+		 * Populates domain description model with model sub objects as defined
+		 * in the NddlGeneratable::initSubObject() function.
+		 *
+		 * @param domainDescription Domain description model
+		 */
+		void populateWithSubObjects(
+				nddlgen::models::DomainDescriptionModelPtr domainDescription
+		);
+
+		/**
+		 * Populates domain description model with predicates as defined in
+		 * the NddlGeneratable::initPredicates() function.
+		 *
+		 * @param domainDescription Domain description model
+		 */
+		void populateWithPredicates(
+				nddlgen::models::DomainDescriptionModelPtr domainDescription
+		);
+
+		/**
+		 * Populates domain description model with facts as defined by the
+		 * NddlGeneratable::_initialPredicate member.
+		 *
+		 * @param domainDescription Domain description model
+		 */
+		void populateWithFacts(
+				nddlgen::models::DomainDescriptionModelPtr domainDescription
+		);
+
+		/**
+		 * Populates the models within the domain description model which are
+		 * blocked by other objects according to a collision detection algorithm.
+		 *
+		 * @param domainDescription Domain description model
+		 */
+		void populateWithBlockedObjects(
+				nddlgen::models::DomainDescriptionModelPtr domainDescription
+		);
+
+		/**
+		 * Populates domain description model with actions as defined in the
+		 * NddlGenertable::initActions() function.
+		 *
+		 * @param domainDescription Domain description model
+		 */
+		void populateWithActions(
+				nddlgen::models::DomainDescriptionModelPtr domainDescription
+		);
+
+		/**
+		 * Populates domain description model with all classes that are used.
+		 *
+		 * @param domainDescription Domain description model
+		 */
+		void populateWithUsedClasses(
+				nddlgen::models::DomainDescriptionModelPtr domainDescription
+		);
+
+		/**
+		 * Helper to populate models with sub objects as defined in the initSubObjects()
+		 * function.
+		 *
+		 * @param model Current model in tree
+		 * @param indices Map to keep track of all indices. Should be empty initially
+		 */
+		void subObjectPopulationHelper(
+				nddlgen::models::NddlGeneratablePtr model,
+				std::map<std::string, int> indices
+		);
+
+		/**
+		 * Helper to populate models with predicates as defined in the initPredicates()
+		 * function.
+		 *
+		 * @param model Current model in tree
+		 */
+		void predicatesPopulationHelper(
+				nddlgen::models::NddlGeneratablePtr model
+		);
+
+		/**
+		 * Helper to populate models with actions as defined in the initActions()
+		 * function. Also add all actions to the domain description model directly.
+		 *
+		 * @param model Current model in tree
+		 */
+		void actionsPopulationHelper(
+				nddlgen::models::NddlGeneratablePtr model
+		);
 
 		/**
 		 * Factory function to instantiate NddGeneratables.
@@ -92,7 +194,9 @@ class nddlgen::controllers::DomainDescriptionFactory
 		 * @return Instantiated NddlGeneratable, or null pointer if this->_modelFactory was
 		 * not able to instantiate one from the SDF data.
 		 */
-		nddlgen::models::NddlGeneratablePtr modelFactory(sdf::ElementPtr element);
+		nddlgen::models::NddlGeneratablePtr modelFactory(
+				sdf::ElementPtr element
+		);
 
 		/**
 		 * Factory function to instantiate a bounding box.
@@ -103,27 +207,34 @@ class nddlgen::controllers::DomainDescriptionFactory
 		 *
 		 * @return Cuboid object representing bounding box.
 		 */
-		nddlgen::math::CuboidPtr boundingBoxFactory(std::string basePose,
+		nddlgen::math::CuboidPtr boundingBoxFactory(
+				std::string basePose,
 				std::string pose,
-				std::string size);
+				std::string size
+		);
 
 		/**
-		 * Factory function to instantiate facts.
+		 * Gets all used objects. Use this instead of directly accessing
+		 * _objects, since this field is lazily evaluated.
 		 *
-		 * @param factElement Fact as defined in ISD
+		 * @param domainDescription Domain description model
 		 *
-		 * @return Fact object representing a fact in NDDL.
+		 * @return List of all used objects
 		 */
-		nddlgen::utilities::InitialStateFactPtr factFactory(TiXmlElement* factElement);
+		nddlgen::types::NddlGeneratableList getSubObjectsFrom(
+				nddlgen::models::DomainDescriptionModelPtr domainDescription
+		);
 
 		/**
-		 * Factory function to instantiate goals.
+		 * Gets all sub objects of given model.
 		 *
-		 * @param goalElement Goal as defined in ISD
+		 * @param model Model from where to start traversing tree
 		 *
-		 * @return Goal object representing a goal in NDDL.
+		 * @return List of all sub objects.
 		 */
-		nddlgen::utilities::InitialStateGoalPtr goalFactory(TiXmlElement* goalElement);
+		nddlgen::types::NddlGeneratableList getSubObjectsFrom(
+				nddlgen::models::NddlGeneratablePtr model
+		);
 
 	public:
 
@@ -145,15 +256,19 @@ class nddlgen::controllers::DomainDescriptionFactory
 		 *
 		 * @return Fully qualified domain description model.
 		 */
-		nddlgen::models::DomainDescriptionModelPtr build(nddlgen::types::SdfRoot sdfRoot,
-				nddlgen::types::IsdRoot isdRoot);
+		nddlgen::models::DomainDescriptionModelPtr build(
+				nddlgen::types::SdfRoot sdfRoot,
+				nddlgen::types::IsdRoot isdRoot
+		);
 
 		/**
 		 * Set model factory needed by domain description factory.
 		 *
 		 * @param modelFactory Model factory
 		 */
-		void setModelFactory(nddlgen::controllers::NddlGeneratableFactoryPtr modelFactory);
+		void setModelFactory(
+				nddlgen::controllers::NddlGeneratableFactoryPtr modelFactory
+		);
 
 };
 

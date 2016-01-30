@@ -14,49 +14,44 @@
  * limitations under the License.
  */
 
-#ifndef NDDLGEN_MODELS_ARMMODEL_H_
-#define NDDLGEN_MODELS_ARMMODEL_H_
+#ifndef NDDLGEN_MODELS_DEFAULTWORKSPACEMODEL_H_
+#define NDDLGEN_MODELS_DEFAULTWORKSPACEMODEL_H_
 
-#include <string>
 #include <iostream>
 #include <fstream>
 
 #include <boost/shared_ptr.hpp>
 
 #include <nddlgen/models/NddlGeneratable.h>
-#include <nddlgen/models/WorkspaceModel.h>
-#include <nddlgen/models/ProcessModel.h>
+#include <nddlgen/utilities/Types.hpp>
+#include <nddlgen/utilities/Foreach.hpp>
 
 namespace nddlgen
 {
 	namespace models
 	{
-		class ArmModel;
-		typedef boost::shared_ptr<ArmModel> ArmModelPtr;
+		class DefaultWorkspaceModel;
+		typedef boost::shared_ptr<nddlgen::models::DefaultWorkspaceModel> DefaultWorkspaceModelPtr;
 	}
 }
 
-class nddlgen::models::ArmModel : public nddlgen::models::NddlGeneratable
+class nddlgen::models::DefaultWorkspaceModel : public nddlgen::models::NddlGeneratable
 {
 
 	private:
 
-		std::list<std::string> _actionPrototypes;
+		void generateWorkspaceMembers(std::ofstream& ofStream);
+		void generateWorkspaceConstructor(std::ofstream& ofStream);
 
 	public:
 
-		ArmModel();
-		virtual ~ArmModel();
+		DefaultWorkspaceModel();
+		virtual ~DefaultWorkspaceModel();
 
-		virtual void initSubObjects();
+		void addModelToWorkspace(nddlgen::models::NddlGeneratablePtr model);
+		nddlgen::models::NddlGeneratablePtr getModelByName(std::string name);
 
-		virtual void generateModel(std::ofstream& ofStream);
-
-		nddlgen::models::WorkspaceModelPtr getWorkspace();
-
-		virtual std::string getAccessor();
-
-		void setActionPrototypes(std::list<std::string> actionPrototypes);
+		nddlgen::types::NddlGeneratableList getModels();
 
 };
 

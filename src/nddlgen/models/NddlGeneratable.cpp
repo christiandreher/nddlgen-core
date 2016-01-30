@@ -55,7 +55,7 @@ void nddlgen::models::NddlGeneratable::generateInstantiation(std::ofstream& ofSt
 
 	if (this->hasSubObjects())
 	{
-		std::vector<nddlgen::models::NddlGeneratablePtr> subObjects = this->getSubObjects();
+		nddlgen::types::NddlGeneratableList subObjects = this->getSubObjects();
 
 		foreach (nddlgen::models::NddlGeneratablePtr subObject, subObjects)
 		{
@@ -230,6 +230,33 @@ bool nddlgen::models::NddlGeneratable::hasPredicates()
 	return (this->_predicates.size() != 0);
 }
 
+void nddlgen::models::NddlGeneratable::setInitialPredicate(std::string initialPredicate)
+{
+	this->_initialPredicate = initialPredicate;
+}
+
+std::string nddlgen::models::NddlGeneratable::getInitialPredicate()
+{
+	return this->_initialPredicate;
+}
+
+nddlgen::utilities::InitialStateFactPtr nddlgen::models::NddlGeneratable::getInitialState()
+{
+	if (this->_initialPredicate == "")
+	{
+		// TODO: throw proper exception
+		throw "No initial predicate was set for " + this->_name;
+	}
+
+	nddlgen::utilities::InitialStateFactPtr fact(new nddlgen::utilities::InitialStateFact());
+
+	fact->setFactName(this->getName() + "_" + this->getInitialPredicate());
+	fact->setModelName(this->getName());
+	fact->setPredicate(this->getInitialPredicate());
+
+	return fact;
+}
+
 void nddlgen::models::NddlGeneratable::addAction(nddlgen::utilities::ModelActionPtr action)
 {
 	this->_actions.push_back(action);
@@ -286,23 +313,36 @@ void nddlgen::models::NddlGeneratable::addSubObject(nddlgen::models::NddlGenerat
 	this->_subObjects.push_back(subObject);
 }
 
-std::vector<nddlgen::models::NddlGeneratablePtr> nddlgen::models::NddlGeneratable::getSubObjects()
+nddlgen::types::NddlGeneratableList nddlgen::models::NddlGeneratable::getSubObjects()
 {
 	return this->_subObjects;
 }
 
-nddlgen::models::NddlGeneratablePtr nddlgen::models::NddlGeneratable::getSubObjectByName(std::string name)
+nddlgen::models::NddlGeneratablePtr nddlgen::models::NddlGeneratable::getSubObjectByName(
+		std::string name,
+		bool findInTree)
 {
+	nddlgen::models::NddlGeneratablePtr output(0);
+
 	foreach (nddlgen::models::NddlGeneratablePtr generatableModel, this->_subObjects)
 	{
 		if (generatableModel->getName() == name)
 		{
-			return generatableModel;
+			output = generatableModel;
+		}
+
+		if (!output && findInTree)
+		{
+			output = generatableModel->getSubObjectByName(name, findInTree);
+		}
+
+		if (output)
+		{
+			return output;
 		}
 	}
 
-	nddlgen::models::NddlGeneratablePtr null(0);
-	return null;
+	return output;
 }
 
 void nddlgen::models::NddlGeneratable::setInstanceNameFor(int index, std::string instanceName)

@@ -18,15 +18,22 @@
 
 nddlgen::utilities::InitialStateGoal::InitialStateGoal()
 {
+	this->_goalName = "";
 	this->_modelName = "";
 	this->_predicate = "";
-	this->_maxTicks = "";
+	this->_startsAfter = "";
+	this->_endsBefore = "";
 	this->_index = "";
 }
 
 nddlgen::utilities::InitialStateGoal::~InitialStateGoal()
 {
 
+}
+
+void nddlgen::utilities::InitialStateGoal::setGoalName(std::string goalName)
+{
+	this->_goalName = goalName;
 }
 
 void nddlgen::utilities::InitialStateGoal::setModelName(std::string modelName)
@@ -39,9 +46,14 @@ void nddlgen::utilities::InitialStateGoal::setPredicate(std::string predicate)
 	this->_predicate = predicate;
 }
 
-void nddlgen::utilities::InitialStateGoal::setMaxTicks(std::string maxTicks)
+void nddlgen::utilities::InitialStateGoal::setStartsAfter(std::string startsAfter)
 {
-	this->_maxTicks = maxTicks;
+	this->_startsAfter = startsAfter;
+}
+
+void nddlgen::utilities::InitialStateGoal::setEndsBefore(std::string endsBefore)
+{
+	this->_endsBefore = endsBefore;
 }
 
 void nddlgen::utilities::InitialStateGoal::setIndex(int index)
@@ -57,12 +69,28 @@ std::list<std::string> nddlgen::utilities::InitialStateGoal::getGoal()
 	}
 
 	std::list<std::string> goal;
+	std::string goalName;
 
-	std::string goalName = "goal" + this->_index;
+	if (this->_goalName != "")
+	{
+		goalName = this->_goalName;
+	}
+	else
+	{
+		goalName = "goal" + this->_index;
+	}
 
 	goal.push_back("goal(" + this->_modelName + "." + this->_predicate + " " + goalName + ");");
-	goal.push_back("lt(0, " + goalName + ".start);");
-	goal.push_back("lt(" + goalName + ".start, 10);");
+
+	if (this->_startsAfter != "")
+	{
+		goal.push_back(this->_startsAfter + " <= " + goalName + ".start" + ";");
+	}
+
+	if (this->_endsBefore != "")
+	{
+		goal.push_back(goalName + ".end" + " <= " + this->_endsBefore + ";");
+	}
 
 	return goal;
 }

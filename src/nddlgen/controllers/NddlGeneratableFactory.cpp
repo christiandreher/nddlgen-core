@@ -26,11 +26,6 @@ nddlgen::controllers::NddlGeneratableFactory::~NddlGeneratableFactory()
 
 }
 
-void nddlgen::controllers::NddlGeneratableFactory::configurateDomain(nddlgen::models::DomainDescriptionModelPtr domain)
-{
-	// Dummy which can be overridden. Default function does nothing
-}
-
 nddlgen::models::NddlGeneratablePtr nddlgen::controllers::NddlGeneratableFactory::fromString(std::string modelName)
 {
 	std::string modelNameLc = boost::algorithm::to_lower_copy(modelName);
@@ -60,14 +55,14 @@ void nddlgen::controllers::NddlGeneratableFactory::registerNddlGeneratable(
 	this->_registeredNddlGeneratables[modelNameLc] = createFunction;
 }
 
-nddlgen::models::NddlGeneratablePtr nddlgen::controllers::NddlGeneratableFactory::createArm()
+nddlgen::models::NddlGeneratablePtr nddlgen::controllers::NddlGeneratableFactory::createDefaultArm()
 {
-	nddlgen::models::ArmModelPtr model(new nddlgen::models::ArmModel());
+	nddlgen::models::DefaultArmModelPtr model(new nddlgen::models::DefaultArmModel());
 	return model;
 }
 
-nddlgen::models::NddlGeneratablePtr nddlgen::controllers::NddlGeneratableFactory::createWorkspace()
+nddlgen::models::NddlGeneratablePtr nddlgen::controllers::NddlGeneratableFactory::createDefaultWorkspace()
 {
-	nddlgen::models::WorkspaceModelPtr model(new nddlgen::models::WorkspaceModel());
+	nddlgen::models::DefaultWorkspaceModelPtr model(new nddlgen::models::DefaultWorkspaceModel());
 	return model;
 }

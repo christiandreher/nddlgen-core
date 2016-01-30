@@ -18,6 +18,7 @@
 
 nddlgen::utilities::InitialStateFact::InitialStateFact()
 {
+	this->_factName = "";
 	this->_modelName = "";
 	this->_predicate = "";
 	this->_index = "";
@@ -26,6 +27,11 @@ nddlgen::utilities::InitialStateFact::InitialStateFact()
 nddlgen::utilities::InitialStateFact::~InitialStateFact()
 {
 
+}
+
+void nddlgen::utilities::InitialStateFact::setFactName(std::string factName)
+{
+	this->_factName = factName;
 }
 
 void nddlgen::utilities::InitialStateFact::setModelName(std::string modelName)
@@ -51,11 +57,19 @@ std::list<std::string> nddlgen::utilities::InitialStateFact::getFact()
 	}
 
 	std::list<std::string> fact;
+	std::string factName;
 
-	std::string conditionName = "initialCondition" + this->_index;
+	if (this->_factName != "")
+	{
+		factName = this->_factName;
+	}
+	else
+	{
+		factName = "initialCondition" + this->_index;
+	}
 
-	fact.push_back("fact(" + this->_modelName + "." + this->_predicate + " " + conditionName + ");");
-	fact.push_back("eq(" + conditionName + ".start, 0);");
+	fact.push_back("fact(" + this->_modelName + "." + this->_predicate + " " + factName + ");");
+	fact.push_back("eq(" + factName + ".start, 0);");
 
 	return fact;
 }
