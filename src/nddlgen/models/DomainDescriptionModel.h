@@ -69,6 +69,7 @@ class nddlgen::models::DomainDescriptionModel
 
 		void initSubObjects();
 		void initPredicates();
+		void gatherFacts();
 		void detectBlockingObjects();
 		void initActions();
 		void gatherUsedClasses();

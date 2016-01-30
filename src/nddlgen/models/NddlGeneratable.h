@@ -31,6 +31,7 @@
 #include <nddlgen/utilities/WriteStream.hpp>
 #include <nddlgen/utilities/Foreach.hpp>
 #include <nddlgen/utilities/ModelAction.h>
+#include <nddlgen/utilities/InitialStateFact.h>
 
 namespace nddlgen
 {
@@ -50,6 +51,7 @@ class nddlgen::models::NddlGeneratable : public boost::enable_shared_from_this<n
 		std::string _className;
 		nddlgen::types::NddlGeneratableList _blockedBy;
 		std::list<std::string> _predicates;
+		std::string _initialPredicate;
 		nddlgen::types::ActionList _actions;
 		nddlgen::math::CuboidPtr _objectBoundingBox;
 		nddlgen::math::CuboidPtr _accessibilityBoundingBox;
@@ -88,6 +90,10 @@ class nddlgen::models::NddlGeneratable : public boost::enable_shared_from_this<n
 
 		void addPredicate(std::string predicate);
 		bool hasPredicates();
+		void setInitialPredicate(std::string initialPredicate);
+		std::string getInitialPredicate();
+
+		nddlgen::utilities::InitialStateFactPtr getInitialState();
 
 		void addAction(nddlgen::utilities::ModelActionPtr action);
 		bool hasActions();

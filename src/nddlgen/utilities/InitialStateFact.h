@@ -39,6 +39,7 @@ class nddlgen::utilities::InitialStateFact
 
 	private:
 
+		std::string _factName;
 		std::string _modelName;
 		std::string _predicate;
 		std::string _index;
@@ -48,6 +49,7 @@ class nddlgen::utilities::InitialStateFact
 		InitialStateFact();
 		virtual ~InitialStateFact();
 
+		void setFactName(std::string factName);
 		void setModelName(std::string modelName);
 		void setPredicate(std::string predicate);
 		void setIndex(int index);

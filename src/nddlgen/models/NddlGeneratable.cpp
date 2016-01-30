@@ -230,6 +230,33 @@ bool nddlgen::models::NddlGeneratable::hasPredicates()
 	return (this->_predicates.size() != 0);
 }
 
+void nddlgen::models::NddlGeneratable::setInitialPredicate(std::string initialPredicate)
+{
+	this->_initialPredicate = initialPredicate;
+}
+
+std::string nddlgen::models::NddlGeneratable::getInitialPredicate()
+{
+	return this->_initialPredicate;
+}
+
+nddlgen::utilities::InitialStateFactPtr nddlgen::models::NddlGeneratable::getInitialState()
+{
+	if (this->_initialPredicate == "")
+	{
+		// TODO: throw proper exception
+		throw "No initial predicate was set for " + this->_name;
+	}
+
+	nddlgen::utilities::InitialStateFactPtr fact(new nddlgen::utilities::InitialStateFact());
+
+	fact->setFactName(this->getName() + "_" + this->getInitialPredicate());
+	fact->setModelName(this->getName());
+	fact->setPredicate(this->getInitialPredicate());
+
+	return fact;
+}
+
 void nddlgen::models::NddlGeneratable::addAction(nddlgen::utilities::ModelActionPtr action)
 {
 	this->_actions.push_back(action);

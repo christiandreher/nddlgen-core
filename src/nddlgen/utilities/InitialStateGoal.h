@@ -39,9 +39,11 @@ class nddlgen::utilities::InitialStateGoal
 
 	private:
 
+		std::string _goalName;
 		std::string _modelName;
 		std::string _predicate;
-		std::string _maxTicks;
+		std::string _startsAfter;
+		std::string _endsBefore;
 		std::string _index;
 
 	public:
@@ -49,9 +51,11 @@ class nddlgen::utilities::InitialStateGoal
 		InitialStateGoal();
 		virtual ~InitialStateGoal();
 
+		void setGoalName(std::string goalName);
 		void setModelName(std::string modelName);
 		void setPredicate(std::string predicate);
-		void setMaxTicks(std::string maxTicks);
+		void setStartsAfter(std::string startsAfter);
+		void setEndsBefore(std::string endsBefore);
 		void setIndex(int index);
 
 		std::list<std::string> getGoal();

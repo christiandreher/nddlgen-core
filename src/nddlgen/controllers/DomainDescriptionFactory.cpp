@@ -40,24 +40,29 @@ nddlgen::models::DomainDescriptionModelPtr nddlgen::controllers::DomainDescripti
 	nddlgen::models::DomainDescriptionModelPtr domainDescription(new nddlgen::models::DomainDescriptionModel());
 	nddlgen::models::ArmModelPtr arm = boost::dynamic_pointer_cast<nddlgen::models::ArmModel>(this->_modelFactory->fromString("arm"));
 	nddlgen::models::WorkspaceModelPtr workspace = boost::dynamic_pointer_cast<nddlgen::models::WorkspaceModel>(this->_modelFactory->fromString("workspace"));
+	nddlgen::models::InitialStateModelPtr initialState(new nddlgen::models::InitialStateModel());
 
 	// Set names for arm and workspace manually
 	arm->setName("arm");
 	workspace->setName("workspace");
 
-	// Add workspace and arm to the hierarchy
+	// Add workspace to arm hierarchy, and arm and initial state to domain description
 	arm->addSubObject(workspace);
 	domainDescription->setArm(arm);
+	domainDescription->setInitialState(initialState);
 
-	// Populate the model with given SDF and ISD roots
+	// Populate domain description with the information given by the SDF and ISD input files
 	this->populateModelsFromSdf(domainDescription, sdfRoot);
-	this->populateInitialStateFromIsd(domainDescription, isdRoot);
+	this->populateGoalsFromIsd(domainDescription, isdRoot);
 
-	// Populate model hierarchy by calling initSubObjects() for all models
+	// Initialize model sub objects by calling initSubObjects() for all models
 	domainDescription->initSubObjects();
 
 	// Initialize predicates by calling initPredicates() for all models
 	domainDescription->initPredicates();
+
+	// Initialize facts
+	domainDescription->gatherFacts();
 
 	// Call configurateDomain(...) to allow user to modify domain further
 	this->_modelFactory->configurateDomain(domainDescription);
@@ -110,34 +115,32 @@ void nddlgen::controllers::DomainDescriptionFactory::populateModelsFromSdf(
 	}
 }
 
-void nddlgen::controllers::DomainDescriptionFactory::populateInitialStateFromIsd(
+void nddlgen::controllers::DomainDescriptionFactory::populateGoalsFromIsd(
 		nddlgen::models::DomainDescriptionModelPtr domainDescription,
 		nddlgen::types::IsdRoot isdRoot)
 {
-	nddlgen::models::InitialStateModelPtr initialState(new nddlgen::models::InitialStateModel());
+	nddlgen::models::InitialStateModelPtr initialState = domainDescription->getInitialState();
 
 	TiXmlHandle isdRootHandle(isdRoot->RootElement());
-
-	TiXmlElement* facts = isdRootHandle.FirstChild("facts").FirstChild("fact").ToElement();
 	TiXmlElement* goals = isdRootHandle.FirstChild("goals").FirstChild("goal").ToElement();
 
-	// Iterate through facts
-	for (; facts; facts = facts->NextSiblingElement())
-	{
-		initialState->addFact(this->factFactory(facts));
-	}
-
-	// Iterate through goals
+	// Iterate through goals and add them to initial state model
 	for (; goals; goals = goals->NextSiblingElement())
 	{
-		initialState->addGoal(this->goalFactory(goals));
-	}
+		nddlgen::utilities::InitialStateGoalPtr goal(new nddlgen::utilities::InitialStateGoal());
 
-	// Add initial state model to domain description model
-	domainDescription->setInitialState(initialState);
+		goal->setGoalName(goals->Attribute("name"));
+		goal->setModelName(goals->Attribute("for"));
+		goal->setPredicate(goals->Attribute("predicate"));
+		goal->setStartsAfter(goals->Attribute("starts-after"));
+		goal->setEndsBefore(goals->Attribute("ends-before"));
+
+		initialState->addGoal(goal);
+	}
 }
 
-nddlgen::models::NddlGeneratablePtr nddlgen::controllers::DomainDescriptionFactory::modelFactory(sdf::ElementPtr element)
+nddlgen::models::NddlGeneratablePtr nddlgen::controllers::DomainDescriptionFactory::modelFactory(
+		sdf::ElementPtr element)
 {
 	std::string elementName = element->GetAttribute("name")->GetAsString();
 	nddlgen::models::NddlGeneratablePtr instance = this->_modelFactory->fromString(elementName);
@@ -285,25 +288,4 @@ nddlgen::math::CuboidPtr nddlgen::controllers::DomainDescriptionFactory::boundin
 	nddlgen::math::CuboidPtr boundingBox(new nddlgen::math::Cuboid(vertices, xAxisNormal, yAxisNormal, zAxisNormal));
 
 	return boundingBox;
-}
-
-nddlgen::utilities::InitialStateFactPtr nddlgen::controllers::DomainDescriptionFactory::factFactory(TiXmlElement* factElement)
-{
-	nddlgen::utilities::InitialStateFactPtr fact(new nddlgen::utilities::InitialStateFact());
-
-	fact->setModelName(factElement->Attribute("for"));
-	fact->setPredicate(factElement->Attribute("predicate"));
-
-	return fact;
-}
-
-nddlgen::utilities::InitialStateGoalPtr nddlgen::controllers::DomainDescriptionFactory::goalFactory(TiXmlElement* goalElement)
-{
-	nddlgen::utilities::InitialStateGoalPtr goal(new nddlgen::utilities::InitialStateGoal());
-
-	goal->setModelName(goalElement->Attribute("for"));
-	goal->setPredicate(goalElement->Attribute("predicate"));
-	goal->setMaxTicks(goalElement->Attribute("max-ticks"));
-
-	return goal;
 }

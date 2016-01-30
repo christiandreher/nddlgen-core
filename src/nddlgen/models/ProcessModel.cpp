@@ -31,4 +31,6 @@ void nddlgen::models::ProcessModel::initPredicates()
 	this->addPredicate("pending");
 	this->addPredicate("processing");
 	this->addPredicate("done");
+
+	this->setInitialPredicate("pending");
 }

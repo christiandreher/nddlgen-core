@@ -60,6 +60,23 @@ void nddlgen::models::DomainDescriptionModel::initPredicates()
 	this->initPredicates(this->_arm);
 }
 
+void nddlgen::models::DomainDescriptionModel::gatherFacts()
+{
+	// Get all objects
+	std::list<nddlgen::models::NddlGeneratablePtr> allObjects = this->gatherUsedObjects(this->_arm);
+
+	// Iterate through objects
+	foreach (nddlgen::models::NddlGeneratablePtr object, allObjects)
+	{
+		// If the object has predicates, get initial state predicate as fact and add
+		// it to the initial state model
+		if (object->hasPredicates())
+		{
+			this->getInitialState()->addFact(object->getInitialState());
+		}
+	}
+}
+
 void nddlgen::models::DomainDescriptionModel::detectBlockingObjects()
 {
 	// Get all models on workspace
