@@ -33,10 +33,10 @@
 #include <nddlgen/math/CuboidOperations.h>
 #include <nddlgen/math/Vector.h>
 #include <nddlgen/math/VectorOperations.h>
-#include <nddlgen/models/ArmModel.h>
+#include <nddlgen/models/DefaultArmModel.h>
+#include <nddlgen/models/DefaultWorkspaceModel.h>
 #include <nddlgen/models/DomainDescriptionModel.h>
 #include <nddlgen/models/NddlGeneratable.h>
-#include <nddlgen/models/WorkspaceModel.h>
 #include <nddlgen/utilities/InitialStateFact.h>
 #include <nddlgen/utilities/InitialStateGoal.h>
 #include <nddlgen/utilities/Types.hpp>
@@ -67,25 +67,123 @@ class nddlgen::controllers::DomainDescriptionFactory
 		nddlgen::controllers::NddlGeneratableFactoryPtr _modelFactory;
 
 		/**
-		 * Populates workspace with the models that are found in the SDF.
+		 * Collection of all NddlGeneratable objects within the hierarchy.
+		 * Access this only with the getObjects() function, since this value
+		 * will be evaluated lazily.
+		 */
+		nddlgen::types::NddlGeneratableList _objects;
+
+		/**
+		 * Populates domain description model with the models that are found in the SDF.
 		 *
 		 * @param domainDescription Domain description model
 		 * @param sdfRoot SDF document root
 		 */
-		void populateModelsFromSdf(
+		void populateWithModelsFromSdf(
 				nddlgen::models::DomainDescriptionModelPtr domainDescription,
 				nddlgen::types::SdfRoot sdfRoot
 		);
 
 		/**
-		 * Populate goals from the data in the ISD.
+		 * Populates domain description model with the goals from the ISD.
 		 *
 		 * @param domainDescription Domain description model
 		 * @param isdRoot ISD document root
 		 */
-		void populateGoalsFromIsd(
+		void populateWithGoalsFromIsd(
 				nddlgen::models::DomainDescriptionModelPtr domainDescription,
 				nddlgen::types::IsdRoot isdRoot
+		);
+
+		/**
+		 * Populates domain description model with model sub objects as defined
+		 * in the NddlGeneratable::initSubObject() function.
+		 *
+		 * @param domainDescription Domain description model
+		 */
+		void populateWithSubObjects(
+				nddlgen::models::DomainDescriptionModelPtr domainDescription
+		);
+
+		/**
+		 * Populates domain description model with predicates as defined in
+		 * the NddlGeneratable::initPredicates() function.
+		 *
+		 * @param domainDescription Domain description model
+		 */
+		void populateWithPredicates(
+				nddlgen::models::DomainDescriptionModelPtr domainDescription
+		);
+
+		/**
+		 * Populates domain description model with facts as defined by the
+		 * NddlGeneratable::_initialPredicate member.
+		 *
+		 * @param domainDescription Domain description model
+		 */
+		void populateWithFacts(
+				nddlgen::models::DomainDescriptionModelPtr domainDescription
+		);
+
+		/**
+		 * Populates the models within the domain description model which are
+		 * blocked by other objects according to a collision detection algorithm.
+		 *
+		 * @param domainDescription Domain description model
+		 */
+		void populateWithBlockedObjects(
+				nddlgen::models::DomainDescriptionModelPtr domainDescription
+		);
+
+		/**
+		 * Populates domain description model with actions as defined in the
+		 * NddlGenertable::initActions() function.
+		 *
+		 * @param domainDescription Domain description model
+		 */
+		void populateWithActions(
+				nddlgen::models::DomainDescriptionModelPtr domainDescription
+		);
+
+		/**
+		 * Populates domain description model with all classes that are used.
+		 *
+		 * @param domainDescription Domain description model
+		 */
+		void populateWithUsedClasses(
+				nddlgen::models::DomainDescriptionModelPtr domainDescription
+		);
+
+		/**
+		 * Helper to populate models with sub objects as defined in the initSubObjects()
+		 * function.
+		 *
+		 * @param model Current model in tree
+		 * @param indices Map to keep track of all indices. Should be empty initially
+		 */
+		void subObjectPopulationHelper(
+				nddlgen::models::NddlGeneratablePtr model,
+				std::map<std::string, int> indices
+		);
+
+		/**
+		 * Helper to populate models with predicates as defined in the initPredicates()
+		 * function.
+		 *
+		 * @param model Current model in tree
+		 */
+		void predicatesPopulationHelper(
+				nddlgen::models::NddlGeneratablePtr model
+		);
+
+		/**
+		 * Helper to populate models with actions as defined in the initActions()
+		 * function. Also add all actions to the domain description model directly.
+		 *
+		 * @param model Current model in tree
+		 */
+		void actionsPopulationHelper(
+				nddlgen::models::NddlGeneratablePtr model
 		);
 
 		/**
@@ -113,6 +211,29 @@ class nddlgen::controllers::DomainDescriptionFactory
 				std::string basePose,
 				std::string pose,
 				std::string size
+		);
+
+		/**
+		 * Gets all used objects. Use this instead of directly accessing
+		 * _objects, since this field is lazily evaluated.
+		 *
+		 * @param domainDescription Domain description model
+		 *
+		 * @return List of all used objects
+		 */
+		nddlgen::types::NddlGeneratableList getSubObjectsFrom(
+				nddlgen::models::DomainDescriptionModelPtr domainDescription
+		);
+
+		/**
+		 * Gets all sub objects of given model.
+		 *
+		 * @param model Model from where to start traversing tree
+		 *
+		 * @return List of all sub objects.
+		 */
+		nddlgen::types::NddlGeneratableList getSubObjectsFrom(
+				nddlgen::models::NddlGeneratablePtr model
 		);
 
 	public:

@@ -38,8 +38,8 @@ nddlgen::models::DomainDescriptionModelPtr nddlgen::controllers::DomainDescripti
 
 	// Instantiate basic models
 	nddlgen::models::DomainDescriptionModelPtr domainDescription(new nddlgen::models::DomainDescriptionModel());
-	nddlgen::models::ArmModelPtr arm = boost::dynamic_pointer_cast<nddlgen::models::ArmModel>(this->_modelFactory->fromString("arm"));
-	nddlgen::models::WorkspaceModelPtr workspace = boost::dynamic_pointer_cast<nddlgen::models::WorkspaceModel>(this->_modelFactory->fromString("workspace"));
+	nddlgen::models::DefaultArmModelPtr arm = boost::dynamic_pointer_cast<nddlgen::models::DefaultArmModel>(this->_modelFactory->fromString("arm"));
+	nddlgen::models::DefaultWorkspaceModelPtr workspace = boost::dynamic_pointer_cast<nddlgen::models::DefaultWorkspaceModel>(this->_modelFactory->fromString("workspace"));
 	nddlgen::models::InitialStateModelPtr initialState(new nddlgen::models::InitialStateModel());
 
 	// Set names for arm and workspace manually
@@ -51,33 +51,29 @@ nddlgen::models::DomainDescriptionModelPtr nddlgen::controllers::DomainDescripti
 	domainDescription->setArm(arm);
 	domainDescription->setInitialState(initialState);
 
-	// Populate domain description with the information given by the SDF and ISD input files
-	this->populateModelsFromSdf(domainDescription, sdfRoot);
-	this->populateGoalsFromIsd(domainDescription, isdRoot);
+	// Populate DDM with the models defined in the SDF
+	this->populateWithModelsFromSdf(domainDescription, sdfRoot);
 
-	// Initialize model sub objects by calling initSubObjects() for all models
-	domainDescription->initSubObjects();
+	// Populate DDM with the goals defined in the ISD
+	this->populateWithGoalsFromIsd(domainDescription, isdRoot);
 
-	// Initialize predicates by calling initPredicates() for all models
-	domainDescription->initPredicates();
+	// Populate DDM with the sub objects as defined in each NddlGeneratable
+	this->populateWithSubObjects(domainDescription);
 
-	// Initialize facts
-	domainDescription->gatherFacts();
+	// Populate DDM with the actions and action prototypes as defined in each NddlGeneratable
+	this->populateWithPredicates(domainDescription);
 
-	// Call configurateDomain(...) to allow user to modify domain further
-	this->_modelFactory->configurateDomain(domainDescription);
+	// Populate DDM with the facts as defined in each NddlGeneratable
+	this->populateWithFacts(domainDescription);
 
-	// Detect blocking objects
-	domainDescription->detectBlockingObjects();
+	// Populate DDM models that are blocked with the blocking objects
+	this->populateWithBlockedObjects(domainDescription);
 
-	// Initialize actions by calling initActions() for all models
-	domainDescription->initActions();
+	// Populate DDM with actions as defined in each NddlGeneratable
+	this->populateWithActions(domainDescription);
 
-	// Gather used classes
-	domainDescription->gatherUsedClasses();
-
-	// Gather all actions
-	domainDescription->gatherActions();
+	// Populate DDM with used classes by traversing tree
+	this->populateWithUsedClasses(domainDescription);
 
 	// Return the fully qualified domain description model
 	return domainDescription;
@@ -89,12 +85,12 @@ void nddlgen::controllers::DomainDescriptionFactory::setModelFactory(
 	this->_modelFactory = modelFactory;
 }
 
-void nddlgen::controllers::DomainDescriptionFactory::populateModelsFromSdf(
+void nddlgen::controllers::DomainDescriptionFactory::populateWithModelsFromSdf(
 		nddlgen::models::DomainDescriptionModelPtr domainDescription,
 		nddlgen::types::SdfRoot sdfRoot)
 {
 	// Initialize needed variables
-	nddlgen::models::WorkspaceModelPtr workspace = domainDescription->getArm()->getWorkspace();
+	nddlgen::models::DefaultWorkspaceModelPtr workspace = domainDescription->getArm()->getWorkspace();
 	sdf::ElementPtr currentModelElement = sdfRoot->root->GetElement("world")->GetElement("model");
 
 	// Iterate through elements in SDF model node
@@ -115,7 +111,7 @@ void nddlgen::controllers::DomainDescriptionFactory::populateModelsFromSdf(
 	}
 }
 
-void nddlgen::controllers::DomainDescriptionFactory::populateGoalsFromIsd(
+void nddlgen::controllers::DomainDescriptionFactory::populateWithGoalsFromIsd(
 		nddlgen::models::DomainDescriptionModelPtr domainDescription,
 		nddlgen::types::IsdRoot isdRoot)
 {
@@ -137,6 +133,214 @@ void nddlgen::controllers::DomainDescriptionFactory::populateGoalsFromIsd(
 
 		initialState->addGoal(goal);
 	}
+}
+
+void nddlgen::controllers::DomainDescriptionFactory::populateWithSubObjects(
+		nddlgen::models::DomainDescriptionModelPtr domainDescription)
+{
+	// Map containing all sub object classes and an incrementing index to keep
+	// track of numbers to avoid instances with the same name
+	std::map<std::string, int> indices;
+
+	this->subObjectPopulationHelper(domainDescription->getArm(), indices);
+}
+
+void nddlgen::controllers::DomainDescriptionFactory::populateWithPredicates(
+		nddlgen::models::DomainDescriptionModelPtr domainDescription)
+{
+	this->predicatesPopulationHelper(domainDescription->getArm());
+}
+
+void nddlgen::controllers::DomainDescriptionFactory::populateWithFacts(
+		nddlgen::models::DomainDescriptionModelPtr domainDescription)
+{
+	// Get all objects
+	nddlgen::types::NddlGeneratableList allObjects = this->getSubObjectsFrom(domainDescription);
+
+	// Iterate through objects
+	foreach (nddlgen::models::NddlGeneratablePtr object, allObjects)
+	{
+		// If the object has predicates, get initial state predicate as fact and add
+		// it to the initial state model
+		if (object->hasPredicates())
+		{
+			domainDescription->getInitialState()->addFact(object->getInitialState());
+		}
+	}
+}
+
+void nddlgen::controllers::DomainDescriptionFactory::populateWithBlockedObjects(
+		nddlgen::models::DomainDescriptionModelPtr domainDescription)
+{
+	// Get all models on workspace
+	nddlgen::types::NddlGeneratableList models = domainDescription->getArm()->getWorkspace()->getModels();
+
+	// Use this...
+	foreach (nddlgen::models::NddlGeneratablePtr model1, models)
+	{
+		// ...and this foreach loop to form all permutations (naive, may be improved)
+		foreach (nddlgen::models::NddlGeneratablePtr model2, models)
+		{
+			// Only run collision detection if model1 and model2 are not the same object
+			if (model1 != model2)
+			{
+				// Accessibility bounding box of model1 and object bounding box of model2 need to be set
+				if (model1->hasAccessibilityBoundingBox() && model2->hasObjectBoundingBox())
+				{
+					// Run collision detection and save result
+					bool doBoundingBoxesIntersect = nddlgen::controllers::CollisionDetectionController::doesIntersect(
+							model1->getAccessibilityBoundingBox(),
+							model2->getObjectBoundingBox()
+					);
+
+					// If the bounding boxes intersect, instruct model1 that it is blocked by model2
+					if (doBoundingBoxesIntersect)
+					{
+						model1->addBlockingObject(model2);
+					}
+				}
+			}
+		}
+	}
+}
+
+void nddlgen::controllers::DomainDescriptionFactory::populateWithActions(
+		nddlgen::models::DomainDescriptionModelPtr domainDescription)
+{
+	// Populate actions by calling initActions() for each NddlGeneratable
+	this->actionsPopulationHelper(domainDescription->getArm());
+
+	// List of all action prototypes. This will be passed to the Arm model later
+	std::list<std::string> actionPrototypes;
+
+	// Get all objects
+	nddlgen::types::NddlGeneratableList allObjects = this->getSubObjectsFrom(domainDescription->getArm());
+
+	// Iterate through all objects and register actions in DDM
+	foreach (nddlgen::models::NddlGeneratablePtr object, allObjects)
+	{
+		nddlgen::types::ActionList actions = object->getActions();
+		domainDescription->registerActions(actions);
+	}
+
+	// Get all actions
+	nddlgen::types::ActionList actions = domainDescription->getActions();
+
+	// Loop through actions and generate prototypes
+	foreach (nddlgen::utilities::ModelActionPtr action, actions)
+	{
+		std::string actionPrototype = "action " + action->getName() + " " + "{ duration=" + action->getDuration() + "; }";
+		actionPrototypes.push_back(actionPrototype);
+	}
+
+	// Register action prototypes for the arm
+	domainDescription->getArm()->setActionPrototypes(actionPrototypes);
+}
+
+void nddlgen::controllers::DomainDescriptionFactory::populateWithUsedClasses(
+		nddlgen::models::DomainDescriptionModelPtr domainDescription)
+{
+	// Get all objects
+	nddlgen::types::NddlGeneratableList allObjects = this->getSubObjectsFrom(domainDescription);
+
+	// Insert class name into map. As the class name is used as the map key, there won't be duplicates
+	foreach (nddlgen::models::NddlGeneratablePtr object, allObjects)
+	{
+		domainDescription->registerUsedClass(object);
+	}
+}
+
+void nddlgen::controllers::DomainDescriptionFactory::subObjectPopulationHelper(
+		nddlgen::models::NddlGeneratablePtr model,
+				std::map<std::string, int> indices)
+{
+	// Call initSubObjects() first, so that sub objects get instantiated
+	model->initSubObjects();
+
+	// If model has sub objects, initialize recursive call
+	if (model->hasSubObjects())
+	{
+		// Index to be able to address sub objects
+		int index = 0;
+
+		// Get sub objects
+		std::vector<nddlgen::models::NddlGeneratablePtr> subObjects = model->getSubObjects();
+
+		// Loop through sub objects and use it as parameter for the recursive call
+		foreach (nddlgen::models::NddlGeneratablePtr subObject, subObjects)
+		{
+			this->subObjectPopulationHelper(subObject, indices);
+
+			std::string subObjectClass = subObject->getClassName();
+			std::string instanceName = subObject->getName();
+			std::map<std::string, int>::iterator it = indices.find(subObjectClass);
+
+			// If instanceName was not set, action is needed. Otherwise the program relies
+			// on the uniqueness of instance names as the SDF species names to be unique
+			if (instanceName == "")
+			{
+				instanceName = boost::to_lower_copy(subObject->getClassName())  + "_";
+
+				// Check if subObjectClass exists in indices
+				if (it != indices.end())
+				{
+					instanceName = instanceName + boost::lexical_cast<std::string>(it->second);
+					model->setInstanceNameFor(index, instanceName);
+
+					it->second++;
+				}
+				else
+				{
+					instanceName = instanceName + boost::lexical_cast<std::string>(1);
+					model->setInstanceNameFor(index, instanceName);
+
+					indices.insert(std::pair<std::string, int>(subObjectClass, 2));
+				}
+			}
+
+			index++;
+		}
+	}
+}
+
+void nddlgen::controllers::DomainDescriptionFactory::predicatesPopulationHelper(
+		nddlgen::models::NddlGeneratablePtr model)
+{
+	// If model has sub objects, initialize recursive call
+	if (model->hasSubObjects())
+	{
+		// Get sub objects
+		std::vector<nddlgen::models::NddlGeneratablePtr> subObjects = model->getSubObjects();
+
+		// Loop through sub objects and use it as parameter for the recursive call
+		foreach (nddlgen::models::NddlGeneratablePtr subObject, subObjects)
+		{
+			this->predicatesPopulationHelper(subObject);
+		}
+	}
+
+	// In any case, call function of model
+	model->initPredicates();
+}
+
+void nddlgen::controllers::DomainDescriptionFactory::actionsPopulationHelper(
+		nddlgen::models::NddlGeneratablePtr model)
+{
+	// If model has sub objects, initialize recursive call
+	if (model->hasSubObjects())
+	{
+		// Get sub objects
+		std::vector<nddlgen::models::NddlGeneratablePtr> subObjects = model->getSubObjects();
+
+		// Loop through sub objects and use it as parameter for the recursive call
+		foreach (nddlgen::models::NddlGeneratablePtr subObject, subObjects)
+		{
+			this->actionsPopulationHelper(subObject);
+		}
+	}
+
+	// In any case, call function of model
+	model->initActions();
 }
 
 nddlgen::models::NddlGeneratablePtr nddlgen::controllers::DomainDescriptionFactory::modelFactory(
@@ -288,4 +492,44 @@ nddlgen::math::CuboidPtr nddlgen::controllers::DomainDescriptionFactory::boundin
 	nddlgen::math::CuboidPtr boundingBox(new nddlgen::math::Cuboid(vertices, xAxisNormal, yAxisNormal, zAxisNormal));
 
 	return boundingBox;
+}
+
+nddlgen::types::NddlGeneratableList nddlgen::controllers::DomainDescriptionFactory::getSubObjectsFrom(
+		nddlgen::models::DomainDescriptionModelPtr domainDescription)
+{
+	// If list is empty, get all sub objects and save them to member
+	if (this->_objects.size() == 0)
+	{
+		this->_objects = this->getSubObjectsFrom(domainDescription->getArm());
+	}
+
+	// Return list of all objects
+	return this->_objects;
+}
+
+nddlgen::types::NddlGeneratableList nddlgen::controllers::DomainDescriptionFactory::getSubObjectsFrom(
+		nddlgen::models::NddlGeneratablePtr model)
+{
+	nddlgen::types::NddlGeneratableList output;
+
+	// If model has sub objects, initialize recursive call
+	if (model->hasSubObjects())
+	{
+		// Get sub objects
+		std::vector<nddlgen::models::NddlGeneratablePtr> subObjects = model->getSubObjects();
+
+		// Loop through sub objects and use it as parameter for the recursive call
+		foreach (nddlgen::models::NddlGeneratablePtr subObject, subObjects)
+		{
+			nddlgen::types::NddlGeneratableList recursiveOutput = this->getSubObjectsFrom(subObject);
+
+			// Merge lists of sub objects into output list
+			output.insert(output.end(), recursiveOutput.begin(), recursiveOutput.end());
+		}
+	}
+
+	// Add parent model to the list, too
+	output.push_back(model);
+
+	return output;
 }

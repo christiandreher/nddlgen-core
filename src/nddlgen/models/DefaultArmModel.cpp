@@ -14,19 +14,19 @@
  * limitations under the License.
  */
 
-#include <nddlgen/models/ArmModel.h>
+#include <nddlgen/models/DefaultArmModel.h>
 
-nddlgen::models::ArmModel::ArmModel()
+nddlgen::models::DefaultArmModel::DefaultArmModel()
 {
 	this->setClassName("Arm");
 }
 
-nddlgen::models::ArmModel::~ArmModel()
+nddlgen::models::DefaultArmModel::~DefaultArmModel()
 {
 
 }
 
-void nddlgen::models::ArmModel::initSubObjects()
+void nddlgen::models::DefaultArmModel::initSubObjects()
 {
 	nddlgen::models::ProcessModelPtr armProcess(new nddlgen::models::ProcessModel());
 	armProcess->setName("armprocess");
@@ -34,7 +34,7 @@ void nddlgen::models::ArmModel::initSubObjects()
 	this->addSubObject(armProcess);
 }
 
-void nddlgen::models::ArmModel::generateModel(std::ofstream& ofStream)
+void nddlgen::models::DefaultArmModel::generateModel(std::ofstream& ofStream)
 {
 	// Arm needs Timeline, since actions should be executed one by one
 	wrln(0, "class " + this->_className + " extends Timeline", 1);
@@ -61,19 +61,19 @@ void nddlgen::models::ArmModel::generateModel(std::ofstream& ofStream)
 	wrln(0, "}", 2);
 }
 
-nddlgen::models::WorkspaceModelPtr nddlgen::models::ArmModel::getWorkspace()
+nddlgen::models::DefaultWorkspaceModelPtr nddlgen::models::DefaultArmModel::getWorkspace()
 {
 	nddlgen::models::NddlGeneratablePtr workspaceUncasted = this->getSubObjectByName("workspace");
-	nddlgen::models::WorkspaceModelPtr workspace = boost::dynamic_pointer_cast<nddlgen::models::WorkspaceModel>(workspaceUncasted);
+	nddlgen::models::DefaultWorkspaceModelPtr workspace = boost::dynamic_pointer_cast<nddlgen::models::DefaultWorkspaceModel>(workspaceUncasted);
 	return workspace;
 }
 
-std::string nddlgen::models::ArmModel::getAccessor()
+std::string nddlgen::models::DefaultArmModel::getAccessor()
 {
 	return "object";
 }
 
-void nddlgen::models::ArmModel::setActionPrototypes(std::list<std::string> actionPrototypes)
+void nddlgen::models::DefaultArmModel::setActionPrototypes(std::list<std::string> actionPrototypes)
 {
 	this->_actionPrototypes = actionPrototypes;
 }

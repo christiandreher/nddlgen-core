@@ -14,29 +14,29 @@
  * limitations under the License.
  */
 
-#include <nddlgen/models/WorkspaceModel.h>
+#include <nddlgen/models/DefaultWorkspaceModel.h>
 
-nddlgen::models::WorkspaceModel::WorkspaceModel()
+nddlgen::models::DefaultWorkspaceModel::DefaultWorkspaceModel()
 {
 	this->setClassName("Workspace");
 }
 
-nddlgen::models::WorkspaceModel::~WorkspaceModel()
+nddlgen::models::DefaultWorkspaceModel::~DefaultWorkspaceModel()
 {
 
 }
 
-void nddlgen::models::WorkspaceModel::addModelToWorkspace(nddlgen::models::NddlGeneratablePtr model)
+void nddlgen::models::DefaultWorkspaceModel::addModelToWorkspace(nddlgen::models::NddlGeneratablePtr model)
 {
 	this->addSubObject(model);
 }
 
-nddlgen::models::NddlGeneratablePtr nddlgen::models::WorkspaceModel::getModelByName(std::string name)
+nddlgen::models::NddlGeneratablePtr nddlgen::models::DefaultWorkspaceModel::getModelByName(std::string name)
 {
 	return this->getSubObjectByName(name);
 }
 
-nddlgen::types::NddlGeneratableList nddlgen::models::WorkspaceModel::getModels()
+nddlgen::types::NddlGeneratableList nddlgen::models::DefaultWorkspaceModel::getModels()
 {
 	return this->_subObjects;
 }
