@@ -21,8 +21,8 @@
 #include <fstream>
 
 #include <boost/shared_ptr.hpp>
+#include <nddlgen/models/AbstractObjectModel.h>
 
-#include <nddlgen/models/NddlGeneratable.h>
 #include <nddlgen/utilities/Types.hpp>
 #include <nddlgen/utilities/Foreach.hpp>
 
@@ -35,7 +35,7 @@ namespace nddlgen
 	}
 }
 
-class nddlgen::models::DefaultWorkspaceModel : public nddlgen::models::NddlGeneratable
+class nddlgen::models::DefaultWorkspaceModel : public nddlgen::models::AbstractObjectModel
 {
 
 	private:
@@ -48,10 +48,10 @@ class nddlgen::models::DefaultWorkspaceModel : public nddlgen::models::NddlGener
 		DefaultWorkspaceModel();
 		virtual ~DefaultWorkspaceModel();
 
-		void addModelToWorkspace(nddlgen::models::NddlGeneratablePtr model);
-		nddlgen::models::NddlGeneratablePtr getModelByName(std::string name);
+		void addModelToWorkspace(nddlgen::models::AbstractObjectModelPtr model);
+		nddlgen::models::AbstractObjectModelPtr getModelByName(std::string name);
 
-		nddlgen::types::NddlGeneratableList getModels();
+		nddlgen::types::ObjectModelList getModels();
 
 };
 

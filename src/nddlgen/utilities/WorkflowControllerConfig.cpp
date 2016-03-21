@@ -71,7 +71,7 @@ void nddlgen::utilities::WorkflowControllerConfig::setOutputFilesPath(std::strin
 }
 
 void nddlgen::utilities::WorkflowControllerConfig::setModelFactory(
-		nddlgen::controllers::NddlGeneratableFactoryPtr modelFactory)
+		nddlgen::controllers::AbstractObjectFactoryPtr modelFactory)
 {
 	this->trySet();
 
@@ -225,7 +225,7 @@ std::string nddlgen::utilities::WorkflowControllerConfig::normalizePath(const bo
 	return result.string();
 }
 
-nddlgen::controllers::NddlGeneratableFactoryPtr nddlgen::utilities::WorkflowControllerConfig::getModelFactory()
+nddlgen::controllers::AbstractObjectFactoryPtr nddlgen::utilities::WorkflowControllerConfig::getModelFactory()
 {
 	return this->_modelFactory;
 }

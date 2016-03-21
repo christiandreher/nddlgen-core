@@ -25,8 +25,8 @@
 #include <boost/shared_ptr.hpp>
 
 #include <nddlgen/controllers/CollisionDetectionController.h>
+#include <nddlgen/models/AbstractObjectModel.h>
 #include <nddlgen/models/DefaultArmModel.h>
-#include <nddlgen/models/NddlGeneratable.h>
 #include <nddlgen/models/InitialStateModel.h>
 #include <nddlgen/utilities/Foreach.hpp>
 #include <nddlgen/utilities/Types.hpp>
@@ -47,7 +47,7 @@ class nddlgen::models::DomainDescriptionModel
 
 		nddlgen::models::DefaultArmModelPtr _arm;
 		nddlgen::models::InitialStateModelPtr _initialState;
-		std::map<std::string, nddlgen::models::NddlGeneratablePtr> _usedClasses;
+		std::map<std::string, nddlgen::models::AbstractObjectModelPtr> _usedClasses;
 		nddlgen::types::ActionList _actions;
 
 	public:
@@ -61,10 +61,10 @@ class nddlgen::models::DomainDescriptionModel
 		void setInitialState(nddlgen::models::InitialStateModelPtr initialState);
 		nddlgen::models::InitialStateModelPtr getInitialState();
 
-		void registerActions(nddlgen::types::ActionList actions);
+		void addActions(nddlgen::types::ActionList actions);
 		nddlgen::types::ActionList getActions();
 
-		void registerUsedClass(nddlgen::models::NddlGeneratablePtr object);
+		void addUsedClass(nddlgen::models::AbstractObjectModelPtr object);
 
 		void generateForwardDeclarations(std::ofstream& ofStream);
 		void generateInstantiations(std::ofstream& ofStream);

@@ -63,7 +63,7 @@ void nddlgen::models::DefaultArmModel::generateModel(std::ofstream& ofStream)
 
 nddlgen::models::DefaultWorkspaceModelPtr nddlgen::models::DefaultArmModel::getWorkspace()
 {
-	nddlgen::models::NddlGeneratablePtr workspaceUncasted = this->getSubObjectByName("workspace");
+	nddlgen::models::AbstractObjectModelPtr workspaceUncasted = this->getSubObjectByName("workspace");
 	nddlgen::models::DefaultWorkspaceModelPtr workspace = boost::dynamic_pointer_cast<nddlgen::models::DefaultWorkspaceModel>(workspaceUncasted);
 	return workspace;
 }

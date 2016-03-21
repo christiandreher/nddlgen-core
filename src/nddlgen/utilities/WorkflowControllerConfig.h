@@ -21,8 +21,7 @@
 
 #include <boost/filesystem.hpp>
 #include <boost/shared_ptr.hpp>
-
-#include <nddlgen/controllers/NddlGeneratableFactory.h>
+#include <nddlgen/controllers/AbstractObjectFactory.h>
 #include <nddlgen/exceptions/ControllerConfigIsReadOnlyException.hpp>
 
 namespace nddlgen
@@ -74,7 +73,7 @@ class nddlgen::utilities::WorkflowControllerConfig
 		/**
 		 * Instance of the model factory which should be used.
 		 */
-		nddlgen::controllers::NddlGeneratableFactoryPtr _modelFactory;
+		nddlgen::controllers::AbstractObjectFactoryPtr _modelFactory;
 
 		/**
 		 * Helper for setter functions. Tries to use the setter. May throw, if _readOnly
@@ -144,7 +143,7 @@ class nddlgen::utilities::WorkflowControllerConfig
 		 *
 		 * @param modelFactory Model factory
 		 */
-		void setModelFactory(nddlgen::controllers::NddlGeneratableFactoryPtr modelFactory);
+		void setModelFactory(nddlgen::controllers::AbstractObjectFactoryPtr modelFactory);
 
 		/**
 		 * Gets the adapter name.
@@ -249,7 +248,7 @@ class nddlgen::utilities::WorkflowControllerConfig
 		 *
 		 * @return Model factory.
 		 */
-		nddlgen::controllers::NddlGeneratableFactoryPtr getModelFactory();
+		nddlgen::controllers::AbstractObjectFactoryPtr getModelFactory();
 
 		/**
 		 * Tests if this instance has been marked as read only.

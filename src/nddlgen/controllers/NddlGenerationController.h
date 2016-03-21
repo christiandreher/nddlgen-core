@@ -27,8 +27,8 @@
 #include <boost/shared_ptr.hpp>
 
 #include <nddlgen/exceptions/FileAlreadyExistsException.hpp>
+#include <nddlgen/models/AbstractObjectModel.h>
 #include <nddlgen/models/DomainDescriptionModel.h>
-#include <nddlgen/models/NddlGeneratable.h>
 #include <nddlgen/models/ProcessModel.h>
 #include <nddlgen/utilities/Foreach.hpp>
 #include <nddlgen/utilities/Types.hpp>

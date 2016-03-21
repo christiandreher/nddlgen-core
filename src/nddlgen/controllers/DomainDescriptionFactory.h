@@ -24,21 +24,21 @@
 #include <map>
 
 #include <boost/shared_ptr.hpp>
+#include <nddlgen/controllers/AbstractObjectFactory.h>
 #include <sdf/sdf.hh>
 #include <tinyxml.h>
 
-#include <nddlgen/controllers/NddlGeneratableFactory.h>
 #include <nddlgen/exceptions/ModelFactoryNotSetException.hpp>
 #include <nddlgen/math/Cuboid.h>
 #include <nddlgen/math/CuboidOperations.h>
 #include <nddlgen/math/Vector.h>
 #include <nddlgen/math/VectorOperations.h>
+#include <nddlgen/models/AbstractObjectModel.h>
 #include <nddlgen/models/DefaultArmModel.h>
 #include <nddlgen/models/DefaultWorkspaceModel.h>
 #include <nddlgen/models/DomainDescriptionModel.h>
-#include <nddlgen/models/NddlGeneratable.h>
-#include <nddlgen/utilities/InitialStateFact.h>
-#include <nddlgen/utilities/InitialStateGoal.h>
+#include <nddlgen/models/InitialStateFactModel.h>
+#include <nddlgen/models/InitialStateGoalModel.h>
 #include <nddlgen/utilities/Types.hpp>
 #include <nddlgen/utilities/Foreach.hpp>
 
@@ -64,14 +64,14 @@ class nddlgen::controllers::DomainDescriptionFactory
 		/**
 		 * Model factory instance.
 		 */
-		nddlgen::controllers::NddlGeneratableFactoryPtr _modelFactory;
+		nddlgen::controllers::AbstractObjectFactoryPtr _modelFactory;
 
 		/**
 		 * Collection of all NddlGeneratable objects within the hierarchy.
 		 * Access this only with the getObjects() function, since this value
 		 * will be evaluated lazily.
 		 */
-		nddlgen::types::NddlGeneratableList _objects;
+		nddlgen::types::ObjectModelList _objects;
 
 		/**
 		 * Populates domain description model with the models that are found in the SDF.
@@ -162,7 +162,7 @@ class nddlgen::controllers::DomainDescriptionFactory
 		 * @param indices Map to keep track of all indices. Should be empty initially
 		 */
 		void subObjectPopulationHelper(
-				nddlgen::models::NddlGeneratablePtr model,
+				nddlgen::models::AbstractObjectModelPtr model,
 				std::map<std::string, int> indices
 		);
 
@@ -173,7 +173,7 @@ class nddlgen::controllers::DomainDescriptionFactory
 		 * @param model Current model in tree
 		 */
 		void predicatesPopulationHelper(
-				nddlgen::models::NddlGeneratablePtr model
+				nddlgen::models::AbstractObjectModelPtr model
 		);
 
 		/**
@@ -183,7 +183,7 @@ class nddlgen::controllers::DomainDescriptionFactory
 		 * @param model Current model in tree
 		 */
 		void actionsPopulationHelper(
-				nddlgen::models::NddlGeneratablePtr model
+				nddlgen::models::AbstractObjectModelPtr model
 		);
 
 		/**
@@ -194,7 +194,7 @@ class nddlgen::controllers::DomainDescriptionFactory
 		 * @return Instantiated NddlGeneratable, or null pointer if this->_modelFactory was
 		 * not able to instantiate one from the SDF data.
 		 */
-		nddlgen::models::NddlGeneratablePtr modelFactory(
+		nddlgen::models::AbstractObjectModelPtr modelFactory(
 				sdf::ElementPtr element
 		);
 
@@ -221,7 +221,7 @@ class nddlgen::controllers::DomainDescriptionFactory
 		 *
 		 * @return List of all used objects
 		 */
-		nddlgen::types::NddlGeneratableList getSubObjectsFrom(
+		nddlgen::types::ObjectModelList getSubObjectsFrom(
 				nddlgen::models::DomainDescriptionModelPtr domainDescription
 		);
 
@@ -232,8 +232,8 @@ class nddlgen::controllers::DomainDescriptionFactory
 		 *
 		 * @return List of all sub objects.
 		 */
-		nddlgen::types::NddlGeneratableList getSubObjectsFrom(
-				nddlgen::models::NddlGeneratablePtr model
+		nddlgen::types::ObjectModelList getSubObjectsFrom(
+				nddlgen::models::AbstractObjectModelPtr model
 		);
 
 	public:
@@ -267,7 +267,7 @@ class nddlgen::controllers::DomainDescriptionFactory
 		 * @param modelFactory Model factory
 		 */
 		void setModelFactory(
-				nddlgen::controllers::NddlGeneratableFactoryPtr modelFactory
+				nddlgen::controllers::AbstractObjectFactoryPtr modelFactory
 		);
 
 };

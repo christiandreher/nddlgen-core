@@ -22,8 +22,8 @@
 #include <fstream>
 
 #include <boost/shared_ptr.hpp>
+#include <nddlgen/models/AbstractObjectModel.h>
 
-#include <nddlgen/models/NddlGeneratable.h>
 #include <nddlgen/models/DefaultWorkspaceModel.h>
 #include <nddlgen/models/ProcessModel.h>
 
@@ -36,7 +36,7 @@ namespace nddlgen
 	}
 }
 
-class nddlgen::models::DefaultArmModel : public nddlgen::models::NddlGeneratable
+class nddlgen::models::DefaultArmModel : public nddlgen::models::AbstractObjectModel
 {
 
 	private:

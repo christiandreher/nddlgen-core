@@ -29,27 +29,27 @@ namespace nddlgen
 {
 	namespace models
 	{
-		class NddlGeneratable;
+		class AbstractObjectModel;
 	}
 
-	namespace utilities
+	namespace models
 	{
-		class ModelAction;
-		class InitialStateFact;
-		class InitialStateGoal;
+		class InitialStateFactModel;
+		class InitialStateGoalModel;
+		class ActionModel;
 	}
 }
 
 namespace nddlgen { namespace types
 {
 
-	typedef std::vector<boost::shared_ptr<nddlgen::models::NddlGeneratable>> NddlGeneratableList;
+	typedef std::vector<boost::shared_ptr<nddlgen::models::AbstractObjectModel>> ObjectModelList;
 
-	typedef std::list<boost::shared_ptr<nddlgen::utilities::ModelAction>> ActionList;
+	typedef std::list<boost::shared_ptr<nddlgen::models::ActionModel>> ActionList;
 
-	typedef std::list<boost::shared_ptr<nddlgen::utilities::InitialStateFact>> FactList;
+	typedef std::list<boost::shared_ptr<nddlgen::models::InitialStateFactModel>> FactList;
 
-	typedef std::list<boost::shared_ptr<nddlgen::utilities::InitialStateGoal>> GoalList;
+	typedef std::list<boost::shared_ptr<nddlgen::models::InitialStateGoalModel>> GoalList;
 
 	typedef boost::shared_ptr<sdf::SDF> SdfRoot;
 

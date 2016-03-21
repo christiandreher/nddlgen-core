@@ -56,15 +56,15 @@ nddlgen::types::ActionList nddlgen::models::DomainDescriptionModel::getActions()
 	return this->_actions;
 }
 
-void nddlgen::models::DomainDescriptionModel::registerUsedClass(nddlgen::models::NddlGeneratablePtr object)
+void nddlgen::models::DomainDescriptionModel::addUsedClass(nddlgen::models::AbstractObjectModelPtr object)
 {
-	this->_usedClasses.insert(std::pair<std::string, nddlgen::models::NddlGeneratablePtr>(object->getClassName(),
+	this->_usedClasses.insert(std::pair<std::string, nddlgen::models::AbstractObjectModelPtr>(object->getClassName(),
 			object));
 }
 
 void nddlgen::models::DomainDescriptionModel::generateForwardDeclarations(std::ofstream& ofStream)
 {
-	for (std::map<std::string, nddlgen::models::NddlGeneratablePtr>::iterator it = this->_usedClasses.begin();
+	for (std::map<std::string, nddlgen::models::AbstractObjectModelPtr>::iterator it = this->_usedClasses.begin();
 			it != this->_usedClasses.end(); it++)
 	{
 		it->second->generateForwardDeclaration(ofStream);
@@ -82,7 +82,7 @@ void nddlgen::models::DomainDescriptionModel::generateInstantiations(std::ofstre
 
 void nddlgen::models::DomainDescriptionModel::generateModels(std::ofstream& ofStream)
 {
-	for (std::map<std::string, nddlgen::models::NddlGeneratablePtr>::iterator it = this->_usedClasses.begin();
+	for (std::map<std::string, nddlgen::models::AbstractObjectModelPtr>::iterator it = this->_usedClasses.begin();
 			it != this->_usedClasses.end(); it++)
 	{
 		it->second->generateModel(ofStream);
@@ -94,7 +94,7 @@ void nddlgen::models::DomainDescriptionModel::generateActions(std::ofstream& ofS
 	std::string armClass = this->getArm()->getClassName();
 
 	// Iterate through all actions and print it
-	foreach (nddlgen::utilities::ModelActionPtr action, this->_actions)
+	foreach (nddlgen::models::ActionModelPtr action, this->_actions)
 	{
 		std::string actionName = action->getName();
 		std::list<std::string> actionSteps = action->getActionSteps();
@@ -119,7 +119,7 @@ void nddlgen::models::DomainDescriptionModel::generateFacts(std::ofstream& ofStr
 	nddlgen::types::FactList facts = this->getInitialState()->getFacts();
 
 	// Iterate through facts
-	foreach (nddlgen::utilities::InitialStateFactPtr fact, facts)
+	foreach (nddlgen::models::InitialStateFactModelPtr fact, facts)
 	{
 		// Get fact
 		std::list<std::string> factLines = fact->getFact();
@@ -140,7 +140,7 @@ void nddlgen::models::DomainDescriptionModel::generateGoals(std::ofstream& ofStr
 	nddlgen::types::GoalList goals = this->getInitialState()->getGoals();
 
 	// Iterate through goals
-	foreach (nddlgen::utilities::InitialStateGoalPtr goal, goals)
+	foreach (nddlgen::models::InitialStateGoalModelPtr goal, goals)
 	{
 		// Get goal
 		std::list<std::string> goalLines = goal->getGoal();

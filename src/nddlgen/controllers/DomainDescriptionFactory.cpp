@@ -80,7 +80,7 @@ nddlgen::models::DomainDescriptionModelPtr nddlgen::controllers::DomainDescripti
 }
 
 void nddlgen::controllers::DomainDescriptionFactory::setModelFactory(
-		nddlgen::controllers::NddlGeneratableFactoryPtr modelFactory)
+		nddlgen::controllers::AbstractObjectFactoryPtr modelFactory)
 {
 	this->_modelFactory = modelFactory;
 }
@@ -96,7 +96,7 @@ void nddlgen::controllers::DomainDescriptionFactory::populateWithModelsFromSdf(
 	// Iterate through elements in SDF model node
 	while (currentModelElement)
 	{
-		nddlgen::models::NddlGeneratablePtr generatableModel = this->modelFactory(currentModelElement);
+		nddlgen::models::AbstractObjectModelPtr generatableModel = this->modelFactory(currentModelElement);
 
 		// If generatableModel is null, it is not supported by the given model factory
 		// and will therefore be ignored and not added to the workspace
@@ -123,10 +123,10 @@ void nddlgen::controllers::DomainDescriptionFactory::populateWithGoalsFromIsd(
 	// Iterate through goals and add them to initial state model
 	for (; goals; goals = goals->NextSiblingElement())
 	{
-		nddlgen::utilities::InitialStateGoalPtr goal(new nddlgen::utilities::InitialStateGoal());
+		nddlgen::models::InitialStateGoalModelPtr goal(new nddlgen::models::InitialStateGoalModel());
 
 		goal->setGoalName(goals->Attribute("name"));
-		goal->setModelName(goals->Attribute("for"));
+		goal->setObjectName(goals->Attribute("for"));
 		goal->setPredicate(goals->Attribute("predicate"));
 		goal->setStartsAfter(goals->Attribute("starts-after"));
 		goal->setEndsBefore(goals->Attribute("ends-before"));
@@ -155,10 +155,10 @@ void nddlgen::controllers::DomainDescriptionFactory::populateWithFacts(
 		nddlgen::models::DomainDescriptionModelPtr domainDescription)
 {
 	// Get all objects
-	nddlgen::types::NddlGeneratableList allObjects = this->getSubObjectsFrom(domainDescription);
+	nddlgen::types::ObjectModelList allObjects = this->getSubObjectsFrom(domainDescription);
 
 	// Iterate through objects
-	foreach (nddlgen::models::NddlGeneratablePtr object, allObjects)
+	foreach (nddlgen::models::AbstractObjectModelPtr object, allObjects)
 	{
 		// If the object has predicates, get initial state predicate as fact and add
 		// it to the initial state model
@@ -173,13 +173,13 @@ void nddlgen::controllers::DomainDescriptionFactory::populateWithBlockedObjects(
 		nddlgen::models::DomainDescriptionModelPtr domainDescription)
 {
 	// Get all models on workspace
-	nddlgen::types::NddlGeneratableList models = domainDescription->getArm()->getWorkspace()->getModels();
+	nddlgen::types::ObjectModelList models = domainDescription->getArm()->getWorkspace()->getModels();
 
 	// Use this...
-	foreach (nddlgen::models::NddlGeneratablePtr model1, models)
+	foreach (nddlgen::models::AbstractObjectModelPtr model1, models)
 	{
 		// ...and this foreach loop to form all permutations (naive, may be improved)
-		foreach (nddlgen::models::NddlGeneratablePtr model2, models)
+		foreach (nddlgen::models::AbstractObjectModelPtr model2, models)
 		{
 			// Only run collision detection if model1 and model2 are not the same object
 			if (model1 != model2)
@@ -214,10 +214,10 @@ void nddlgen::controllers::DomainDescriptionFactory::populateWithActions(
 	std::list<std::string> actionPrototypes;
 
 	// Get all objects
-	nddlgen::types::NddlGeneratableList allObjects = this->getSubObjectsFrom(domainDescription->getArm());
+	nddlgen::types::ObjectModelList allObjects = this->getSubObjectsFrom(domainDescription->getArm());
 
 	// Iterate through all objects and register actions in DDM
-	foreach (nddlgen::models::NddlGeneratablePtr object, allObjects)
+	foreach (nddlgen::models::AbstractObjectModelPtr object, allObjects)
 	{
 		nddlgen::types::ActionList actions = object->getActions();
 		domainDescription->registerActions(actions);
@@ -227,7 +227,7 @@ void nddlgen::controllers::DomainDescriptionFactory::populateWithActions(
 	nddlgen::types::ActionList actions = domainDescription->getActions();
 
 	// Loop through actions and generate prototypes
-	foreach (nddlgen::utilities::ModelActionPtr action, actions)
+	foreach (nddlgen::models::ActionModelPtr action, actions)
 	{
 		std::string actionPrototype = "action " + action->getName() + " " + "{ duration=" + action->getDuration() + "; }";
 		actionPrototypes.push_back(actionPrototype);
@@ -241,17 +241,17 @@ void nddlgen::controllers::DomainDescriptionFactory::populateWithUsedClasses(
 		nddlgen::models::DomainDescriptionModelPtr domainDescription)
 {
 	// Get all objects
-	nddlgen::types::NddlGeneratableList allObjects = this->getSubObjectsFrom(domainDescription);
+	nddlgen::types::ObjectModelList allObjects = this->getSubObjectsFrom(domainDescription);
 
 	// Insert class name into map. As the class name is used as the map key, there won't be duplicates
-	foreach (nddlgen::models::NddlGeneratablePtr object, allObjects)
+	foreach (nddlgen::models::AbstractObjectModelPtr object, allObjects)
 	{
-		domainDescription->registerUsedClass(object);
+		domainDescription->addUsedClass(object);
 	}
 }
 
 void nddlgen::controllers::DomainDescriptionFactory::subObjectPopulationHelper(
-		nddlgen::models::NddlGeneratablePtr model,
+		nddlgen::models::AbstractObjectModelPtr model,
 				std::map<std::string, int> indices)
 {
 	// Call initSubObjects() first, so that sub objects get instantiated
@@ -264,10 +264,10 @@ void nddlgen::controllers::DomainDescriptionFactory::subObjectPopulationHelper(
 		int index = 0;
 
 		// Get sub objects
-		nddlgen::types::NddlGeneratableList subObjects = model->getSubObjects();
+		nddlgen::types::ObjectModelList subObjects = model->getSubObjects();
 
 		// Loop through sub objects and use it as parameter for the recursive call
-		foreach (nddlgen::models::NddlGeneratablePtr subObject, subObjects)
+		foreach (nddlgen::models::AbstractObjectModelPtr subObject, subObjects)
 		{
 			this->subObjectPopulationHelper(subObject, indices);
 
@@ -304,16 +304,16 @@ void nddlgen::controllers::DomainDescriptionFactory::subObjectPopulationHelper(
 }
 
 void nddlgen::controllers::DomainDescriptionFactory::predicatesPopulationHelper(
-		nddlgen::models::NddlGeneratablePtr model)
+		nddlgen::models::AbstractObjectModelPtr model)
 {
 	// If model has sub objects, initialize recursive call
 	if (model->hasSubObjects())
 	{
 		// Get sub objects
-		nddlgen::types::NddlGeneratableList subObjects = model->getSubObjects();
+		nddlgen::types::ObjectModelList subObjects = model->getSubObjects();
 
 		// Loop through sub objects and use it as parameter for the recursive call
-		foreach (nddlgen::models::NddlGeneratablePtr subObject, subObjects)
+		foreach (nddlgen::models::AbstractObjectModelPtr subObject, subObjects)
 		{
 			this->predicatesPopulationHelper(subObject);
 		}
@@ -324,16 +324,16 @@ void nddlgen::controllers::DomainDescriptionFactory::predicatesPopulationHelper(
 }
 
 void nddlgen::controllers::DomainDescriptionFactory::actionsPopulationHelper(
-		nddlgen::models::NddlGeneratablePtr model)
+		nddlgen::models::AbstractObjectModelPtr model)
 {
 	// If model has sub objects, initialize recursive call
 	if (model->hasSubObjects())
 	{
 		// Get sub objects
-		nddlgen::types::NddlGeneratableList subObjects = model->getSubObjects();
+		nddlgen::types::ObjectModelList subObjects = model->getSubObjects();
 
 		// Loop through sub objects and use it as parameter for the recursive call
-		foreach (nddlgen::models::NddlGeneratablePtr subObject, subObjects)
+		foreach (nddlgen::models::AbstractObjectModelPtr subObject, subObjects)
 		{
 			this->actionsPopulationHelper(subObject);
 		}
@@ -343,11 +343,11 @@ void nddlgen::controllers::DomainDescriptionFactory::actionsPopulationHelper(
 	model->initActions();
 }
 
-nddlgen::models::NddlGeneratablePtr nddlgen::controllers::DomainDescriptionFactory::modelFactory(
+nddlgen::models::AbstractObjectModelPtr nddlgen::controllers::DomainDescriptionFactory::modelFactory(
 		sdf::ElementPtr element)
 {
 	std::string elementName = element->GetAttribute("name")->GetAsString();
-	nddlgen::models::NddlGeneratablePtr instance = this->_modelFactory->fromString(elementName);
+	nddlgen::models::AbstractObjectModelPtr instance = this->_modelFactory->fromString(elementName);
 
 	// If instance is set
 	if (instance)
@@ -494,7 +494,7 @@ nddlgen::math::CuboidPtr nddlgen::controllers::DomainDescriptionFactory::boundin
 	return boundingBox;
 }
 
-nddlgen::types::NddlGeneratableList nddlgen::controllers::DomainDescriptionFactory::getSubObjectsFrom(
+nddlgen::types::ObjectModelList nddlgen::controllers::DomainDescriptionFactory::getSubObjectsFrom(
 		nddlgen::models::DomainDescriptionModelPtr domainDescription)
 {
 	// If list is empty, get all sub objects and save them to member
@@ -507,21 +507,21 @@ nddlgen::types::NddlGeneratableList nddlgen::controllers::DomainDescriptionFacto
 	return this->_objects;
 }
 
-nddlgen::types::NddlGeneratableList nddlgen::controllers::DomainDescriptionFactory::getSubObjectsFrom(
-		nddlgen::models::NddlGeneratablePtr model)
+nddlgen::types::ObjectModelList nddlgen::controllers::DomainDescriptionFactory::getSubObjectsFrom(
+		nddlgen::models::AbstractObjectModelPtr model)
 {
-	nddlgen::types::NddlGeneratableList output;
+	nddlgen::types::ObjectModelList output;
 
 	// If model has sub objects, initialize recursive call
 	if (model->hasSubObjects())
 	{
 		// Get sub objects
-		nddlgen::types::NddlGeneratableList subObjects = model->getSubObjects();
+		nddlgen::types::ObjectModelList subObjects = model->getSubObjects();
 
 		// Loop through sub objects and use it as parameter for the recursive call
-		foreach (nddlgen::models::NddlGeneratablePtr subObject, subObjects)
+		foreach (nddlgen::models::AbstractObjectModelPtr subObject, subObjects)
 		{
-			nddlgen::types::NddlGeneratableList recursiveOutput = this->getSubObjectsFrom(subObject);
+			nddlgen::types::ObjectModelList recursiveOutput = this->getSubObjectsFrom(subObject);
 
 			// Merge lists of sub objects into output list
 			output.insert(output.end(), recursiveOutput.begin(), recursiveOutput.end());

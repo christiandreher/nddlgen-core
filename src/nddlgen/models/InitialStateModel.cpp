@@ -26,7 +26,7 @@ nddlgen::models::InitialStateModel::~InitialStateModel()
 
 }
 
-void nddlgen::models::InitialStateModel::addFact(nddlgen::utilities::InitialStateFactPtr fact)
+void nddlgen::models::InitialStateModel::addFact(nddlgen::models::InitialStateFactModelPtr fact)
 {
 	int index = this->_facts.size() + 1;
 	fact->setIndex(index);
@@ -39,7 +39,7 @@ nddlgen::types::FactList nddlgen::models::InitialStateModel::getFacts()
 	return this->_facts;
 }
 
-void nddlgen::models::InitialStateModel::addGoal(nddlgen::utilities::InitialStateGoalPtr goal)
+void nddlgen::models::InitialStateModel::addGoal(nddlgen::models::InitialStateGoalModelPtr goal)
 {
 	int index = this->_goals.size() + 1;
 	goal->setIndex(index);

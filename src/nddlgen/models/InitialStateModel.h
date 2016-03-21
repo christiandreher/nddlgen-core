@@ -20,9 +20,8 @@
 #include <string>
 
 #include <boost/shared_ptr.hpp>
-
-#include <nddlgen/utilities/InitialStateFact.h>
-#include <nddlgen/utilities/InitialStateGoal.h>
+#include <nddlgen/models/InitialStateFactModel.h>
+#include <nddlgen/models/InitialStateGoalModel.h>
 #include <nddlgen/utilities/Types.hpp>
 
 namespace nddlgen
@@ -47,10 +46,10 @@ class nddlgen::models::InitialStateModel
 		InitialStateModel();
 		virtual ~InitialStateModel();
 
-		void addFact(nddlgen::utilities::InitialStateFactPtr fact);
+		void addFact(nddlgen::models::InitialStateFactModelPtr fact);
 		nddlgen::types::FactList getFacts();
 
-		void addGoal(nddlgen::utilities::InitialStateGoalPtr goal);
+		void addGoal(nddlgen::models::InitialStateGoalModelPtr goal);
 		nddlgen::types::GoalList getGoals();
 
 };
