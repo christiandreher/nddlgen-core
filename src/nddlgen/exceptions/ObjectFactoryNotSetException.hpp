@@ -14,23 +14,23 @@
  * limitations under the License.
  */
 
-#ifndef NDDLGEN_EXCEPTIONS_MODELFACTORYNOTSETEXCEPTION_HPP_
-#define NDDLGEN_EXCEPTIONS_MODELFACTORYNOTSETEXCEPTION_HPP_
+#ifndef NDDLGEN_EXCEPTIONS_OBJECTFACTORYNOTSETEXCEPTION_HPP_
+#define NDDLGEN_EXCEPTIONS_OBJECTFACTORYNOTSETEXCEPTION_HPP_
 
 #include <exception>
 
-namespace nddlgen { namespace exceptions { class ModelFactoryNotSetException; }}
+namespace nddlgen { namespace exceptions { class ObjectFactoryNotSetException; }}
 
-class nddlgen::exceptions::ModelFactoryNotSetException : public std::exception
+class nddlgen::exceptions::ObjectFactoryNotSetException : public std::exception
 {
 	public:
 
-		ModelFactoryNotSetException() {}
-		virtual ~ModelFactoryNotSetException() throw (){}
+		ObjectFactoryNotSetException() {}
+		virtual ~ObjectFactoryNotSetException() throw (){}
 
 		virtual const char* what() const throw()
 		{
-			return "A ModelFactory (inherits NddlGeneratableFactory) was not set.";
+			return "An ObjectFactory (inherits AbstractObjectFactory) was not set.";
 		}
 
 };
