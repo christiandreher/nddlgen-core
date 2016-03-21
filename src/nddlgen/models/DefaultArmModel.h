@@ -51,7 +51,7 @@ class nddlgen::models::DefaultArmModel : public nddlgen::models::AbstractObjectM
 
 		virtual void initSubObjects();
 
-		virtual void generateModel(std::ofstream& ofStream);
+		virtual void generateNddlClass(std::ofstream& ofStream);
 
 		nddlgen::models::DefaultWorkspaceModelPtr getWorkspace();
 

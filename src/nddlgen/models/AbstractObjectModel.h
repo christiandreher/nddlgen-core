@@ -67,15 +67,15 @@ class nddlgen::models::AbstractObjectModel : public boost::enable_shared_from_th
 
 		boost::weak_ptr<nddlgen::models::AbstractObjectModel> _superObject;
 
-		void generateModelPredicates(
+		void generateNddlClassPredicates(
 				std::ofstream& ofStream
 		);
 
-		void generateModelSubObjects(
+		void generateNddlClassMembers(
 				std::ofstream& ofStream
 		);
 
-		void generateModelConstructor(
+		void generateNddlClassConstructor(
 				std::ofstream& ofStream
 		);
 
@@ -95,7 +95,7 @@ class nddlgen::models::AbstractObjectModel : public boost::enable_shared_from_th
 				std::ofstream& ofStream
 		);
 
-		virtual void generateModel(
+		virtual void generateNddlClass(
 				std::ofstream& ofStream
 		);
 

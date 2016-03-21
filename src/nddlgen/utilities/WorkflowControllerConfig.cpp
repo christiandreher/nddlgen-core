@@ -70,13 +70,13 @@ void nddlgen::utilities::WorkflowControllerConfig::setOutputFilesPath(std::strin
 	}
 }
 
-void nddlgen::utilities::WorkflowControllerConfig::setModelFactory(
+void nddlgen::utilities::WorkflowControllerConfig::setObjectFactory(
 		nddlgen::controllers::AbstractObjectFactoryPtr modelFactory)
 {
 	this->trySet();
 
-	this->_modelFactory = modelFactory;
-	this->_modelFactory->registerNddlGeneratables();
+	this->_objectFactory = modelFactory;
+	this->_objectFactory->registerObjectModels();
 }
 
 void nddlgen::utilities::WorkflowControllerConfig::setReadOnly()
@@ -225,7 +225,7 @@ std::string nddlgen::utilities::WorkflowControllerConfig::normalizePath(const bo
 	return result.string();
 }
 
-nddlgen::controllers::AbstractObjectFactoryPtr nddlgen::utilities::WorkflowControllerConfig::getModelFactory()
+nddlgen::controllers::AbstractObjectFactoryPtr nddlgen::utilities::WorkflowControllerConfig::getObjectFactory()
 {
-	return this->_modelFactory;
+	return this->_objectFactory;
 }

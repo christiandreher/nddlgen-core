@@ -48,10 +48,10 @@ class nddlgen::models::DefaultWorkspaceModel : public nddlgen::models::AbstractO
 		DefaultWorkspaceModel();
 		virtual ~DefaultWorkspaceModel();
 
-		void addModelToWorkspace(nddlgen::models::AbstractObjectModelPtr model);
-		nddlgen::models::AbstractObjectModelPtr getModelByName(std::string name);
+		void addObjectToWorkspace(nddlgen::models::AbstractObjectModelPtr model);
+		nddlgen::models::AbstractObjectModelPtr getObjectByName(std::string name);
 
-		nddlgen::types::ObjectModelList getModels();
+		nddlgen::types::ObjectModelList getObjects();
 
 };
 

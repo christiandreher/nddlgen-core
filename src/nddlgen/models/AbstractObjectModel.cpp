@@ -73,7 +73,7 @@ void nddlgen::models::AbstractObjectModel::generateInstantiation(std::ofstream& 
 	wrln(0, className + " " + instanceName + " = new " + className + "(" + constructorParameters + ");", 1);
 }
 
-void nddlgen::models::AbstractObjectModel::generateModel(std::ofstream& ofStream)
+void nddlgen::models::AbstractObjectModel::generateNddlClass(std::ofstream& ofStream)
 {
 	std::string extendsTimeline = "";
 
@@ -88,18 +88,18 @@ void nddlgen::models::AbstractObjectModel::generateModel(std::ofstream& ofStream
 	wrln(0, "{", 1);
 
 	// Print predicates if present
-	this->generateModelPredicates(ofStream);
+	this->generateNddlClassPredicates(ofStream);
 
 	// Print sub objects as member if present
-	this->generateModelSubObjects(ofStream);
+	this->generateNddlClassMembers(ofStream);
 
 	// Print constructor if sub objects are set
-	this->generateModelConstructor(ofStream);
+	this->generateNddlClassConstructor(ofStream);
 
 	wrln(0, "}", 2);
 }
 
-void nddlgen::models::AbstractObjectModel::generateModelPredicates(std::ofstream& ofStream)
+void nddlgen::models::AbstractObjectModel::generateNddlClassPredicates(std::ofstream& ofStream)
 {
 	// Print predicates if present
 	if (this->hasPredicates())
@@ -116,7 +116,7 @@ void nddlgen::models::AbstractObjectModel::generateModelPredicates(std::ofstream
 	}
 }
 
-void nddlgen::models::AbstractObjectModel::generateModelSubObjects(std::ofstream& ofStream)
+void nddlgen::models::AbstractObjectModel::generateNddlClassMembers(std::ofstream& ofStream)
 {
 	// Only print members if the model has any sub objects
 	if (this->hasSubObjects())
@@ -134,7 +134,7 @@ void nddlgen::models::AbstractObjectModel::generateModelSubObjects(std::ofstream
 	}
 }
 
-void nddlgen::models::AbstractObjectModel::generateModelConstructor(std::ofstream& ofStream)
+void nddlgen::models::AbstractObjectModel::generateNddlClassConstructor(std::ofstream& ofStream)
 {
 	// Only print constructor if the model has any sub objects
 	if (this->hasSubObjects())

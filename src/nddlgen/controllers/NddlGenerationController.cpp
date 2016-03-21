@@ -47,7 +47,7 @@ void nddlgen::controllers::NddlGenerationController::writeModelFile(
 	domainDescription->generateForwardDeclarations(ofStream);
 
 	// Print model for each used class
-	domainDescription->generateModels(ofStream);
+	domainDescription->generateNddlClasses(ofStream);
 
 	// Print arm actions
 	domainDescription->generateActions(ofStream);

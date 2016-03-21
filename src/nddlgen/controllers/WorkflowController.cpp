@@ -87,7 +87,7 @@ void nddlgen::controllers::WorkflowController::buildDomainDescription()
 
 	// Instantiate and initialize DomainDescriptionFactory
 	nddlgen::controllers::DomainDescriptionFactoryPtr factory(new nddlgen::controllers::DomainDescriptionFactory());
-	factory->setModelFactory(this->_config->getModelFactory());
+	factory->setObjectFactory(this->_config->getObjectFactory());
 
 	// Build the domain description model
 	this->_domainDescription = factory->build(this->_sdfRoot, this->_isdRoot);

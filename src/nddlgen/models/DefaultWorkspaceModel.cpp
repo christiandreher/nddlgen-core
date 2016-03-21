@@ -26,17 +26,17 @@ nddlgen::models::DefaultWorkspaceModel::~DefaultWorkspaceModel()
 
 }
 
-void nddlgen::models::DefaultWorkspaceModel::addModelToWorkspace(nddlgen::models::AbstractObjectModelPtr model)
+void nddlgen::models::DefaultWorkspaceModel::addObjectToWorkspace(nddlgen::models::AbstractObjectModelPtr model)
 {
 	this->addSubObject(model);
 }
 
-nddlgen::models::AbstractObjectModelPtr nddlgen::models::DefaultWorkspaceModel::getModelByName(std::string name)
+nddlgen::models::AbstractObjectModelPtr nddlgen::models::DefaultWorkspaceModel::getObjectByName(std::string name)
 {
 	return this->getSubObjectByName(name);
 }
 
-nddlgen::types::ObjectModelList nddlgen::models::DefaultWorkspaceModel::getModels()
+nddlgen::types::ObjectModelList nddlgen::models::DefaultWorkspaceModel::getObjects()
 {
 	return this->_subObjects;
 }

@@ -25,10 +25,10 @@
 
 #include <boost/shared_ptr.hpp>
 #include <nddlgen/controllers/AbstractObjectFactory.h>
+#include <nddlgen/exceptions/ObjectFactoryNotSetException.hpp>
 #include <sdf/sdf.hh>
 #include <tinyxml.h>
 
-#include <nddlgen/exceptions/ModelFactoryNotSetException.hpp>
 #include <nddlgen/math/Cuboid.h>
 #include <nddlgen/math/CuboidOperations.h>
 #include <nddlgen/math/Vector.h>
@@ -64,7 +64,7 @@ class nddlgen::controllers::DomainDescriptionFactory
 		/**
 		 * Model factory instance.
 		 */
-		nddlgen::controllers::AbstractObjectFactoryPtr _modelFactory;
+		nddlgen::controllers::AbstractObjectFactoryPtr _objectFactory;
 
 		/**
 		 * Collection of all NddlGeneratable objects within the hierarchy.
@@ -79,7 +79,7 @@ class nddlgen::controllers::DomainDescriptionFactory
 		 * @param domainDescription Domain description model
 		 * @param sdfRoot SDF document root
 		 */
-		void populateWithModelsFromSdf(
+		void populateWithObjectsFromSdf(
 				nddlgen::models::DomainDescriptionModelPtr domainDescription,
 				nddlgen::types::SdfRoot sdfRoot
 		);
@@ -173,7 +173,7 @@ class nddlgen::controllers::DomainDescriptionFactory
 		 * @param model Current model in tree
 		 */
 		void predicatesPopulationHelper(
-				nddlgen::models::AbstractObjectModelPtr model
+				nddlgen::models::AbstractObjectModelPtr object
 		);
 
 		/**
@@ -194,7 +194,7 @@ class nddlgen::controllers::DomainDescriptionFactory
 		 * @return Instantiated NddlGeneratable, or null pointer if this->_modelFactory was
 		 * not able to instantiate one from the SDF data.
 		 */
-		nddlgen::models::AbstractObjectModelPtr modelFactory(
+		nddlgen::models::AbstractObjectModelPtr objectFactory(
 				sdf::ElementPtr element
 		);
 
@@ -266,7 +266,7 @@ class nddlgen::controllers::DomainDescriptionFactory
 		 *
 		 * @param modelFactory Model factory
 		 */
-		void setModelFactory(
+		void setObjectFactory(
 				nddlgen::controllers::AbstractObjectFactoryPtr modelFactory
 		);
 

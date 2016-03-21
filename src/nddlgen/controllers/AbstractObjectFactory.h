@@ -38,8 +38,8 @@ namespace nddlgen
 /**
  * Typedefs for function pointer and function pointer map
  */
-typedef nddlgen::models::AbstractObjectModelPtr (*CreateNddlGeneratable)(void);
-typedef std::map<std::string, CreateNddlGeneratable> NddlGeneratableMap;
+typedef nddlgen::models::AbstractObjectModelPtr (*CreateObject)(void);
+typedef std::map<std::string, CreateObject> ObjectModelMap;
 
 /**
  * Abstract factory class to instantiate NddlGeneratables. This enables programs which
@@ -55,7 +55,7 @@ class nddlgen::controllers::AbstractObjectFactory
 		/**
 		 * Map containing all registered NddlGeneratables.
 		 */
-		NddlGeneratableMap _registeredNddlGeneratables;
+		ObjectModelMap _registeredObjectModels;
 
 		/**
 		 * Helper function to register a new NddlGeneratable.
@@ -63,7 +63,7 @@ class nddlgen::controllers::AbstractObjectFactory
 		 * @param modelName Name of the Model (CLass name)
 		 * @param createFunction Create function
 		 */
-		void registerNddlGeneratable(std::string modelName, CreateNddlGeneratable createFunction);
+		void registerObjectModel(std::string modelName, CreateObject createFunction);
 
 	public:
 
@@ -95,7 +95,7 @@ class nddlgen::controllers::AbstractObjectFactory
 		 * This function is the initialization of the factory. The factory instance is later used
 		 * by the framework so that it can instantiate objects, which it is not fully aware of.
 		 */
-		virtual void registerNddlGeneratables() = 0;
+		virtual void registerObjectModels() = 0;
 
 		/**
 		 * Creates the default Arm NddlGeneratable model

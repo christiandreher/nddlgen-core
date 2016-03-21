@@ -31,8 +31,9 @@ nddlgen::models::AbstractObjectModelPtr nddlgen::controllers::AbstractObjectFact
 	std::string modelNameLc = boost::algorithm::to_lower_copy(modelName);
 
 	// Using reverse iterator, so that non-prefix-free keys are not matched wrong.
-	for (NddlGeneratableMap::reverse_iterator i = this->_registeredNddlGeneratables.rbegin();
-			i != this->_registeredNddlGeneratables.rend(); i++)
+	// ToDo: Sort desc. by string length. Better approach
+	for (ObjectModelMap::reverse_iterator i = this->_registeredObjectModels.rbegin();
+			i != this->_registeredObjectModels.rend(); i++)
 	{
 		std::string classNameLc = boost::algorithm::to_lower_copy(i->first);
 
@@ -46,13 +47,13 @@ nddlgen::models::AbstractObjectModelPtr nddlgen::controllers::AbstractObjectFact
 	return null;
 }
 
-void nddlgen::controllers::AbstractObjectFactory::registerNddlGeneratable(
+void nddlgen::controllers::AbstractObjectFactory::registerObjectModel(
 		std::string modelName,
-		CreateNddlGeneratable createFunction)
+		CreateObject createFunction)
 {
 	std::string modelNameLc = boost::algorithm::to_lower_copy(modelName);
 
-	this->_registeredNddlGeneratables[modelNameLc] = createFunction;
+	this->_registeredObjectModels[modelNameLc] = createFunction;
 }
 
 nddlgen::models::AbstractObjectModelPtr nddlgen::controllers::AbstractObjectFactory::createDefaultArm()

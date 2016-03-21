@@ -31,15 +31,15 @@ nddlgen::models::DomainDescriptionModelPtr nddlgen::controllers::DomainDescripti
 		nddlgen::types::IsdRoot isdRoot)
 {
 	// Assert that a model factory was set
-	if (!this->_modelFactory)
+	if (!this->_objectFactory)
 	{
-		throw nddlgen::exceptions::ModelFactoryNotSetException();
+		throw nddlgen::exceptions::ObjectFactoryNotSetException();
 	}
 
 	// Instantiate basic models
 	nddlgen::models::DomainDescriptionModelPtr domainDescription(new nddlgen::models::DomainDescriptionModel());
-	nddlgen::models::DefaultArmModelPtr arm = boost::dynamic_pointer_cast<nddlgen::models::DefaultArmModel>(this->_modelFactory->fromString("arm"));
-	nddlgen::models::DefaultWorkspaceModelPtr workspace = boost::dynamic_pointer_cast<nddlgen::models::DefaultWorkspaceModel>(this->_modelFactory->fromString("workspace"));
+	nddlgen::models::DefaultArmModelPtr arm = boost::dynamic_pointer_cast<nddlgen::models::DefaultArmModel>(this->_objectFactory->fromString("arm"));
+	nddlgen::models::DefaultWorkspaceModelPtr workspace = boost::dynamic_pointer_cast<nddlgen::models::DefaultWorkspaceModel>(this->_objectFactory->fromString("workspace"));
 	nddlgen::models::InitialStateModelPtr initialState(new nddlgen::models::InitialStateModel());
 
 	// Set names for arm and workspace manually
@@ -52,7 +52,7 @@ nddlgen::models::DomainDescriptionModelPtr nddlgen::controllers::DomainDescripti
 	domainDescription->setInitialState(initialState);
 
 	// Populate DDM with the models defined in the SDF
-	this->populateWithModelsFromSdf(domainDescription, sdfRoot);
+	this->populateWithObjectsFromSdf(domainDescription, sdfRoot);
 
 	// Populate DDM with the goals defined in the ISD
 	this->populateWithGoalsFromIsd(domainDescription, isdRoot);
@@ -79,13 +79,13 @@ nddlgen::models::DomainDescriptionModelPtr nddlgen::controllers::DomainDescripti
 	return domainDescription;
 }
 
-void nddlgen::controllers::DomainDescriptionFactory::setModelFactory(
+void nddlgen::controllers::DomainDescriptionFactory::setObjectFactory(
 		nddlgen::controllers::AbstractObjectFactoryPtr modelFactory)
 {
-	this->_modelFactory = modelFactory;
+	this->_objectFactory = modelFactory;
 }
 
-void nddlgen::controllers::DomainDescriptionFactory::populateWithModelsFromSdf(
+void nddlgen::controllers::DomainDescriptionFactory::populateWithObjectsFromSdf(
 		nddlgen::models::DomainDescriptionModelPtr domainDescription,
 		nddlgen::types::SdfRoot sdfRoot)
 {
@@ -96,14 +96,14 @@ void nddlgen::controllers::DomainDescriptionFactory::populateWithModelsFromSdf(
 	// Iterate through elements in SDF model node
 	while (currentModelElement)
 	{
-		nddlgen::models::AbstractObjectModelPtr generatableModel = this->modelFactory(currentModelElement);
+		nddlgen::models::AbstractObjectModelPtr generatableModel = this->objectFactory(currentModelElement);
 
 		// If generatableModel is null, it is not supported by the given model factory
 		// and will therefore be ignored and not added to the workspace
 		if (generatableModel)
 		{
 			// First add generatableModel to workspace to make sure that it is initialized properly
-			workspace->addModelToWorkspace(generatableModel);
+			workspace->addObjectToWorkspace(generatableModel);
 		}
 
 		// Iterate
@@ -173,7 +173,7 @@ void nddlgen::controllers::DomainDescriptionFactory::populateWithBlockedObjects(
 		nddlgen::models::DomainDescriptionModelPtr domainDescription)
 {
 	// Get all models on workspace
-	nddlgen::types::ObjectModelList models = domainDescription->getArm()->getWorkspace()->getModels();
+	nddlgen::types::ObjectModelList models = domainDescription->getArm()->getWorkspace()->getObjects();
 
 	// Use this...
 	foreach (nddlgen::models::AbstractObjectModelPtr model1, models)
@@ -220,7 +220,7 @@ void nddlgen::controllers::DomainDescriptionFactory::populateWithActions(
 	foreach (nddlgen::models::AbstractObjectModelPtr object, allObjects)
 	{
 		nddlgen::types::ActionList actions = object->getActions();
-		domainDescription->registerActions(actions);
+		domainDescription->addActions(actions);
 	}
 
 	// Get all actions
@@ -246,7 +246,7 @@ void nddlgen::controllers::DomainDescriptionFactory::populateWithUsedClasses(
 	// Insert class name into map. As the class name is used as the map key, there won't be duplicates
 	foreach (nddlgen::models::AbstractObjectModelPtr object, allObjects)
 	{
-		domainDescription->addUsedClass(object);
+		domainDescription->addUsedModel(object);
 	}
 }
 
@@ -304,13 +304,13 @@ void nddlgen::controllers::DomainDescriptionFactory::subObjectPopulationHelper(
 }
 
 void nddlgen::controllers::DomainDescriptionFactory::predicatesPopulationHelper(
-		nddlgen::models::AbstractObjectModelPtr model)
+		nddlgen::models::AbstractObjectModelPtr object)
 {
 	// If model has sub objects, initialize recursive call
-	if (model->hasSubObjects())
+	if (object->hasSubObjects())
 	{
 		// Get sub objects
-		nddlgen::types::ObjectModelList subObjects = model->getSubObjects();
+		nddlgen::types::ObjectModelList subObjects = object->getSubObjects();
 
 		// Loop through sub objects and use it as parameter for the recursive call
 		foreach (nddlgen::models::AbstractObjectModelPtr subObject, subObjects)
@@ -320,7 +320,7 @@ void nddlgen::controllers::DomainDescriptionFactory::predicatesPopulationHelper(
 	}
 
 	// In any case, call function of model
-	model->initPredicates();
+	object->initPredicates();
 }
 
 void nddlgen::controllers::DomainDescriptionFactory::actionsPopulationHelper(
@@ -343,11 +343,11 @@ void nddlgen::controllers::DomainDescriptionFactory::actionsPopulationHelper(
 	model->initActions();
 }
 
-nddlgen::models::AbstractObjectModelPtr nddlgen::controllers::DomainDescriptionFactory::modelFactory(
+nddlgen::models::AbstractObjectModelPtr nddlgen::controllers::DomainDescriptionFactory::objectFactory(
 		sdf::ElementPtr element)
 {
 	std::string elementName = element->GetAttribute("name")->GetAsString();
-	nddlgen::models::AbstractObjectModelPtr instance = this->_modelFactory->fromString(elementName);
+	nddlgen::models::AbstractObjectModelPtr instance = this->_objectFactory->fromString(elementName);
 
 	// If instance is set
 	if (instance)

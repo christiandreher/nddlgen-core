@@ -46,7 +46,7 @@ nddlgen::models::InitialStateModelPtr nddlgen::models::DomainDescriptionModel::g
 	return this->_initialState;
 }
 
-void nddlgen::models::DomainDescriptionModel::registerActions(nddlgen::types::ActionList actions)
+void nddlgen::models::DomainDescriptionModel::addActions(nddlgen::types::ActionList actions)
 {
 	this->_actions.insert(this->_actions.end(), actions.begin(), actions.end());
 }
@@ -56,16 +56,16 @@ nddlgen::types::ActionList nddlgen::models::DomainDescriptionModel::getActions()
 	return this->_actions;
 }
 
-void nddlgen::models::DomainDescriptionModel::addUsedClass(nddlgen::models::AbstractObjectModelPtr object)
+void nddlgen::models::DomainDescriptionModel::addUsedModel(nddlgen::models::AbstractObjectModelPtr object)
 {
-	this->_usedClasses.insert(std::pair<std::string, nddlgen::models::AbstractObjectModelPtr>(object->getClassName(),
+	this->_usedModels.insert(std::pair<std::string, nddlgen::models::AbstractObjectModelPtr>(object->getClassName(),
 			object));
 }
 
 void nddlgen::models::DomainDescriptionModel::generateForwardDeclarations(std::ofstream& ofStream)
 {
-	for (std::map<std::string, nddlgen::models::AbstractObjectModelPtr>::iterator it = this->_usedClasses.begin();
-			it != this->_usedClasses.end(); it++)
+	for (std::map<std::string, nddlgen::models::AbstractObjectModelPtr>::iterator it = this->_usedModels.begin();
+			it != this->_usedModels.end(); it++)
 	{
 		it->second->generateForwardDeclaration(ofStream);
 	}
@@ -80,12 +80,12 @@ void nddlgen::models::DomainDescriptionModel::generateInstantiations(std::ofstre
 	wrel(1);
 }
 
-void nddlgen::models::DomainDescriptionModel::generateModels(std::ofstream& ofStream)
+void nddlgen::models::DomainDescriptionModel::generateNddlClasses(std::ofstream& ofStream)
 {
-	for (std::map<std::string, nddlgen::models::AbstractObjectModelPtr>::iterator it = this->_usedClasses.begin();
-			it != this->_usedClasses.end(); it++)
+	for (std::map<std::string, nddlgen::models::AbstractObjectModelPtr>::iterator it = this->_usedModels.begin();
+			it != this->_usedModels.end(); it++)
 	{
-		it->second->generateModel(ofStream);
+		it->second->generateNddlClass(ofStream);
 	}
 }
 

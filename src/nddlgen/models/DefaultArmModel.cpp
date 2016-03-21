@@ -34,20 +34,20 @@ void nddlgen::models::DefaultArmModel::initSubObjects()
 	this->addSubObject(armProcess);
 }
 
-void nddlgen::models::DefaultArmModel::generateModel(std::ofstream& ofStream)
+void nddlgen::models::DefaultArmModel::generateNddlClass(std::ofstream& ofStream)
 {
 	// Arm needs Timeline, since actions should be executed one by one
 	wrln(0, "class " + this->_className + " extends Timeline", 1);
 	wrln(0, "{", 1);
 
 	// Print predicates if present
-	this->generateModelPredicates(ofStream);
+	this->generateNddlClassPredicates(ofStream);
 
 	// Print sub objects as member if present
-	this->generateModelSubObjects(ofStream);
+	this->generateNddlClassMembers(ofStream);
 
 	// Print constructor if sub objects are set
-	this->generateModelConstructor(ofStream);
+	this->generateNddlClassConstructor(ofStream);
 
 	// Additional line to devide constructor and actions
 	wrel(1);

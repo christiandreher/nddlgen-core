@@ -47,7 +47,7 @@ class nddlgen::models::DomainDescriptionModel
 
 		nddlgen::models::DefaultArmModelPtr _arm;
 		nddlgen::models::InitialStateModelPtr _initialState;
-		std::map<std::string, nddlgen::models::AbstractObjectModelPtr> _usedClasses;
+		std::map<std::string, nddlgen::models::AbstractObjectModelPtr> _usedModels;
 		nddlgen::types::ActionList _actions;
 
 	public:
@@ -64,11 +64,11 @@ class nddlgen::models::DomainDescriptionModel
 		void addActions(nddlgen::types::ActionList actions);
 		nddlgen::types::ActionList getActions();
 
-		void addUsedClass(nddlgen::models::AbstractObjectModelPtr object);
+		void addUsedModel(nddlgen::models::AbstractObjectModelPtr object);
 
 		void generateForwardDeclarations(std::ofstream& ofStream);
 		void generateInstantiations(std::ofstream& ofStream);
-		void generateModels(std::ofstream& ofStream);
+		void generateNddlClasses(std::ofstream& ofStream);
 		void generateActions(std::ofstream& ofStream);
 		void generateFacts(std::ofstream& ofStream);
 		void generateGoals(std::ofstream& ofStream);
