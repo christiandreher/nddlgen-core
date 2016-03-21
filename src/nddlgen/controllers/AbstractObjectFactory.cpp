@@ -14,19 +14,19 @@
  * limitations under the License.
  */
 
-#include <nddlgen/controllers/NddlGeneratableFactory.h>
+#include <nddlgen/controllers/AbstractObjectFactory.h>
 
-nddlgen::controllers::NddlGeneratableFactory::NddlGeneratableFactory()
+nddlgen::controllers::AbstractObjectFactory::AbstractObjectFactory()
 {
 
 }
 
-nddlgen::controllers::NddlGeneratableFactory::~NddlGeneratableFactory()
+nddlgen::controllers::AbstractObjectFactory::~AbstractObjectFactory()
 {
 
 }
 
-nddlgen::models::NddlGeneratablePtr nddlgen::controllers::NddlGeneratableFactory::fromString(std::string modelName)
+nddlgen::models::AbstractObjectModelPtr nddlgen::controllers::AbstractObjectFactory::fromString(std::string modelName)
 {
 	std::string modelNameLc = boost::algorithm::to_lower_copy(modelName);
 
@@ -42,11 +42,11 @@ nddlgen::models::NddlGeneratablePtr nddlgen::controllers::NddlGeneratableFactory
 		}
 	}
 
-	nddlgen::models::NddlGeneratablePtr null(0);
+	nddlgen::models::AbstractObjectModelPtr null(0);
 	return null;
 }
 
-void nddlgen::controllers::NddlGeneratableFactory::registerNddlGeneratable(
+void nddlgen::controllers::AbstractObjectFactory::registerNddlGeneratable(
 		std::string modelName,
 		CreateNddlGeneratable createFunction)
 {
@@ -55,13 +55,13 @@ void nddlgen::controllers::NddlGeneratableFactory::registerNddlGeneratable(
 	this->_registeredNddlGeneratables[modelNameLc] = createFunction;
 }
 
-nddlgen::models::NddlGeneratablePtr nddlgen::controllers::NddlGeneratableFactory::createDefaultArm()
+nddlgen::models::AbstractObjectModelPtr nddlgen::controllers::AbstractObjectFactory::createDefaultArm()
 {
 	nddlgen::models::DefaultArmModelPtr model(new nddlgen::models::DefaultArmModel());
 	return model;
 }
 
-nddlgen::models::NddlGeneratablePtr nddlgen::controllers::NddlGeneratableFactory::createDefaultWorkspace()
+nddlgen::models::AbstractObjectModelPtr nddlgen::controllers::AbstractObjectFactory::createDefaultWorkspace()
 {
 	nddlgen::models::DefaultWorkspaceModelPtr model(new nddlgen::models::DefaultWorkspaceModel());
 	return model;

@@ -14,8 +14,8 @@
  * limitations under the License.
  */
 
-#ifndef NDDLGEN_UTILITIES_INITIALSTATEFACT_H_
-#define NDDLGEN_UTILITIES_INITIALSTATEFACT_H_
+#ifndef NDDLGEN_MODELS_INITIALSTATEFACTMODEL_H_
+#define NDDLGEN_MODELS_INITIALSTATEFACTMODEL_H_
 
 #include <string>
 #include <list>
@@ -27,30 +27,30 @@
 
 namespace nddlgen
 {
-	namespace utilities
+	namespace models
 	{
-		class InitialStateFact;
-		typedef boost::shared_ptr<nddlgen::utilities::InitialStateFact> InitialStateFactPtr;
+		class InitialStateFactModel;
+		typedef boost::shared_ptr<nddlgen::models::InitialStateFactModel> InitialStateFactModelPtr;
 	}
 }
 
-class nddlgen::utilities::InitialStateFact
+class nddlgen::models::InitialStateFactModel
 {
 
 	private:
 
 		std::string _factName;
-		std::string _modelName;
+		std::string _objectName;
 		std::string _predicate;
 		std::string _index;
 
 	public:
 
-		InitialStateFact();
-		virtual ~InitialStateFact();
+		InitialStateFactModel();
+		virtual ~InitialStateFactModel();
 
 		void setFactName(std::string factName);
-		void setModelName(std::string modelName);
+		void setObjectName(std::string objectName);
 		void setPredicate(std::string predicate);
 		void setIndex(int index);
 

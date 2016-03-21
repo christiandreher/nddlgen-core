@@ -14,42 +14,42 @@
  * limitations under the License.
  */
 
-#include <nddlgen/utilities/InitialStateFact.h>
+#include <nddlgen/models/InitialStateFactModel.h>
 
-nddlgen::utilities::InitialStateFact::InitialStateFact()
+nddlgen::models::InitialStateFactModel::InitialStateFactModel()
 {
 	this->_factName = "";
-	this->_modelName = "";
+	this->_objectName = "";
 	this->_predicate = "";
 	this->_index = "";
 }
 
-nddlgen::utilities::InitialStateFact::~InitialStateFact()
+nddlgen::models::InitialStateFactModel::~InitialStateFactModel()
 {
 
 }
 
-void nddlgen::utilities::InitialStateFact::setFactName(std::string factName)
+void nddlgen::models::InitialStateFactModel::setFactName(std::string factName)
 {
 	this->_factName = factName;
 }
 
-void nddlgen::utilities::InitialStateFact::setModelName(std::string modelName)
+void nddlgen::models::InitialStateFactModel::setObjectName(std::string objectName)
 {
-	this->_modelName = modelName;
+	this->_objectName = objectName;
 }
 
-void nddlgen::utilities::InitialStateFact::setPredicate(std::string predicate)
+void nddlgen::models::InitialStateFactModel::setPredicate(std::string predicate)
 {
 	this->_predicate = predicate;
 }
 
-void nddlgen::utilities::InitialStateFact::setIndex(int index)
+void nddlgen::models::InitialStateFactModel::setIndex(int index)
 {
 	this->_index = boost::lexical_cast<std::string>(index);
 }
 
-std::list<std::string> nddlgen::utilities::InitialStateFact::getFact()
+std::list<std::string> nddlgen::models::InitialStateFactModel::getFact()
 {
 	if (this->_index == "")
 	{
@@ -68,7 +68,7 @@ std::list<std::string> nddlgen::utilities::InitialStateFact::getFact()
 		factName = "initialCondition" + this->_index;
 	}
 
-	fact.push_back("fact(" + this->_modelName + "." + this->_predicate + " " + factName + ");");
+	fact.push_back("fact(" + this->_objectName + "." + this->_predicate + " " + factName + ");");
 	fact.push_back("eq(" + factName + ".start, 0);");
 
 	return fact;

@@ -14,39 +14,39 @@
  * limitations under the License.
  */
 
-#include <nddlgen/models/NddlGeneratable.h>
+#include <nddlgen/models/AbstractObjectModel.h>
 
-nddlgen::models::NddlGeneratable::NddlGeneratable()
+nddlgen::models::AbstractObjectModel::AbstractObjectModel()
 {
 
 }
 
-nddlgen::models::NddlGeneratable::~NddlGeneratable()
+nddlgen::models::AbstractObjectModel::~AbstractObjectModel()
 {
 
 }
 
-void nddlgen::models::NddlGeneratable::initPredicates()
-{
-	// Dummy. Do nothing
-}
-
-void nddlgen::models::NddlGeneratable::initSubObjects()
+void nddlgen::models::AbstractObjectModel::initPredicates()
 {
 	// Dummy. Do nothing
 }
 
-void nddlgen::models::NddlGeneratable::initActions()
+void nddlgen::models::AbstractObjectModel::initSubObjects()
 {
 	// Dummy. Do nothing
 }
 
-void nddlgen::models::NddlGeneratable::generateForwardDeclaration(std::ofstream& ofStream)
+void nddlgen::models::AbstractObjectModel::initActions()
+{
+	// Dummy. Do nothing
+}
+
+void nddlgen::models::AbstractObjectModel::generateForwardDeclaration(std::ofstream& ofStream)
 {
 	wrln(0, "class " + this->getClassName() + ";", 1);
 }
 
-void nddlgen::models::NddlGeneratable::generateInstantiation(std::ofstream& ofStream)
+void nddlgen::models::AbstractObjectModel::generateInstantiation(std::ofstream& ofStream)
 {
 	std::string className = this->getClassName();
 	std::string instanceName = this->getName();
@@ -55,9 +55,9 @@ void nddlgen::models::NddlGeneratable::generateInstantiation(std::ofstream& ofSt
 
 	if (this->hasSubObjects())
 	{
-		nddlgen::types::NddlGeneratableList subObjects = this->getSubObjects();
+		nddlgen::types::ObjectModelList subObjects = this->getSubObjects();
 
-		foreach (nddlgen::models::NddlGeneratablePtr subObject, subObjects)
+		foreach (nddlgen::models::AbstractObjectModelPtr subObject, subObjects)
 		{
 			std::string subObjectClassName = subObject->getClassName();
 			std::string subObjectInstanceName = subObject->getName();
@@ -73,7 +73,7 @@ void nddlgen::models::NddlGeneratable::generateInstantiation(std::ofstream& ofSt
 	wrln(0, className + " " + instanceName + " = new " + className + "(" + constructorParameters + ");", 1);
 }
 
-void nddlgen::models::NddlGeneratable::generateModel(std::ofstream& ofStream)
+void nddlgen::models::AbstractObjectModel::generateModel(std::ofstream& ofStream)
 {
 	std::string extendsTimeline = "";
 
@@ -99,7 +99,7 @@ void nddlgen::models::NddlGeneratable::generateModel(std::ofstream& ofStream)
 	wrln(0, "}", 2);
 }
 
-void nddlgen::models::NddlGeneratable::generateModelPredicates(std::ofstream& ofStream)
+void nddlgen::models::AbstractObjectModel::generateModelPredicates(std::ofstream& ofStream)
 {
 	// Print predicates if present
 	if (this->hasPredicates())
@@ -116,13 +116,13 @@ void nddlgen::models::NddlGeneratable::generateModelPredicates(std::ofstream& of
 	}
 }
 
-void nddlgen::models::NddlGeneratable::generateModelSubObjects(std::ofstream& ofStream)
+void nddlgen::models::AbstractObjectModel::generateModelSubObjects(std::ofstream& ofStream)
 {
 	// Only print members if the model has any sub objects
 	if (this->hasSubObjects())
 	{
 		// For each sub object, print member
-		foreach (nddlgen::models::NddlGeneratablePtr generatableModel, this->_subObjects)
+		foreach (nddlgen::models::AbstractObjectModelPtr generatableModel, this->_subObjects)
 		{
 			std::string className = generatableModel->getClassName();
 			std::string instanceName = generatableModel->getNamePref();
@@ -134,7 +134,7 @@ void nddlgen::models::NddlGeneratable::generateModelSubObjects(std::ofstream& of
 	}
 }
 
-void nddlgen::models::NddlGeneratable::generateModelConstructor(std::ofstream& ofStream)
+void nddlgen::models::AbstractObjectModel::generateModelConstructor(std::ofstream& ofStream)
 {
 	// Only print constructor if the model has any sub objects
 	if (this->hasSubObjects())
@@ -142,7 +142,7 @@ void nddlgen::models::NddlGeneratable::generateModelConstructor(std::ofstream& o
 		// Print constructor
 		std::string constructorHeader = this->getClassName() + "(";
 
-		foreach (nddlgen::models::NddlGeneratablePtr generatableModel, this->_subObjects)
+		foreach (nddlgen::models::AbstractObjectModelPtr generatableModel, this->_subObjects)
 		{
 			std::string parameter = generatableModel->getClassName() + " " + generatableModel->getNamePrefSuff() + ", ";
 			constructorHeader += parameter;
@@ -155,7 +155,7 @@ void nddlgen::models::NddlGeneratable::generateModelConstructor(std::ofstream& o
 		wrln(1, constructorHeader, 1);
 		wrln(1, "{", 1);
 
-		foreach (nddlgen::models::NddlGeneratablePtr generatableModel, this->_subObjects)
+		foreach (nddlgen::models::AbstractObjectModelPtr generatableModel, this->_subObjects)
 		{
 			std::string assignment = generatableModel->getNamePref() + " = " + generatableModel->getNamePrefSuff() + ";";
 
@@ -166,33 +166,33 @@ void nddlgen::models::NddlGeneratable::generateModelConstructor(std::ofstream& o
 	}
 }
 
-void nddlgen::models::NddlGeneratable::setName(std::string name)
+void nddlgen::models::AbstractObjectModel::setName(std::string name)
 {
 	this->_name = name;
 }
 
-std::string nddlgen::models::NddlGeneratable::getName()
+std::string nddlgen::models::AbstractObjectModel::getName()
 {
 	return this->_name;
 }
 
-std::string nddlgen::models::NddlGeneratable::getNamePref()
+std::string nddlgen::models::AbstractObjectModel::getNamePref()
 {
 	return "_" + this->getName();
 }
 
-std::string nddlgen::models::NddlGeneratable::getNamePrefSuff()
+std::string nddlgen::models::AbstractObjectModel::getNamePrefSuff()
 {
 	return this->getNamePref() + "_param";
 }
 
-std::string nddlgen::models::NddlGeneratable::getAccessor()
+std::string nddlgen::models::AbstractObjectModel::getAccessor()
 {
 	std::string accessor = this->getNamePref();
 
 	if (this->hasSuperObject())
 	{
-		nddlgen::models::NddlGeneratablePtr superObject = this->_superObject.lock();
+		nddlgen::models::AbstractObjectModelPtr superObject = this->_superObject.lock();
 
 		accessor = superObject->getAccessor() + "." + accessor;
 	}
@@ -200,47 +200,47 @@ std::string nddlgen::models::NddlGeneratable::getAccessor()
 	return accessor;
 }
 
-void nddlgen::models::NddlGeneratable::setClassName(std::string className)
+void nddlgen::models::AbstractObjectModel::setClassName(std::string className)
 {
 	this->_className = className;
 }
 
-std::string nddlgen::models::NddlGeneratable::getClassName()
+std::string nddlgen::models::AbstractObjectModel::getClassName()
 {
 	return this->_className;
 }
 
-void nddlgen::models::NddlGeneratable::addBlockingObject(nddlgen::models::NddlGeneratablePtr blockingObject)
+void nddlgen::models::AbstractObjectModel::addBlockingObject(nddlgen::models::AbstractObjectModelPtr blockingObject)
 {
-	this->_blockedBy.push_back(blockingObject);
+	this->_blockingObjects.push_back(blockingObject);
 }
 
-bool nddlgen::models::NddlGeneratable::isBlocked()
+bool nddlgen::models::AbstractObjectModel::hasBlockingObjects()
 {
-	return (this->_blockedBy.size() != 0);
+	return (this->_blockingObjects.size() != 0);
 }
 
-void nddlgen::models::NddlGeneratable::addPredicate(std::string predicate)
+void nddlgen::models::AbstractObjectModel::addPredicate(std::string predicate)
 {
 	this->_predicates.push_back(predicate);
 }
 
-bool nddlgen::models::NddlGeneratable::hasPredicates()
+bool nddlgen::models::AbstractObjectModel::hasPredicates()
 {
 	return (this->_predicates.size() != 0);
 }
 
-void nddlgen::models::NddlGeneratable::setInitialPredicate(std::string initialPredicate)
+void nddlgen::models::AbstractObjectModel::setInitialPredicate(std::string initialPredicate)
 {
 	this->_initialPredicate = initialPredicate;
 }
 
-std::string nddlgen::models::NddlGeneratable::getInitialPredicate()
+std::string nddlgen::models::AbstractObjectModel::getInitialPredicate()
 {
 	return this->_initialPredicate;
 }
 
-nddlgen::utilities::InitialStateFactPtr nddlgen::models::NddlGeneratable::getInitialState()
+nddlgen::models::InitialStateFactModelPtr nddlgen::models::AbstractObjectModel::getInitialState()
 {
 	if (this->_initialPredicate == "")
 	{
@@ -248,83 +248,83 @@ nddlgen::utilities::InitialStateFactPtr nddlgen::models::NddlGeneratable::getIni
 		throw "No initial predicate was set for " + this->_name;
 	}
 
-	nddlgen::utilities::InitialStateFactPtr fact(new nddlgen::utilities::InitialStateFact());
+	nddlgen::models::InitialStateFactModelPtr fact(new nddlgen::models::InitialStateFactModel());
 
 	fact->setFactName(this->getName() + "_" + this->getInitialPredicate());
-	fact->setModelName(this->getName());
+	fact->setObjectName(this->getName());
 	fact->setPredicate(this->getInitialPredicate());
 
 	return fact;
 }
 
-void nddlgen::models::NddlGeneratable::addAction(nddlgen::utilities::ModelActionPtr action)
+void nddlgen::models::AbstractObjectModel::addAction(nddlgen::models::ActionModelPtr action)
 {
 	this->_actions.push_back(action);
 }
 
-bool nddlgen::models::NddlGeneratable::hasActions()
+bool nddlgen::models::AbstractObjectModel::hasActions()
 {
 	return (this->_actions.size() != 0);
 }
 
-nddlgen::types::ActionList nddlgen::models::NddlGeneratable::getActions()
+nddlgen::types::ActionList nddlgen::models::AbstractObjectModel::getActions()
 {
 	return this->_actions;
 }
 
-nddlgen::math::CuboidPtr nddlgen::models::NddlGeneratable::getObjectBoundingBox()
+nddlgen::math::CuboidPtr nddlgen::models::AbstractObjectModel::getObjectBoundingBox()
 {
 	return this->_objectBoundingBox;
 }
 
-void nddlgen::models::NddlGeneratable::setObjectBoundingBox(nddlgen::math::CuboidPtr objectBoundingBox)
+void nddlgen::models::AbstractObjectModel::setObjectBoundingBox(nddlgen::math::CuboidPtr objectBoundingBox)
 {
 	this->_objectBoundingBox = objectBoundingBox;
 }
 
-bool nddlgen::models::NddlGeneratable::hasObjectBoundingBox()
+bool nddlgen::models::AbstractObjectModel::hasObjectBoundingBox()
 {
 	return (bool) this->_objectBoundingBox;
 }
 
-nddlgen::math::CuboidPtr nddlgen::models::NddlGeneratable::getAccessibilityBoundingBox()
+nddlgen::math::CuboidPtr nddlgen::models::AbstractObjectModel::getAccessibilityBoundingBox()
 {
 	return this->_accessibilityBoundingBox;
 }
 
-void nddlgen::models::NddlGeneratable::setAccessibilityBoundingBox(nddlgen::math::CuboidPtr accessibilityBoundingBox)
+void nddlgen::models::AbstractObjectModel::setAccessibilityBoundingBox(nddlgen::math::CuboidPtr accessibilityBoundingBox)
 {
 	this->_accessibilityBoundingBox = accessibilityBoundingBox;
 }
 
-bool nddlgen::models::NddlGeneratable::hasAccessibilityBoundingBox()
+bool nddlgen::models::AbstractObjectModel::hasAccessibilityBoundingBox()
 {
 	return (bool) this->_accessibilityBoundingBox;
 }
 
-bool nddlgen::models::NddlGeneratable::hasSubObjects()
+bool nddlgen::models::AbstractObjectModel::hasSubObjects()
 {
 	return (this->_subObjects.size() != 0);
 }
 
-void nddlgen::models::NddlGeneratable::addSubObject(nddlgen::models::NddlGeneratablePtr subObject)
+void nddlgen::models::AbstractObjectModel::addSubObject(nddlgen::models::AbstractObjectModelPtr subObject)
 {
 	subObject->setSuperObject(this->shared_from_this());
 	this->_subObjects.push_back(subObject);
 }
 
-nddlgen::types::NddlGeneratableList nddlgen::models::NddlGeneratable::getSubObjects()
+nddlgen::types::ObjectModelList nddlgen::models::AbstractObjectModel::getSubObjects()
 {
 	return this->_subObjects;
 }
 
-nddlgen::models::NddlGeneratablePtr nddlgen::models::NddlGeneratable::getSubObjectByName(
+nddlgen::models::AbstractObjectModelPtr nddlgen::models::AbstractObjectModel::getSubObjectByName(
 		std::string name,
 		bool findInTree)
 {
-	nddlgen::models::NddlGeneratablePtr output(0);
+	nddlgen::models::AbstractObjectModelPtr output(0);
 
-	foreach (nddlgen::models::NddlGeneratablePtr generatableModel, this->_subObjects)
+	foreach (nddlgen::models::AbstractObjectModelPtr generatableModel, this->_subObjects)
 	{
 		if (generatableModel->getName() == name)
 		{
@@ -345,18 +345,18 @@ nddlgen::models::NddlGeneratablePtr nddlgen::models::NddlGeneratable::getSubObje
 	return output;
 }
 
-void nddlgen::models::NddlGeneratable::setInstanceNameFor(int index, std::string instanceName)
+void nddlgen::models::AbstractObjectModel::setInstanceNameFor(int index, std::string instanceName)
 {
 	this->_subObjects.at(index)->setName(instanceName);
 }
 
-bool nddlgen::models::NddlGeneratable::hasSuperObject()
+bool nddlgen::models::AbstractObjectModel::hasSuperObject()
 {
-	nddlgen::models::NddlGeneratablePtr superObject = this->_superObject.lock();
+	nddlgen::models::AbstractObjectModelPtr superObject = this->_superObject.lock();
 	return (bool) superObject;
 }
 
-void nddlgen::models::NddlGeneratable::setSuperObject(nddlgen::models::NddlGeneratablePtr superObject)
+void nddlgen::models::AbstractObjectModel::setSuperObject(nddlgen::models::AbstractObjectModelPtr superObject)
 {
 	this->_superObject = superObject;
 }

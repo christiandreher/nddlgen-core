@@ -14,8 +14,8 @@
  * limitations under the License.
  */
 
-#ifndef NDDLGEN_UTILITIES_INITIALSTATEGOAL_H_
-#define NDDLGEN_UTILITIES_INITIALSTATEGOAL_H_
+#ifndef NDDLGEN_MODELS_INITIALSTATEGOALMODEL_H_
+#define NDDLGEN_MODELS_INITIALSTATEGOALMODEL_H_
 
 #include <string>
 #include <list>
@@ -27,20 +27,20 @@
 
 namespace nddlgen
 {
-	namespace utilities
+	namespace models
 	{
-		class InitialStateGoal;
-		typedef boost::shared_ptr<nddlgen::utilities::InitialStateGoal> InitialStateGoalPtr;
+		class InitialStateGoalModel;
+		typedef boost::shared_ptr<nddlgen::models::InitialStateGoalModel> InitialStateGoalModelPtr;
 	}
 }
 
-class nddlgen::utilities::InitialStateGoal
+class nddlgen::models::InitialStateGoalModel
 {
 
 	private:
 
 		std::string _goalName;
-		std::string _modelName;
+		std::string _objectName;
 		std::string _predicate;
 		std::string _startsAfter;
 		std::string _endsBefore;
@@ -48,11 +48,11 @@ class nddlgen::utilities::InitialStateGoal
 
 	public:
 
-		InitialStateGoal();
-		virtual ~InitialStateGoal();
+		InitialStateGoalModel();
+		virtual ~InitialStateGoalModel();
 
 		void setGoalName(std::string goalName);
-		void setModelName(std::string modelName);
+		void setObjectName(std::string objectName);
 		void setPredicate(std::string predicate);
 		void setStartsAfter(std::string startsAfter);
 		void setEndsBefore(std::string endsBefore);

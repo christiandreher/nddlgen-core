@@ -24,14 +24,14 @@
 
 namespace nddlgen
 {
-	namespace utilities
+	namespace models
 	{
-		class ModelAction;
-		typedef boost::shared_ptr<nddlgen::utilities::ModelAction> ModelActionPtr;
+		class ActionModel;
+		typedef boost::shared_ptr<nddlgen::models::ActionModel> ActionModelPtr;
 	}
 }
 
-class nddlgen::utilities::ModelAction
+class nddlgen::models::ActionModel
 {
 
 	private:
@@ -44,8 +44,8 @@ class nddlgen::utilities::ModelAction
 
 	public:
 
-		ModelAction();
-		~ModelAction();
+		ActionModel();
+		~ActionModel();
 
 		void setName(std::string name);
 		void setDuration(std::string duration);

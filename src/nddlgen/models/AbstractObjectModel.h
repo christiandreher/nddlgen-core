@@ -14,8 +14,8 @@
  * limitations under the License.
  */
 
-#ifndef NDDLGEN_MODELS_NDDLGENERATABLE_H_
-#define NDDLGEN_MODELS_NDDLGENERATABLE_H_
+#ifndef NDDLGEN_MODELS_ABSTRACTOBJECTMODEL_H_
+#define NDDLGEN_MODELS_ABSTRACTOBJECTMODEL_H_
 
 #include <iostream>
 #include <fstream>
@@ -27,22 +27,22 @@
 #include <boost/enable_shared_from_this.hpp>
 
 #include <nddlgen/math/Cuboid.h>
+#include <nddlgen/models/ActionModel.h>
+#include <nddlgen/models/InitialStateFactModel.h>
 #include <nddlgen/utilities/Types.hpp>
 #include <nddlgen/utilities/WriteStream.hpp>
 #include <nddlgen/utilities/Foreach.hpp>
-#include <nddlgen/utilities/ModelAction.h>
-#include <nddlgen/utilities/InitialStateFact.h>
 
 namespace nddlgen
 {
 	namespace models
 	{
-		class NddlGeneratable;
-		typedef boost::shared_ptr<nddlgen::models::NddlGeneratable> NddlGeneratablePtr;
+		class AbstractObjectModel;
+		typedef boost::shared_ptr<nddlgen::models::AbstractObjectModel> AbstractObjectModelPtr;
 	}
 }
 
-class nddlgen::models::NddlGeneratable : public boost::enable_shared_from_this<nddlgen::models::NddlGeneratable>
+class nddlgen::models::AbstractObjectModel : public boost::enable_shared_from_this<nddlgen::models::AbstractObjectModel>
 {
 
 	protected:
@@ -51,7 +51,7 @@ class nddlgen::models::NddlGeneratable : public boost::enable_shared_from_this<n
 
 		std::string _className;
 
-		nddlgen::types::NddlGeneratableList _blockedBy;
+		nddlgen::types::ObjectModelList _blockingObjects;
 
 		std::list<std::string> _predicates;
 
@@ -63,9 +63,9 @@ class nddlgen::models::NddlGeneratable : public boost::enable_shared_from_this<n
 
 		nddlgen::math::CuboidPtr _accessibilityBoundingBox;
 
-		nddlgen::types::NddlGeneratableList _subObjects;
+		nddlgen::types::ObjectModelList _subObjects;
 
-		boost::weak_ptr<nddlgen::models::NddlGeneratable> _superObject;
+		boost::weak_ptr<nddlgen::models::AbstractObjectModel> _superObject;
 
 		void generateModelPredicates(
 				std::ofstream& ofStream
@@ -81,9 +81,9 @@ class nddlgen::models::NddlGeneratable : public boost::enable_shared_from_this<n
 
 	public:
 
-		NddlGeneratable();
+		AbstractObjectModel();
 
-		virtual ~NddlGeneratable();
+		virtual ~AbstractObjectModel();
 
 		virtual void initPredicates();
 
@@ -122,10 +122,10 @@ class nddlgen::models::NddlGeneratable : public boost::enable_shared_from_this<n
 		std::string getClassName();
 
 		void addBlockingObject(
-				nddlgen::models::NddlGeneratablePtr blockingObject
+				nddlgen::models::AbstractObjectModelPtr blockingObject
 		);
 
-		bool isBlocked();
+		bool hasBlockingObjects();
 
 		void addPredicate(
 				std::string predicate
@@ -139,10 +139,10 @@ class nddlgen::models::NddlGeneratable : public boost::enable_shared_from_this<n
 
 		std::string getInitialPredicate();
 
-		nddlgen::utilities::InitialStateFactPtr getInitialState();
+		nddlgen::models::InitialStateFactModelPtr getInitialState();
 
 		void addAction(
-				nddlgen::utilities::ModelActionPtr action
+				nddlgen::models::ActionModelPtr action
 		);
 
 		bool hasActions();
@@ -168,12 +168,12 @@ class nddlgen::models::NddlGeneratable : public boost::enable_shared_from_this<n
 		bool hasSubObjects();
 
 		void addSubObject(
-				nddlgen::models::NddlGeneratablePtr subObject
+				nddlgen::models::AbstractObjectModelPtr subObject
 		);
 
-		nddlgen::types::NddlGeneratableList getSubObjects();
+		nddlgen::types::ObjectModelList getSubObjects();
 
-		nddlgen::models::NddlGeneratablePtr getSubObjectByName(
+		nddlgen::models::AbstractObjectModelPtr getSubObjectByName(
 				std::string name,
 				bool findInTree = false
 		);
@@ -186,7 +186,7 @@ class nddlgen::models::NddlGeneratable : public boost::enable_shared_from_this<n
 		bool hasSuperObject();
 
 		void setSuperObject(
-				nddlgen::models::NddlGeneratablePtr superObject
+				nddlgen::models::AbstractObjectModelPtr superObject
 		);
 
 };

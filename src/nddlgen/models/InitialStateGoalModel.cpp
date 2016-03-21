@@ -14,54 +14,54 @@
  * limitations under the License.
  */
 
-#include <nddlgen/utilities/InitialStateGoal.h>
+#include <nddlgen/models/InitialStateGoalModel.h>
 
-nddlgen::utilities::InitialStateGoal::InitialStateGoal()
+nddlgen::models::InitialStateGoalModel::InitialStateGoalModel()
 {
 	this->_goalName = "";
-	this->_modelName = "";
+	this->_objectName = "";
 	this->_predicate = "";
 	this->_startsAfter = "";
 	this->_endsBefore = "";
 	this->_index = "";
 }
 
-nddlgen::utilities::InitialStateGoal::~InitialStateGoal()
+nddlgen::models::InitialStateGoalModel::~InitialStateGoalModel()
 {
 
 }
 
-void nddlgen::utilities::InitialStateGoal::setGoalName(std::string goalName)
+void nddlgen::models::InitialStateGoalModel::setGoalName(std::string goalName)
 {
 	this->_goalName = goalName;
 }
 
-void nddlgen::utilities::InitialStateGoal::setModelName(std::string modelName)
+void nddlgen::models::InitialStateGoalModel::setObjectName(std::string objectName)
 {
-	this->_modelName = modelName;
+	this->_objectName = objectName;
 }
 
-void nddlgen::utilities::InitialStateGoal::setPredicate(std::string predicate)
+void nddlgen::models::InitialStateGoalModel::setPredicate(std::string predicate)
 {
 	this->_predicate = predicate;
 }
 
-void nddlgen::utilities::InitialStateGoal::setStartsAfter(std::string startsAfter)
+void nddlgen::models::InitialStateGoalModel::setStartsAfter(std::string startsAfter)
 {
 	this->_startsAfter = startsAfter;
 }
 
-void nddlgen::utilities::InitialStateGoal::setEndsBefore(std::string endsBefore)
+void nddlgen::models::InitialStateGoalModel::setEndsBefore(std::string endsBefore)
 {
 	this->_endsBefore = endsBefore;
 }
 
-void nddlgen::utilities::InitialStateGoal::setIndex(int index)
+void nddlgen::models::InitialStateGoalModel::setIndex(int index)
 {
 	this->_index = boost::lexical_cast<std::string>(index);
 }
 
-std::list<std::string> nddlgen::utilities::InitialStateGoal::getGoal()
+std::list<std::string> nddlgen::models::InitialStateGoalModel::getGoal()
 {
 	if (this->_index == "")
 	{
@@ -80,7 +80,7 @@ std::list<std::string> nddlgen::utilities::InitialStateGoal::getGoal()
 		goalName = "goal" + this->_index;
 	}
 
-	goal.push_back("goal(" + this->_modelName + "." + this->_predicate + " " + goalName + ");");
+	goal.push_back("goal(" + this->_objectName + "." + this->_predicate + " " + goalName + ");");
 
 	if (this->_startsAfter != "")
 	{

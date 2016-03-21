@@ -21,8 +21,8 @@
 
 #include <boost/algorithm/string.hpp>
 #include <boost/shared_ptr.hpp>
+#include <nddlgen/models/AbstractObjectModel.h>
 
-#include <nddlgen/models/NddlGeneratable.h>
 #include <nddlgen/models/DefaultArmModel.h>
 #include <nddlgen/models/DefaultWorkspaceModel.h>
 
@@ -30,15 +30,15 @@ namespace nddlgen
 {
 	namespace controllers
 	{
-		class NddlGeneratableFactory;
-		typedef boost::shared_ptr<nddlgen::controllers::NddlGeneratableFactory> NddlGeneratableFactoryPtr;
+		class AbstractObjectFactory;
+		typedef boost::shared_ptr<nddlgen::controllers::AbstractObjectFactory> AbstractObjectFactoryPtr;
 	}
 }
 
 /**
  * Typedefs for function pointer and function pointer map
  */
-typedef nddlgen::models::NddlGeneratablePtr (*CreateNddlGeneratable)(void);
+typedef nddlgen::models::AbstractObjectModelPtr (*CreateNddlGeneratable)(void);
 typedef std::map<std::string, CreateNddlGeneratable> NddlGeneratableMap;
 
 /**
@@ -47,7 +47,7 @@ typedef std::map<std::string, CreateNddlGeneratable> NddlGeneratableMap;
  *
  * @author Christian Dreher
  */
-class nddlgen::controllers::NddlGeneratableFactory
+class nddlgen::controllers::AbstractObjectFactory
 {
 
 	protected:
@@ -70,12 +70,12 @@ class nddlgen::controllers::NddlGeneratableFactory
 		/**
 		 * Constructs a new NddlGeneratableFactory.
 		 */
-		NddlGeneratableFactory();
+		AbstractObjectFactory();
 
 		/**
 		 * Destructor to free memory.
 		 */
-		virtual ~NddlGeneratableFactory();
+		virtual ~AbstractObjectFactory();
 
 		/**
 		 * Generate an NddlGeneratable from modelName. This method will match all registered
@@ -87,7 +87,7 @@ class nddlgen::controllers::NddlGeneratableFactory
 		 *
 		 * @return NddlGeneratable object
 		 */
-		nddlgen::models::NddlGeneratablePtr fromString(std::string modelName);
+		nddlgen::models::AbstractObjectModelPtr fromString(std::string modelName);
 
 		/**
 		 * Pure virtual function which has to be overridden. Inside this function, all possible
@@ -102,14 +102,14 @@ class nddlgen::controllers::NddlGeneratableFactory
 		 *
 		 * @return ArmModel instance
 		 */
-		static nddlgen::models::NddlGeneratablePtr createDefaultArm();
+		static nddlgen::models::AbstractObjectModelPtr createDefaultArm();
 
 		/**
 		 * Creates the default Workspace NddlGeneratable model
 		 *
 		 * @return WorkspaceModel instance
 		 */
-		static nddlgen::models::NddlGeneratablePtr createDefaultWorkspace();
+		static nddlgen::models::AbstractObjectModelPtr createDefaultWorkspace();
 
 };
 
