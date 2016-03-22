@@ -16,7 +16,7 @@
 
 #include <nddlgen/utilities/Meta.h>
 
-const std::string nddlgen::utilities::Meta::NDDLGEN_VERSION = "1.1.0";
+const std::string nddlgen::utilities::Meta::NDDLGEN_VERSION = "2.0.0";
 const std::string nddlgen::utilities::Meta::NDDLGEN_PROJECT_HOMEPAGE = "nddlgen.charlydelta.org";
 const std::string nddlgen::utilities::Meta::NDDLGEN_SUPPORT_EMAIL = "nddlgen-support@charlydelta.org";
 const std::string nddlgen::utilities::Meta::AUTHOR_CHR_DREHER_EMAIL = "dreher@charlydelta.org";
