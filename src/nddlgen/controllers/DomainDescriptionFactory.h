@@ -150,7 +150,7 @@ class nddlgen::controllers::DomainDescriptionFactory
 		 *
 		 * @param domainDescription Domain description model
 		 */
-		void populateWithUsedClasses(
+		void populateWithUsedNddlClasses(
 				nddlgen::models::DomainDescriptionModelPtr domainDescription
 		);
 

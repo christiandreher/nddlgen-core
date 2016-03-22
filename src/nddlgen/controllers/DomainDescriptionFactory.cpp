@@ -73,7 +73,7 @@ nddlgen::models::DomainDescriptionModelPtr nddlgen::controllers::DomainDescripti
 	this->populateWithActions(domainDescription);
 
 	// Populate DDM with used classes by traversing tree
-	this->populateWithUsedClasses(domainDescription);
+	this->populateWithUsedNddlClasses(domainDescription);
 
 	// Return the fully qualified domain description model
 	return domainDescription;
@@ -237,7 +237,7 @@ void nddlgen::controllers::DomainDescriptionFactory::populateWithActions(
 	domainDescription->getArm()->setActionPrototypes(actionPrototypes);
 }
 
-void nddlgen::controllers::DomainDescriptionFactory::populateWithUsedClasses(
+void nddlgen::controllers::DomainDescriptionFactory::populateWithUsedNddlClasses(
 		nddlgen::models::DomainDescriptionModelPtr domainDescription)
 {
 	// Get all objects
@@ -246,7 +246,7 @@ void nddlgen::controllers::DomainDescriptionFactory::populateWithUsedClasses(
 	// Insert class name into map. As the class name is used as the map key, there won't be duplicates
 	foreach (nddlgen::models::AbstractObjectModelPtr object, allObjects)
 	{
-		domainDescription->addUsedModel(object);
+		domainDescription->addUsedNddlClass(object);
 	}
 }
 

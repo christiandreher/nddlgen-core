@@ -56,16 +56,16 @@ nddlgen::types::ActionList nddlgen::models::DomainDescriptionModel::getActions()
 	return this->_actions;
 }
 
-void nddlgen::models::DomainDescriptionModel::addUsedModel(nddlgen::models::AbstractObjectModelPtr object)
+void nddlgen::models::DomainDescriptionModel::addUsedNddlClass(nddlgen::models::AbstractObjectModelPtr object)
 {
-	this->_usedModels.insert(std::pair<std::string, nddlgen::models::AbstractObjectModelPtr>(object->getClassName(),
+	this->_usedNddlClasses.insert(std::pair<std::string, nddlgen::models::AbstractObjectModelPtr>(object->getClassName(),
 			object));
 }
 
 void nddlgen::models::DomainDescriptionModel::generateForwardDeclarations(std::ofstream& ofStream)
 {
-	for (std::map<std::string, nddlgen::models::AbstractObjectModelPtr>::iterator it = this->_usedModels.begin();
-			it != this->_usedModels.end(); it++)
+	for (std::map<std::string, nddlgen::models::AbstractObjectModelPtr>::iterator it = this->_usedNddlClasses.begin();
+			it != this->_usedNddlClasses.end(); it++)
 	{
 		it->second->generateForwardDeclaration(ofStream);
 	}
@@ -82,8 +82,8 @@ void nddlgen::models::DomainDescriptionModel::generateInstantiations(std::ofstre
 
 void nddlgen::models::DomainDescriptionModel::generateNddlClasses(std::ofstream& ofStream)
 {
-	for (std::map<std::string, nddlgen::models::AbstractObjectModelPtr>::iterator it = this->_usedModels.begin();
-			it != this->_usedModels.end(); it++)
+	for (std::map<std::string, nddlgen::models::AbstractObjectModelPtr>::iterator it = this->_usedNddlClasses.begin();
+			it != this->_usedNddlClasses.end(); it++)
 	{
 		it->second->generateNddlClass(ofStream);
 	}
