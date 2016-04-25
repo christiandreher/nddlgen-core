@@ -92,5 +92,5 @@ bool nddlgen::math::SeparatingAxisTheoremTest::doesProjectionIntersect(nddlgen::
 	double longSpan = Trivial::max(aMax, bMax) - Trivial::min(aMin, bMin);
 	double sumSpan = aMax - aMin + bMax - bMin;
 
-	return longSpan <= sumSpan;
+	return longSpan < sumSpan;
 }
