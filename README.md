@@ -2,7 +2,7 @@
 
 ## General
 
-This package is the core of the nddl-generator. It is compiled as a shared library and should then be included in the corresponding application (for example nddl-generator-cli, nddl-generator-gui or nddl-generator-core-test)
+This package is the core of the nddl-generator. It is compiled as a shared library and should then be included in the corresponding application (for example [nddl-generator-cli](https://github.com/christiandreher/nddlgen-cli) or a custom one). This codebase was created for the bachelor thesis about [symbolic planning](https://cdre.xyz/bt) [in German].
 
 ## Dependencies
 
